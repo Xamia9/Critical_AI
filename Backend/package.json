@@ -1,0 +1,24 @@
+{
+  "name": "criticalai-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Critical AI - Critical Thinking Training Platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["critical-thinking", "education", "ai"],
+  "author": "Giang Xuan Mai, Phan Ngoc Ha Thy, Nguyen Nu An Nhien",
+  "license": "ISC",
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.4",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.2.1",
+    "uuid": "^13.0.0"
+  }
+}

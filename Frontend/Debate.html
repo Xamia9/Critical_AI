@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Critical AI | Debate</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
+<style>
+* {
+  box-sizing: border-box;
+  font-family: Inter, sans-serif;
+}
+
+/* ================= ROOT (SYNC DEFINE ISSUE) ================= */
+:root {
+  --bg-dark-1: #2B1E4A;
+  --bg-dark-2: #24163F;
+
+  --primary-gradient: linear-gradient(135deg, #C52C5A, #4A5BFF);
+
+  --glass-bg: rgba(255,255,255,0.08);
+  --glass-border: rgba(123,140,255,0.35);
+
+  --text-dark: #ffffff;
+  --text-soft: #cfd1e6;
+
+  --bg-light-1: #EEF0FF;
+  --bg-light-2: #F7F8FF;
+
+  --card-light: rgba(255, 230, 255, 0.65);
+
+  --border-light: rgba(74,91,255,0.35);
+
+  --text-light-main: #1E1E2F;
+}
+
+/* ================= BODY ================= */
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, var(--bg-dark-1), var(--bg-dark-2) 60%);
+  color: var(--text-dark);
+}
+
+/* ================= TOPBAR ================= */
+.topbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 16px 64px;
+  background: var(--primary-gradient);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+}
+
+.logo {
+  font-size: 21px;
+  font-weight: 900;
+  color: white;
+}
+
+.nav a {
+  margin-left: 28px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  color: white;
+  opacity: 0.8;
+}
+
+.nav a:hover {
+  opacity: 1;
+}
+
+/* ================= MAIN ================= */
+.container {
+  padding-top: 140px;
+  padding-left: 90px;
+  padding-right: 90px;
+}
+
+h1 { 
+  font-size: 52px;
+ font-weight: 900;
+ margin-bottom: 36px;
+ text-shadow:
+  0 0 8px rgba(123,140,255,0.5),
+   0 0 18px rgba(123,140,255,0.25);
+ }
+
+/* ================= GLASS CARDS ================= */
+.topic-card,
+.debate-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  padding: 28px;
+  backdrop-filter: blur(14px);
+  box-shadow:
+    0 0 18px rgba(74,91,255,0.25),
+    0 0 32px rgba(197,44,90,0.15);
+  transition: 0.3s ease;
+}
+
+.topic-card {
+  max-width: 900px;
+  font-size: 16px;
+  margin-bottom: 40px;
+  color: var(--text-soft);
+}
+
+.debate-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+.debate-card h2 {
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 20px;
+
+  background: linear-gradient(135deg, #FF2E88, #5B3CFF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  position: relative;
+}
+
+.debate-card h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 50px;
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+  box-shadow: 0 0 10px rgba(74,91,255,0.6);
+}
+
+
+/* ================= AI BOX ================= */
+.ai-box {
+  background: rgba(0,0,0,0.35);
+  border-radius: 14px;
+  padding: 16px;
+  height: 220px;
+  overflow-y: auto;
+  font-size: 15px;
+}
+
+/* ================= MIC ================= */
+.mic-area {
+  border: 1px dashed rgba(255,255,255,0.25);
+  border-radius: 14px;
+  padding: 24px;
+  text-align: center;
+  margin-top: 10px;
+  color: var(--text-soft);
+}
+
+.mic-btn {
+  margin-top: 20px;
+  padding: 16px 40px;
+  border-radius: 16px;
+  border: none;
+  font-size: 15px;
+  font-weight: 700;
+  background: var(--primary-gradient);
+  color: white;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.mic-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(74,91,255,0.35);
+}
+
+/* ================= BUTTONS ================= */
+.button-group {
+  margin-top: 48px;
+  display: flex;
+  justify-content: flex-start; /* đẩy qua trái */
+  gap: 20px;
+}
+
+button {
+  padding: 16px 44px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: 0.25s ease;
+  color: white;
+
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+  background-size: 200% 100%;
+}
+
+/* ===== BACK BUTTON ===== */
+.btn-back {
+  background-position: left center;
+}
+
+/* ===== CONFIRM / COMPLETE BUTTON ===== */
+.btn-confirm,
+.btn-complete {
+  background-position: right center;
+}
+
+/* ===== HOVER EFFECT ===== */
+.btn-back:hover,
+.btn-confirm:hover,
+.btn-complete:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(74,91,255,0.35);
+}
+
+/* ================= FOOTER ================= */
+.footer {
+  margin-top: 40px;
+  font-size: 12px;
+  opacity: 0.4;
+}
+
+/* ================= LIGHT MODE ================= */
+body.light-mode {
+  background: radial-gradient(
+    circle at top,
+    #f6eaff,
+    #eef1ff 70%
+  );
+  color: var(--text-light-main);
+}
+
+body.light-mode h1 {
+  background: linear-gradient(135deg, #FF2E88, #5B3CFF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+}
+
+body.light-mode .topic-card,
+body.light-mode .debate-card {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 200, 255, 0.6),
+    rgba(210, 220, 255, 0.6)
+  );
+  border: 1px solid rgba(123,140,255,0.4);
+  backdrop-filter: blur(16px);
+
+  box-shadow:
+    0 0 25px rgba(197,44,90,0.2),
+    0 0 40px rgba(74,91,255,0.15),
+    inset 0 0 15px rgba(255,255,255,0.3);
+}
+
+
+body.light-mode .topic-card {
+  color: var(--text-light-main);
+}
+
+
+
+
+/* ================= THEME BUTTON ================= */
+.theme-toggle-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+
+  width: 38px;
+  height: 38px;
+
+  padding: 0;              /* QUAN TRỌNG */
+  min-width: 38px;
+  min-height: 38px;
+
+  border-radius: 50%;
+  border: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--primary-gradient);
+  color: white;
+  font-size: 16px;
+  font-weight: normal;
+
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  transition: 0.2s ease;
+
+  z-index: 9999;
+}
+
+.theme-toggle-btn:hover {
+  transform: scale(1.1);
+}
+
+.debate-layout {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.tree-panel {
+  flex: 1;
+}
+
+.feedback-panel {
+  width: 0;
+  overflow: hidden;
+  transition: 0.4s ease;
+  transform: translateX(40px);
+opacity: 0;
+  border-radius: 20px;
+  padding: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(198, 26, 141, 0.716),
+    rgba(80, 22, 188, 0.836)
+  );
+
+  backdrop-filter: blur(14px);
+
+  box-shadow:
+    0 0 30px rgba(123,140,255,0.25),
+    0 0 45px rgba(197,44,90,0.15);
+}
+
+
+body.light-mode .feedback-panel {
+  box-shadow:
+    0 0 30px rgba(123, 141, 255, 0.51),
+    0 0 45px rgba(197, 44, 90, 0.473);
+  color: white;
+}
+
+
+.feedback-panel.active {
+  transform: translateX(0);
+opacity: 1;
+padding: 24px;
+  width: 38%;
+  padding: 24px;
+}
+
+.tree-node {
+  position: relative;
+  padding: 18px 24px;
+  border-radius: 18px;
+  margin: 30px 0;
+  max-width: 520px;
+  outline: none;
+  transition: 0.3s ease;
+  font-size: 15px;
+
+  backdrop-filter: blur(8px);
+
+  box-shadow:
+    0 0 12px rgba(123,140,255,0.25),
+    0 0 24px rgba(197,44,90,0.15);
+}
+
+
+.tree-node:focus {
+  box-shadow: 0 0 14px rgba(74,91,255,0.5);
+}
+
+.tree-node:hover {
+  box-shadow:
+    0 0 20px rgba(123,140,255,0.45),
+    0 0 35px rgba(197,44,90,0.25);
+}
+
+
+/* ================= TREE STRUCTURE ================= */
+
+/* ================= TREE ================= */
+
+.branch-container {
+  position: relative;
+  margin-left: 90px;
+  padding-left: 40px;
+}
+
+/* đường dọc */
+.branch-container::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: rgba(255,255,255,0.25);
+}
+
+/* đường ngang */
+.branch-container > .tree-node::before {
+  content: "";
+  position: absolute;
+  left: -40px;
+  top: 26px;
+  width: 40px;
+  height: 2px;
+  background: rgba(255,255,255,0.25);
+}
+
+
+/* TASK */
+.task-node {
+  font-weight: 900;
+  font-size: 19px;
+  background: linear-gradient(135deg,#C52C5A,#4A5BFF);
+  color: white;
+}
+
+/* LUẬN ĐIỂM */
+.argument-node {
+  background: rgba(255,255,255,0.08);
+  border-left: 4px solid #5B3CFF;
+}
+
+/* LÝ LẼ / BẰNG CHỨNG */
+.support-node {
+  background: rgba(255,255,255,0.05);
+  border-left: 4px solid #FF2E88;
+}
+/* ================= TREE ================= */
+
+
+/* đường dọc */
+.branch-container::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: rgba(255,255,255,0.25);
+}
+
+/* đường ngang */
+.branch-container > .tree-node::before {
+  content: "";
+  position: absolute;
+  left: -40px;
+  top: 26px;
+  width: 40px;
+  height: 2px;
+  background: rgba(255,255,255,0.25);
+}
+
+.add-btn,
+.delete-btn {
+  width: 38px;
+  height: 38px;
+
+  flex: 0 0 38px;     /* QUAN TRỌNG: không cho flex co giãn */
+
+  border-radius: 50%;
+  border: none;
+  margin-top: 15px;
+  margin-bottom: 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  cursor: pointer;
+  padding: 0;
+}
+
+
+.add-btn {
+  background: linear-gradient(135deg,#C52C5A,#4A5BFF);
+  color: white;
+}
+
+.delete-btn {
+  background: #E05666;
+  color: white;
+}
+
+body.light-mode .branch-container::before,
+body.light-mode .branch-container > .tree-node::before {
+  background: rgba(90,90,120,0.35);
+}
+
+.branch-container::before {
+  border-radius: 10px;
+}
+.branch-container {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.tree-panel {
+  width: 100%;
+  transition: 0.4s ease;
+}
+
+.debate-layout.feedback-open .tree-panel {
+  width: 62%;
+}
+
+/* ================= TREE - LIGHT MODE FIX ================= */
+
+body.light-mode .tree-node {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 230, 255, 0.7),
+    rgba(230, 235, 255, 0.7)
+  );
+
+  box-shadow:
+    0 0 18px rgba(123,140,255,0.25),
+    0 0 30px rgba(197,44,90,0.15),
+    inset 0 0 12px rgba(255,255,255,0.4);
+
+  color: #1E1E2F;
+}
+
+
+body.light-mode .argument-node {
+  background: white;
+  border-left: 4px solid #5B3CFF;
+}
+
+body.light-mode .support-node {
+  background: white;
+  border-left: 4px solid #FF2E88;
+}
+
+body.light-mode .task-node {
+  background: linear-gradient(135deg,#C52C5A,#4A5BFF);
+  color: white;
+}
+
+.tree-node * {
+  color: inherit !important;
+}
+body.light-mode .task-node {
+  color: white !important;
+}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+  <div class="logo">Critical AI</div>
+  <div class="nav">
+    <a href="Introduction.html">Giới thiệu</a>
+    <a href="DefineIssue.html">Luyện Tập</a>
+    <a href="History.html">Lịch sử</a>
+    <a href="Login.html">Đăng nhập</a>
+  </div>
+</div>
+
+<div class="container">
+
+<h1 id="role-title"></h1>
+
+
+
+
+<div class="debate-layout">
+
+  <!-- TREE SIDE -->
+  <div class="tree-panel" id="treePanel">
+
+    <div class="tree-node task-node" contenteditable="true" id="taskNode">
+      Nhiệm vụ cần chứng minh...
+    </div>
+
+    <button class="add-btn" id="addRootBtn">+</button>
+    <div id="treeContainer"></div>
+
+    <div class="button-group">
+      <button class="btn-back" onclick="goBack()">Quay lại</button>
+      <button class="btn-confirm" onclick="analyzeTree()">Phân tích</button>
+      <button class="btn-complete" onclick="completeRole()" id="completeBtn" style="display:none;">
+        Hoàn thành vai trò
+      </button>
+    </div>
+
+  </div> <!-- ✅ đóng tree-panel ở đây -->
+
+  <!-- ✅ FEEDBACK phải nằm ngang hàng với tree-panel -->
+  <div class="feedback-panel" id="feedbackPanel">
+    <h2>AI Phân tích</h2>
+    <div id="feedbackContent"></div>
+  </div>
+
+</div>
+
+
+
+<button class="theme-toggle-btn" onclick="toggleTheme()">🌙</button>
+
+<script>
+function toggleTheme() {
+  document.body.classList.toggle("light-mode");
+  const btn = document.querySelector(".theme-toggle-btn");
+
+  if (document.body.classList.contains("light-mode")) {
+    localStorage.setItem("theme", "light");
+    btn.textContent = "☀";
+  } else {
+    localStorage.setItem("theme", "dark");
+    btn.textContent = "🌙";
+  }
+}
+
+window.onload = function() {
+  const savedTheme = localStorage.getItem("theme");
+  const btn = document.querySelector(".theme-toggle-btn");
+
+  if (savedTheme === "light") {
+    document.body.classList.add("light-mode");
+    btn.textContent = "☀";
+  }
+};
+
+
+function createBranch(parent, level = 2){
+
+  
+  const container = document.createElement("div");
+  container.className = "branch-container";
+
+  const nodeWrapper = document.createElement("div");
+  nodeWrapper.style.display = "flex";
+  nodeWrapper.style.alignItems = "center";
+  nodeWrapper.style.gap = "12px";
+
+  const node = document.createElement("div");
+  node.className = "tree-node";
+  node.contentEditable = true;
+
+if(level === 2){
+  node.dataset.placeholder = "Hãy nhập luận điểm";
+  node.classList.add("argument-node");
+} else {
+  node.dataset.placeholder = "Hãy nhập lý lẽ / bằng chứng";
+  node.classList.add("support-node");
+}
+
+node.innerText = node.dataset.placeholder;
+
+/* ===== Placeholder auto clear ===== */
+node.addEventListener("focus", () => {
+  if(node.innerText.trim() === node.dataset.placeholder){
+    node.innerText = "";
+  }
+});
+
+node.addEventListener("blur", () => {
+  if(node.innerText.trim() === ""){
+    node.innerText = node.dataset.placeholder;
+  }
+});
+
+  const addBtn = document.createElement("button");
+  addBtn.className = "add-btn";
+  addBtn.innerText = "+";
+  addBtn.onclick = () => createBranch(container, level + 1);
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.className = "delete-btn";
+  deleteBtn.innerText = "–";
+  deleteBtn.onclick = () => container.remove();
+
+  nodeWrapper.appendChild(node);
+  nodeWrapper.appendChild(addBtn);
+  nodeWrapper.appendChild(deleteBtn);
+
+  container.appendChild(nodeWrapper);
+
+  parent.appendChild(container);
+}
+
+
+/* Root add button */
+document.addEventListener("DOMContentLoaded", async () => {
+
+  /* ================= LẤY ROLE ================= */
+  const roleKey = localStorage.getItem("currentRole");
+
+  console.log("ROLE KEY:", roleKey);
+
+  let debateId = localStorage.getItem("currentDebateId");
+
+if (!debateId) {
+  debateId = "debate_" + Date.now();
+  localStorage.setItem("currentDebateId", debateId);
+}
+
+  if (!roleKey) {
+    window.location.href = "Roles.html";
+    return;
+  }
+
+  /* ================= DOM CACHE ================= */
+  const confirmBtn = document.querySelector(".btn-confirm");
+  const completeBtn = document.getElementById("completeBtn");
+  const roleTitle = document.getElementById("role-title");
+  const taskNode = document.getElementById("taskNode");
+  const treeContainer = document.getElementById("treeContainer");
+  const feedbackPanel = document.getElementById("feedbackPanel");
+  const feedbackContent = document.getElementById("feedbackContent");
+
+  const rootBtn = document.getElementById("addRootBtn");
+rootBtn.onclick = () => createBranch(treeContainer, 2);
+
+  /* ================= CHECK COMPLETED ================= */
+  const completedRoles =
+    JSON.parse(localStorage.getItem("completedRoles")) || {};
+
+  if (completedRoles[roleKey]) {
+    confirmBtn.disabled = true;
+    completeBtn.style.display = "none";
+  }
+
+  /* ================= LOAD ROLE DATA ================= */
+  try {
+    const debateId = localStorage.getItem("currentDebateId");
+
+const res = await fetch("/get-roles", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ debateId })
+});
+    const data = await res.json();
+    console.log("DATA SERVER:", data);
+
+    console.log("DebateId:", debateId);
+console.log("RoleKey:", roleKey);
+console.log("Data:", data);
+
+    const roleData = data[roleKey];
+
+    if (!roleData) {
+      window.location.href = "Roles.html";
+      return;
+    }
+
+    // Hiện tên vai trò
+    roleTitle.innerText = roleData.ten;
+
+    // Gán nhiệm vụ vào node gốc
+    taskNode.innerText = roleData.nhiemVu;
+
+} catch (err) {
+  console.error("Lỗi load role:", err);
+  return;
+}
+
+/* ================= RESTORE SAVED DATA ================= */
+
+const savedData =
+  localStorage.getItem("debateData_" + roleKey + "_" + debateId);
+
+if (savedData) {
+  const parsed = JSON.parse(savedData);
+
+if (parsed.task && parsed.task.trim() !== "") {
+  taskNode.innerText = parsed.task;
+}
+
+  // Clear tree trước khi rebuild
+  treeContainer.innerHTML = "";
+
+  // Rebuild tree
+  if (parsed.tree && parsed.tree.length > 0) {
+    rebuildTree(treeContainer, parsed.tree);
+  }
+
+  // Restore feedback nếu có
+  if (parsed.feedback) {
+    feedbackPanel.classList.add("active");
+    document
+      .querySelector(".debate-layout")
+      .classList.add("feedback-open");
+
+    feedbackContent.innerText = parsed.feedback;
+
+    // Khi đã từng phân tích → cho phép hoàn thành
+    completeBtn.style.display = "inline-block";
+  }
+}
+
+/* ================= REBUILD TREE ================= */
+function rebuildTree(parent, nodes, level = 2) {
+
+  nodes.forEach(nodeData => {
+
+    const container = document.createElement("div");
+    container.className = "branch-container";
+
+    const nodeWrapper = document.createElement("div");
+    nodeWrapper.style.display = "flex";
+    nodeWrapper.style.alignItems = "center";
+    nodeWrapper.style.gap = "12px";
+
+    const node = document.createElement("div");
+    node.className = "tree-node";
+    node.contentEditable = true;
+    node.innerText = nodeData.text || "";
+
+    if (level === 2) {
+      node.classList.add("argument-node");
+    } else {
+      node.classList.add("support-node");
+    }
+
+    const addBtn = document.createElement("button");
+    addBtn.className = "add-btn";
+    addBtn.innerText = "+";
+    addBtn.onclick = () =>
+      createBranch(container, level + 1);
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.className = "delete-btn";
+    deleteBtn.innerText = "–";
+    deleteBtn.onclick = () => container.remove();
+
+    nodeWrapper.appendChild(node);
+    nodeWrapper.appendChild(addBtn);
+    nodeWrapper.appendChild(deleteBtn);
+
+    container.appendChild(nodeWrapper);
+    parent.appendChild(container);
+
+    if (nodeData.children && nodeData.children.length > 0) {
+      rebuildTree(container, nodeData.children, level + 1);
+    }
+
+  });
+
+}
+
+});
+
+function goBack(){
+  saveCurrentTree();
+  window.location.href = "Roles.html";
+}
+
+
+function extractNode(container){
+
+  const node = container.querySelector(":scope > div > .tree-node");
+  const text = node?.innerText.trim() || "";
+
+  const childrenContainers = container.querySelectorAll(":scope > .branch-container");
+
+  let children = [];
+
+  childrenContainers.forEach(child=>{
+    children.push(extractNode(child));
+  });
+
+  return {
+    text,
+    children
+  };
+}
+
+async function completeRole() {
+
+  const debateId = localStorage.getItem("currentDebateId");
+  const roleKey = localStorage.getItem("currentRole");
+
+    await fetch("/complete-role", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      debateId,
+      role: roleKey
+    })
+  });
+
+  let completedRoles = JSON.parse(localStorage.getItem("completedRoles")) || {};
+  completedRoles[roleKey] = true;
+  localStorage.setItem("completedRoles", JSON.stringify(completedRoles));
+
+  window.location.href = "Roles.html";
+}
+
+
+async function analyzeTree(){
+
+  saveCurrentTree();
+
+  const confirmBtn = document.querySelector(".btn-confirm");
+  confirmBtn.disabled = true;
+
+  let timeLeft = 15;
+  confirmBtn.innerText = `AI đang phân tích... ${timeLeft}s`;
+
+  const countdown = setInterval(() => {
+    timeLeft--;
+    if (timeLeft > 0) {
+      confirmBtn.innerText = `AI đang phân tích... ${timeLeft}s`;
+    } else {
+      confirmBtn.innerText = "AI đang đánh giá sâu hơn...";
+      clearInterval(countdown);
+    }
+  }, 1000);
+
+  const currentRole = localStorage.getItem("currentRole");
+
+  if(!currentRole){
+    alert("Không xác định được vai trò.");
+    window.location.href = "Roles.html";
+    return;
+  }
+
+  const taskText = document.getElementById("taskNode").innerText.trim();
+  const treeContainer = document.getElementById("treeContainer");
+  const rootBranches = treeContainer.querySelectorAll(":scope > .branch-container");
+
+  if(rootBranches.length === 0){
+    alert("Bạn cần thêm ít nhất 1 luận điểm trước khi phân tích.");
+    confirmBtn.disabled = false;
+    confirmBtn.innerText = "Phân tích";
+    clearInterval(countdown);
+    return;
+  }
+
+  const feedbackPanel = document.getElementById("feedbackPanel");
+  feedbackPanel.classList.add("active");
+  document.querySelector(".debate-layout").classList.add("feedback-open");
+
+  let tree = [];
+  rootBranches.forEach(branch=>{
+    tree.push(extractNode(branch));
+  });
+
+  try{
+
+    const debateId = localStorage.getItem("currentDebateId");
+
+    const response = await fetch("/mindmap-debate",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({
+        debateId: debateId,
+        role: currentRole,
+        task: taskText,
+        tree: tree
+      })
+    });
+
+    const data = await response.json();
+
+    clearInterval(countdown);
+
+    confirmBtn.innerText = "Phân tích lại";
+    confirmBtn.disabled = false;
+
+    if(data.feedback){
+      document.getElementById("feedbackContent").innerText = data.feedback;
+    } else if(data.error){
+      document.getElementById("feedbackContent").innerText = data.error;
+    } else {
+      document.getElementById("feedbackContent").innerText = "Bạn đã hết lượt phân tích rồi, bạn có thể làm tiếp các vai trò khác nhé!";
+    }
+
+    if(rootBranches.length > 0){
+      document.getElementById("completeBtn").style.display = "inline-block";
+    }
+
+    saveCurrentTree();
+
+  }
+  catch(err){
+    clearInterval(countdown);
+    confirmBtn.innerText = "Phân tích";
+    confirmBtn.disabled = false;
+
+    document.getElementById("feedbackContent").innerText =
+      "Không thể kết nối tới AI backend.";
+  }
+}
+
+
+function saveCurrentTree(){
+
+  const role = localStorage.getItem("currentRole");
+  if(!role) return;
+
+  const taskText = document.getElementById("taskNode").innerText.trim();
+  const treeContainer = document.getElementById("treeContainer");
+  const rootBranches = treeContainer.querySelectorAll(":scope > .branch-container");
+
+  let tree = [];
+
+  rootBranches.forEach(branch=>{
+    tree.push(extractNode(branch));
+  });
+
+const feedback = document.getElementById("feedbackContent").innerText;
+
+const data = {
+  task: taskText,
+  tree: tree,
+  feedback: feedback
+};
+
+  const debateId = localStorage.getItem("currentDebateId");
+localStorage.setItem("debateData_" + role + "_" + debateId, JSON.stringify(data));
+}
+window.addEventListener("beforeunload", saveCurrentTree);
+
+function startNewDebate(){
+  localStorage.removeItem("currentDebateId");
+  window.location.href = "Roles.html";
+}
+
+
+</script>
+<script src="authFetch.js"></script>
+</body>
+</html>

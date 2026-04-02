@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Critical AI</title>
+
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
+
+<style>
+* {
+  box-sizing: border-box;
+  font-family: Inter, sans-serif;
+}
+
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, #2B1E4A, #24163F 60%);
+  color: #ffffff;
+}
+
+
+/* ===== TOP BAR ===== */
+.topbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 16px 64px;
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+}
+
+
+.topbar .logo-top {
+  font-weight: 900;
+  font-size: 21px;
+  letter-spacing: 0.5px;
+  color: white;
+}
+
+
+.topbar nav a {
+  margin-left: 28px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  color: white;
+  opacity: 0.75;
+}
+
+
+.topbar nav a:hover {
+  opacity: 1;
+}
+
+
+/* ===== HERO LAYOUT ===== */
+.intro-container {
+  padding-top: 140px;
+  position: relative;
+  padding-left: 120px;
+  padding-right: 120px;
+  min-height: 100vh;   /* full màn hình */
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  align-items: center;
+  gap: 60px;
+}
+
+
+.intro-left h1 {
+  font-size: 88px;
+  font-weight: 900;
+  letter-spacing: -2px;
+  margin-bottom: 28px;
+  color: white;
+  text-shadow:
+    0 0 20px rgba(123,140,255,0.6),
+    0 0 40px rgba(123,140,255,0.4),
+    0 0 80px rgba(123,140,255,0.25);
+}
+.intro-description {
+  font-size: 17px;
+  line-height: 1.8;
+  opacity: 0.85;
+  margin-bottom: 40px;
+  max-width: 520px;
+}
+
+
+.start-btn {
+  padding: 16px 44px;
+  border-radius: 16px;
+  border: none;
+  font-size: 15px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+  color: white;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+
+.start-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(74,91,255,0.5);
+}
+
+
+.image-panel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-panel img {
+  width: 100%;
+  max-width: 680px;
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+  100% { transform: translateY(0px); }
+}
+
+
+/* ===== NEW SECTIONS ===== */
+
+
+.section {
+  padding: 120px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+
+.section h2 {
+  font-size: 48px;
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 60px;
+  letter-spacing: -1px;
+  color: white;
+  text-shadow:
+    0 0 20px rgba(123,140,255,0.6),
+    0 0 40px rgba(123,140,255,0.4),
+    0 0 80px rgba(123,140,255,0.25);
+}
+
+body.light-mode .section h2 {
+  background: linear-gradient(135deg,#FF2E88,#5B3CFF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+}
+
+.section h3 {
+  font-size: 22px;
+  margin-bottom: 14px;
+  background: linear-gradient(135deg,#FF2E88,#5B3CFF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+.section p {
+  font-size: 16px;
+  line-height: 1.9;
+  opacity: 0.9;
+}
+
+
+.step {
+  margin-bottom: 50px;
+}
+
+
+.flow-box {
+  background: rgba(255,255,255,0.12);
+  border-radius: 20px;
+  padding: 36px;
+  border: 1px solid rgba(123,140,255,0.6);
+  backdrop-filter: blur(16px);
+
+  box-shadow:
+    0 0 30px rgba(74,91,255,0.4),
+    0 0 60px rgba(197,44,90,0.3);
+
+  margin-bottom: 80px;
+  text-align: center;
+
+  font-size: 18px;          /* to hơn */
+  font-weight: 700;         /* đậm hơn */
+  letter-spacing: 0.5px;    /* giãn nhẹ */
+  line-height: 2.2;
+
+  color: white;
+  text-shadow:
+    0 0 10px rgba(123,140,255,0.7),
+    0 0 20px rgba(91,60,255,0.5);
+}
+
+body.light-mode .flow-box {
+  font-weight: 700;
+  font-size: 18px;
+  color: #2B2E4A;
+  text-shadow: none;
+}
+
+
+/* scroll fade */
+.fade {
+  opacity:0;
+  transform:translateY(40px);
+  transition:.8s ease;
+}
+.fade.show {
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* ===== SCROLL DOWN BLOCK ===== */
+.scroll-down {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  cursor: pointer;
+  animation: fadeUp 1.5s ease-in-out infinite alternate;
+}
+
+.scroll-down span {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+  opacity: 0.9;
+}
+
+.scroll-down .arrow {
+  font-size: 34px;
+  animation: bounce 1.8s infinite;
+  text-shadow: 0 0 15px rgba(91,60,255,0.8);
+}
+
+/* Bounce */
+@keyframes bounce {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(10px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0.7; }
+  to { opacity: 1; }
+}
+
+/* Light mode arrow */
+body.light-mode .scroll-down .arrow {
+  color: #5B3CFF;
+  text-shadow: none;
+}
+/* ================= LIGHT MODE ================= */
+
+body.light-mode {
+  background: radial-gradient(circle at top, #EEF0FF, #F7F8FF 70%);
+  color: #1E1E2F !important;
+}
+
+/* HERO TITLE */
+body.light-mode .intro-left h1 {
+  background: linear-gradient(135deg,#FF2E88,#5B3CFF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+}
+
+/* Sections */
+body.light-mode .section h3 {
+  background: linear-gradient(135deg,#FF2E88,#5B3CFF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+body.light-mode .flow-box {
+  background: #ffffff;
+  border: 1px solid rgba(74,91,255,0.35);
+  box-shadow:
+    0 0 20px rgba(74,91,255,0.25),
+    0 0 40px rgba(197,44,90,0.15);
+  backdrop-filter: none;
+}
+
+/* Arrow */
+body.light-mode .scroll-down {
+  color: #5B3CFF;
+  text-shadow: none;
+}
+
+/* ===== THEME BUTTON ===== */
+/* ===== THEME BUTTON (FINAL CLEAN VERSION) ===== */
+.theme-toggle-btn {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: linear-gradient(135deg, #FF2E88, #5B3CFF);
+  color: white;
+
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  transition: 0.3s ease;
+  z-index: 2147483647;
+}
+
+.theme-toggle-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+}
+
+
+.theme-toggle-btn:hover {
+  transform: scale(1.1);
+}
+
+body.light-mode .theme-toggle-btn {
+  background: #7B8CFF;
+  color: white !important;
+}
+
+/* ===== STEP IMAGE ===== */
+.step-image {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.step-image img {
+  width: 100%;
+  max-width: 720px;
+  border-radius: 18px;
+  border: 1px solid rgba(123,140,255,0.4);
+  box-shadow:
+    0 0 25px rgba(74,91,255,0.35),
+    0 0 50px rgba(197,44,90,0.25);
+  transition: 0.4s ease;
+}
+
+.step-image img:hover {
+  transform: scale(1.02);
+}
+
+/* Light mode */
+body.light-mode .step-image img {
+  border: 1px solid rgba(74,91,255,0.25);
+  box-shadow:
+    0 0 20px rgba(74,91,255,0.2);
+}
+
+body {
+  position: relative;
+  z-index: 0;
+}
+
+.step-image img {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  will-change: opacity;
+}
+
+.step-image {
+  position: relative;
+  min-height: 200px;
+}
+
+.image-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.step-image img {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+</style>
+</head>
+
+
+<body>
+<button class="theme-toggle-btn" onclick="toggleTheme()">🌙</button>
+
+<div class="topbar">
+  <div class="logo-top">Critical AI</div>
+  <nav>
+    <a href="#">Giới thiệu</a>
+    <a href="DefineIssue.html">Luyện Tập</a>
+    <a href="History.html">Lịch sử</a>
+    <a href="Login.html">Đăng nhập</a>
+  </nav>
+</div>
+
+
+<!-- HERO -->
+<div class="intro-container fade">
+  <div class="intro-left">
+    <h1>Critical AI</h1>
+
+
+    <div class="intro-description">
+
+      <p>
+    Là nền tảng rèn luyện tư duy phản biện dựa trên khung phương pháp của Richard Paul và Linda Elder,
+  nền tảng tập trung vào cấu trúc lập luận, tiêu chuẩn đánh giá và tính nhất quán trong suy nghĩ.
+  </p>
+  <p>
+Thông qua phân tích đa góc nhìn kết hợp xây dựng lập luận bằng sơ đồ tư duy, Critical AI giúp bạn nhận diện 
+lỗ hổng logic và từng bước cấu trúc hóa quan điểm — để tư duy trở nên rõ ràng, chặt chẽ và có chiều sâu hơn.
+  </p>
+
+
+    </div>
+
+
+    <button class="start-btn" onclick="window.location.href='DefineIssue.html'">
+      Bắt đầu ngay
+    </button>
+  </div>
+
+
+<div class="image-panel">
+  <img src="thinking.png" alt="Thinking Illustration">
+</div>
+<div class="scroll-down" onclick="scrollToNext()">
+  <span>Tìm hiểu thêm</span>
+  <div class="arrow">↓</div>
+</div>
+
+</div>
+
+
+<!-- GIỚI THIỆU -->
+<div class="section fade">
+
+
+  <h2>Các bước giúp bạn rèn luyện tư duy</h2>
+
+
+  <div class="flow-box">
+    Xác định vấn đề → Hoàn thiện 3 vai → Chỉnh sửa →
+    Quyết định → Mô phỏng hệ quả & Chấm điểm → Theo dõi tiến bộ
+  </div>
+
+
+<div class="step">
+  <h3>Bước 1: Nhập vấn đề cần bàn luận</h3>
+  <p>
+    Dựa vào câu trả lời mà bạn nhập, hệ thống sẽ khái quát lại vấn đề để đảm bảo bạn đã xác định đúng trọng tâm cần tranh luận.
+    Việc định nghĩa rõ vấn đề là bước đầu tiên và quan trọng nhất của tư duy phản biện.
+  </p>
+</div>
+
+<div class="step">
+  <h3>Bước 2: Tranh luận từ ba góc nhìn</h3>
+  <p>
+    Hệ thống sẽ tạo ra ba vai đại diện cho ba góc nhìn khác nhau về vấn đề. Bạn sẽ lần lượt nhập lập luận cho từng vai, cố gắng xây dựng quan điểm một cách thuyết phục nhất.
+  
+  </p>
+
+  <p>
+    Ở mỗi vai, bạn xây dựng lập luận theo cấu trúc gồm: Luận điểm, Lý do, Bằng chứng và Hạn chế / Phản biện, trình bày theo dạng sơ đồ tư duy để đảm bảo tính logic và rõ ràng.
+    Ấn vô dấu cộng để nhập luận điểm.
+  </p>
+
+</div>
+
+<div class="step">
+  <h3>Bước 3: Nhận phản hồi và chỉnh sửa</h3>
+  <p>
+    Sau khi hoàn thành ba vai, hệ thống sẽ phân tích và đưa ra phản hồi về điểm mạnh,
+    điểm yếu của từng góc nhìn cũng như những mâu thuẫn hoặc thiếu sót trong lập luận của bạn dựa theo 8 yếu tố của phương pháp Paul & Elder.
+  </p>
+  <p>
+    Bạn sẽ có cơ hội chỉnh sửa lại các góc nhìn dựa trên phản hồi này và có tối đa 3 lần phân tích cho mỗi vai, phân tích tối thiểu 1 lần để hoàn thành vai trò.
+    Mỗi lần chỉnh sửa là một lần đào sâu hơn vào vấn đề.
+    Chính quá trình lặp lại này giúp tư duy của bạn tiến bộ.
+  </p>
+  <div class="step-image">
+    <div class="image-loading">Đang tải hình ảnh... Bạn có thể quay lại trong ít phút sau.</div>
+    <img src="images/step-3.webp" alt="Minh họa bước 3">
+</div>
+
+<div class="step">
+  <h3>Bước 4: Đưa ra quyết định</h3>
+  <p>
+    Sau khi hoàn thành ba góc nhìn, bạn phải tự đưa ra quyết định cuối cùng.
+    Việc ra quyết định trong bối cảnh đã cân nhắc nhiều chiều giúp bạn rèn luyện
+    khả năng suy nghĩ độc lập và trách nhiệm với lựa chọn của mình.
+  </p>
+
+</div>
+
+<div class="step">
+  <h3>Bước 5: Mô phỏng hậu quả và chấm điểm</h3>
+  <p>
+    Hệ thống sẽ dựa vào quyết định cuối cùng của bạn, mô phỏng các hậu quả có thể xảy ra
+    và tổng hợp lại một sơ đồ tư duy tổng quan lại những lý lẽ bạn đã đưa ra.
+  </p>
+  <p>
+    Bên cạnh đó hệ thống sẽ chấm điểm và đưa ra nhận xét về quá trình tư duy của bạn
+    theo 9 tiêu chí của phương pháp Paul & Elder.
+  </p>
+
+</div>
+
+<div class="step">
+  <h3>Bước 6: Theo dõi tiến bộ</h3>
+  <p>
+    Toàn bộ quá trình luyện tập của bạn sẽ được lưu lại trong mục Lịch sử. Bạn có thể xem lại
+    các phiên đã hoàn thành, theo dõi sự tiến bộ của mình theo thời gian và nhận ra những điểm mạnh
+    cũng như điểm cần cải thiện trong tư duy phản biện của mình.
+  </p>
+  <div class="step-image">
+    <div class="image-loading">Đang tải hình ảnh... Bạn có thể quay lại trong ít phút sau.</div>
+    <img src="images/step-3.webp" alt="Minh họa bước 3">
+</div>
+  </div>
+
+</div> <!-- đóng step 6 -->
+<div class="step" id="criteria">
+  <h3>Tiêu chí chấm điểm tư duy</h3>
+
+  <p>
+    Hệ thống sẽ đánh giá quá trình tư duy của bạn theo 9 tiêu chí cốt lõi của khung phương pháp Paul & Elder.
+  </p>
+
+  <div style="
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:50px;
+      line-height:1.9;
+      font-size:16px;
+  ">
+
+    <!-- CỘT TRÁI -->
+    <div>
+
+      <div style="margin-bottom:30px;">
+        <strong>Thang điểm</strong><br>
+        0–2: Gần như không có <br>
+        3–4: Nhiều thiếu sót rõ ràng <br>
+        5–6: Đủ dùng nhưng còn hạn chế <br>
+        7–8: Ít lỗi, lập luận khá vững <br>
+        9–10: Rõ ràng, sâu sắc, có cân nhắc đa chiều
+      </div>
+
+      <p><strong>1. Rõ ràng</strong><br>
+      Ý có dễ hiểu không? Có mơ hồ không?</p>
+
+      <p><strong>2. Chính xác</strong><br>
+      Có dựa trên thông tin hợp lý không?</p>
+
+      <p><strong>3. Cụ thể</strong><br>
+      Có ví dụ, bằng chứng rõ ràng không?</p>
+
+    </div>
+
+    <!-- CỘT PHẢI -->
+    <div>
+
+      <p><strong>4. Liên quan</strong><br>
+      Có tập trung đúng trọng tâm không?</p>
+
+      <p><strong>5. Chiều sâu</strong><br>
+      Có phân tích được sự phức tạp không?</p>
+
+      <p><strong>6. Đa chiều</strong><br>
+      Có xem xét góc nhìn khác không?</p>
+
+      <p><strong>7. Logic</strong><br>
+      Các phần có nhất quán với nhau không?</p>
+
+      <p><strong>8. Trọng yếu</strong><br>
+      Có tập trung vào điều quan trọng nhất không?</p>
+
+      <p><strong>9. Công bằng</strong><br>
+      Có khách quan, không thiên kiến không?</p>
+
+    </div>
+
+  </div>
+
+</div>
+</div> <!-- đóng section Giới thiệu -->
+
+<!-- FOUNDERS -->
+<div class="section fade">
+  <h2>Người sáng lập</h2>
+  <p style="text-align:center; max-width:800px; margin:auto;">
+    Giang Xuân Mai, Phan Ngọc Hà Thy, Nguyễn Nữ An Nhiên cùng thầy giáo Đặng Văn Phương
+    thuộc trường THCS-THPT Nam Sài Gòn đã sáng tạo và thành lập nền tảng này.
+    <br><br>
+    Chúng tôi mong muốn tạo ra một môi trường nơi mọi  học sinh sử dụng AI để rèn luyện tư duy,
+    thay vì lạm dụng AI làm mài mòn tư duy.
+  </p>
+</div>
+
+
+<script>
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('show');
+    }
+  });
+},{threshold:.2});
+
+
+document.querySelectorAll('.fade').forEach(el=>{
+  observer.observe(el);
+});
+</script>
+
+
+
+<script>
+function toggleTheme() {
+  document.body.classList.toggle("light-mode");
+  const btn = document.querySelector(".theme-toggle-btn");
+
+  if (document.body.classList.contains("light-mode")) {
+    localStorage.setItem("theme", "light");
+    btn.textContent = "☀";
+  } else {
+    localStorage.setItem("theme", "dark");
+    btn.textContent = "🌙";
+  }
+}
+
+window.onload = function() {
+  const savedTheme = localStorage.getItem("theme");
+  const btn = document.querySelector(".theme-toggle-btn");
+
+  if (savedTheme === "light") {
+    document.body.classList.add("light-mode");
+    btn.textContent = "☀";
+  }
+};
+
+
+</script>
+<script>
+function scrollToNext() {
+  window.scrollTo({
+    top: window.innerHeight - 80,
+    behavior: "smooth"
+  });
+}
+
+window.addEventListener("load", function() {
+  if (!window.location.hash) {
+    setTimeout(() => {
+      window.scrollTo({
+        top: 60,
+        behavior: "smooth"
+      });
+    }, 600);
+  }
+});
+
+</script>
+
+<script>
+window.addEventListener("load", function() {
+  document.querySelectorAll('.step-image img').forEach(img => {
+
+    function show() {
+      const loading = img.parentElement.querySelector('.image-loading');
+      if (loading) loading.style.display = "none";
+      img.style.opacity = "1";
+    }
+
+    if (img.complete) {
+      show();
+    } else {
+      img.addEventListener("load", show);
+      img.addEventListener("error", () => {
+        const loading = img.parentElement.querySelector('.image-loading');
+        if (loading) loading.textContent = "Không thể tải hình ảnh.";
+      });
+    }
+
+  });
+});
+</script>
+</body>
+</html>
+

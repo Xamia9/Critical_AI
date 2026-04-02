@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Critical AI | Simulation & Scoring</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
+<style>
+* {
+  box-sizing: border-box;
+  font-family: Inter, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, #2B1E4A, #24163F 60%);
+  color: #ffffff;
+  padding-top: 140px;
+  padding-left: 90px;
+  padding-right: 90px;
+  padding-bottom: 80px;
+}
+
+/* ===== TOPBAR ===== */
+.topbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  width: 100%;
+  padding: 16px 64px;
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+}
+
+.logo {
+  font-weight: 900;
+  font-size: 21px;
+  color: white;
+}
+
+.topbar nav a {
+  margin-left: 28px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  color: white;
+  opacity: 0.9;
+}
+
+.topbar nav a:hover {
+  opacity: 1;
+}
+
+/* ===== TITLE ===== */
+h1 {
+  font-size: 52px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  text-shadow:
+    0 0 15px rgba(74,91,255,0.6),
+    0 0 30px rgba(197,44,90,0.4);
+}
+
+.subtitle {
+  opacity: 0.7;
+  margin-bottom: 50px;
+}
+
+/* ===== SECTION CARD (GIỐNG PANEL) ===== */
+.section-card {
+  background: rgba(255,255,255,0.07);
+  border-radius: 20px;
+  padding: 32px;
+  border: 1px solid rgba(74,91,255,0.4);
+  backdrop-filter: blur(12px);
+  margin-bottom: 40px;
+
+  box-shadow:
+    0 0 35px rgba(74,91,255,0.35),
+    0 0 60px rgba(197,44,90,0.25);
+
+  transition: 0.25s ease;
+}
+
+.section-card:hover {
+  box-shadow:
+    0 0 45px rgba(74,91,255,0.45),
+    0 0 75px rgba(197,44,90,0.35);
+}
+
+/* ===== GRID ===== */
+.sim-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.sim-box,
+.score-box {
+  background: rgba(255,255,255,0.05);
+  border-radius: 18px;
+  padding: 22px;
+  border: 1px solid rgba(255,255,255,0.12);
+  line-height: 1.6;
+  font-size: 15px;
+  color: #cfd1e6;
+}
+
+/* ===== SCORE ===== */
+.score-total {
+  font-size: 44px;
+  font-weight: 900;
+  margin-bottom: 28px;
+}
+
+.score-value {
+  font-size: 20px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #FF2E88, #5B3CFF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ===== FEEDBACK ===== */
+.feedback-list {
+  line-height: 1.7;
+  font-size: 15px;
+  color: #cfd1e6;
+}
+
+/* ===== BUTTON GROUP ===== */
+.button-group {
+  margin-top: 48px;
+  display: flex;
+  justify-content: flex-start;
+  gap: 20px;
+}
+
+/* ===== BUTTON STYLE ĐỒNG BỘ ===== */
+.btn-secondary,
+.btn-primary {
+  padding: 16px 44px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  color: white;
+  transition: 0.25s ease;
+
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+  background-size: 200% 100%;
+}
+
+/* Nút trái */
+.button-group button:first-child {
+  background-position: left center;
+}
+
+/* Nút giữa */
+.button-group button:nth-child(2) {
+  background-position: center;
+}
+
+/* Nút phải */
+.button-group button:last-child {
+  background-position: right center;
+}
+
+.button-group button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(74,91,255,0.35);
+}
+
+.section-title {
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 24px;
+
+  background: linear-gradient(135deg, #FF2E88, #5B3CFF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  letter-spacing: 0.5px;
+  position: relative;
+}
+
+/* thêm gạch glow phía dưới */
+.section-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 60px;
+  height: 4px;
+  border-radius: 4px;
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+  box-shadow: 0 0 12px rgba(74,91,255,0.6);
+}
+
+
+/* ===== THEME TOGGLE ===== */
+.theme-toggle-btn {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  color: white;
+  z-index: 9999;
+}
+
+/* ===== LIGHT MODE ===== */
+body.light-mode {
+  background: radial-gradient(circle at top, #EEF0FF, #F7F8FF 70%);
+  color: #1E1E2F;
+}
+
+body.light-mode h1 {
+  background: linear-gradient(135deg, #FF2E88, #5B3CFF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+}
+
+body.light-mode .section-card {
+  background: #ffffff;
+  border: 1px solid rgba(74,91,255,0.35);
+  box-shadow:
+    0 0 20px rgba(74,91,255,0.25),
+    0 0 40px rgba(197,44,90,0.15);
+}
+
+body.light-mode .sim-box,
+body.light-mode .score-box {
+  background: rgba(0,0,0,0.04);
+  border: 1px solid rgba(0,0,0,0.08);
+  color: #1E1E2F;
+}
+
+body.light-mode .feedback-list {
+  color: #1E1E2F;
+}
+
+/* ===== MINDMAP TREE STYLE ===== */
+
+.mindmap-container {
+  position: relative;
+  width: 100%;
+  height: 700px;
+  margin-top: 20px;
+  overflow: hidden;
+  border-radius: 20px;
+  cursor: grab;
+}
+
+.mindmap-viewport {
+  position: absolute;
+  width: 2000px;
+  height: 1400px;
+  transform-origin: center;
+}
+
+.mindmap-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Node chung */
+.mindmap-node {
+  position: absolute;
+  padding: 10px 18px;
+  border-radius: 14px;
+  font-weight: 600;
+  font-size: 14px;
+
+  max-width: 180px;        /* Giới hạn chiều ngang */
+  white-space: normal;     /* Cho phép xuống dòng */
+  word-wrap: break-word;   /* Tự ngắt chữ dài */
+
+  text-align: center;
+  min-width: 120px;
+  max-width: 180px;
+  text-align: center;
+  color: white;
+}
+
+.mindmap-node:hover {
+  transform: scale(1.05);
+}
+
+.mindmap-line {
+  stroke: white;
+}
+
+body.light-mode .mindmap-line {
+  stroke: black;
+}
+/* LEVEL COLORS */
+
+.level-0 {  /* Tiêu đề chính */
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+  font-weight: 800;
+}
+
+.level-1 {  /* 3 vai trò */
+  background: #8B7CFF;
+}
+
+.level-2 {  /* luận điểm */
+  background: #7ED6DF;
+}
+
+.level-3 {  /* lý lẽ */
+  background: #F8A5C2;
+}
+
+.level-4 {
+  background: #F5CD79;
+}
+
+.level-5 {
+  background: #55E6C1;
+}
+/* ===== SCORE SUMMARY BOX ===== */
+.score-summary-box {
+  background: rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 28px;
+  margin-bottom: 32px;
+  border: 1px solid rgba(255,255,255,0.15);
+
+  box-shadow:
+    0 0 25px rgba(74,91,255,0.25),
+    0 0 45px rgba(197,44,90,0.15);
+}
+
+.summary-feedback {
+  margin-top: 18px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #cfd1e6;
+}
+
+body.light-mode .score-summary-box {
+  background: #ffffff;
+  border: 1px solid rgba(74,91,255,0.35);
+}
+
+body.light-mode .summary-feedback {
+  color: #1E1E2F;
+}
+
+.toast {
+  position: fixed;
+  bottom: 90px;
+  right: 30px;
+  padding: 14px 22px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+  color: white;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: 0.3s ease;
+  z-index: 9999;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.export-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  z-index: 10;
+
+  background: linear-gradient(135deg,#C52C5A,#4A5BFF);
+  color: white;
+
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  transition: 0.25s ease;
+}
+
+.export-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* Dark mode: dây trắng */
+.mindmap-line {
+  stroke: white;
+}
+
+/* Light mode: dây đen */
+body.light-mode .mindmap-line {
+  stroke: black;
+}
+
+/* Khi export: luôn đen */
+.exporting .mindmap-line {
+  stroke: #000 !important;
+}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+  <div class="logo">Critical AI</div>
+  <nav>
+    <a href="Introduction.html">Giới thiệu</a>
+    <a href="DefineIssue.html">Luyện Tập</a>
+    <a href="History.html">Lịch sử</a>
+    <a href="Login.html">Đăng nhập</a>
+  </nav>
+</div>
+
+<div class="container">
+
+<h1>Kết quả & Đánh giá</h1>
+<div id="loadingBox" style="
+  margin-bottom:40px;
+  padding:25px;
+  border-radius:18px;
+  background: rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.2);
+  text-align:center;
+  box-shadow: 0 0 25px rgba(74,91,255,0.3);
+">
+  <div style="font-size:20px; font-weight:700; margin-bottom:8px;">
+    AI đang phân tích kết quả...
+  </div>
+  <div style="opacity:0.8; margin-bottom:10px;">
+    Vui lòng chờ trong khoảng <span id="estimatedTime">12</span> giây
+  </div>
+  <div style="font-size:18px;">
+    ⏳ Còn lại: <span id="countdown">15</span>s
+  </div>
+</div>
+<div class="subtitle">AI mô phỏng các hậu quả tiềm ẩn và đánh giá quá trình suy luận phản biện của bạn.</div>
+
+<!-- A. SIMULATION -->
+<div class="section-card">
+<div class="section-title">A. Mô phỏng Hậu quả</div>
+
+<div class="sim-grid">
+
+<div class="sim-box">
+<strong>Kết quả ngắn hạn</strong><br>
+<div id="shortTerm"></div>
+</div>
+
+<div class="sim-box">
+<strong>Kết quả dài hạn</strong><br>
+<div id="longTerm"></div>
+</div>
+
+<div class="sim-box">
+<strong>Các rủi ro tiềm ẩn</strong><br>
+<div id="risks"></div>
+</div>
+
+<div class="sim-box">
+<strong>Các mâu thuẫn logic còn tồn tại</strong><br>
+<div id="conflicts"></div>
+</div>
+
+</div>
+</div>
+
+<!-- B. SCORING -->
+<div class="section-card">
+  <div class="section-title">B. Điểm tư duy phản biện</div>
+
+  <!-- 🔥 KHUNG TỔNG ĐIỂM + NHẬN XÉT -->
+  <div class="score-summary-box">
+    <div class="score-total" id="totalScore"></div>
+
+    <div class="summary-feedback">
+      <div>
+        <strong>Ưu điểm:</strong>
+        <div id="summaryStrengths"></div>
+      </div>
+
+      <div style="margin-top:16px;">
+        <strong>Hạn chế:</strong>
+        <div id="summaryWeaknesses"></div>
+      </div>
+    </div>
+  </div>
+
+<div class="score-grid">
+
+<div class="score-box">
+  <strong>Độ rõ ràng</strong>
+  <div class="score-value" id="clarityScore"></div>
+</div>
+
+<div class="score-box">
+  <strong>Độ chính xác</strong>
+  <div class="score-value" id="accuracyScore"></div>
+</div>
+
+<div class="score-box">
+  <strong>Độ cụ thể</strong>
+  <div class="score-value" id="precisionScore"></div>
+</div>
+
+<div class="score-box">
+  <strong>Tính liên quan</strong>
+  <div class="score-value" id="relevanceScore"></div>
+</div>
+
+<div class="score-box">
+  <strong>Chiều sâu</strong>
+  <div class="score-value" id="depthScore"></div>
+</div>
+
+<div class="score-box">
+  <strong>Độ bao quát</strong>
+  <div class="score-value" id="breadthScore"></div>
+</div>
+
+<div class="score-box">
+  <strong>Tính logic</strong>
+  <div class="score-value" id="logicScore"></div>
+</div>
+
+<div class="score-box">
+  <strong>Tầm quan trọng</strong>
+  <div class="score-value" id="significanceScore"></div>
+</div>
+
+<div class="score-box">
+  <strong>Tính công bằng</strong>
+  <div class="score-value" id="fairnessScore"></div>
+</div>
+</div>
+</div>
+
+
+<!-- C. MINDMAP TỔNG -->
+<div class="section-card">
+<div class="section-title">C. Sơ đồ tư duy tổng hợp</div>
+
+  <div id="finalMindmap" class="mindmap-container">
+    <button class="export-btn" onclick="exportMindmapImage(event)">
+      ⬇ Xuất PNG
+    </button>
+  </div>
+</div>
+</div>
+
+</div>
+<div class="button-group">
+  <button class="btn-secondary" onclick="redoDecision()">
+    Quyết định lại
+  </button>
+
+  <button class="btn-primary" onclick="finishSession()">
+    Hoàn thành
+  </button>
+</div>
+<button class="theme-toggle-btn" onclick="toggleTheme()">🌙</button>
+
+<script>
+function toggleTheme() {
+  document.body.classList.toggle("light-mode");
+  const btn = document.querySelector(".theme-toggle-btn");
+
+  if (document.body.classList.contains("light-mode")) {
+    localStorage.setItem("theme", "light");
+    btn.textContent = "☀";
+  } else {
+    localStorage.setItem("theme", "dark");
+    btn.textContent = "🌙";
+  }
+}
+
+window.onload = function() {
+  const savedTheme = localStorage.getItem("theme");
+  const btn = document.querySelector(".theme-toggle-btn");
+
+  if (savedTheme === "light") {
+    document.body.classList.add("light-mode");
+    btn.textContent = "☀";
+  }
+};
+
+async function runSimulation() {
+
+  const loadingBox = document.getElementById("loadingBox");
+  const countdownEl = document.getElementById("countdown");
+
+  let seconds = 12;
+  countdownEl.innerText = seconds;
+
+  const timer = setInterval(() => {
+    seconds--;
+    if (seconds >= 0) {
+      countdownEl.innerText = seconds;
+    }
+  }, 1000);
+
+  try {
+
+    const debateId = localStorage.getItem("currentDebateId");
+
+    if (!debateId) {
+      clearInterval(timer);
+      alert("Không tìm thấy phiên tranh luận.");
+      window.location.href = "DefineIssue.html";
+      return;
+    }
+
+    const response = await fetch("/run-simulation", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ debateId })
+    });
+
+    if (!response.ok) {
+      clearInterval(timer);
+      loadingBox.innerHTML = "❌ Không thể tải dữ liệu. Vui lòng thử lại.";
+      return;
+    }
+
+    const result = await response.json();
+
+    clearInterval(timer);
+
+    loadingBox.style.display = "none";
+
+    renderResult(result);
+
+  } catch (err) {
+    clearInterval(timer);
+    loadingBox.innerHTML = "❌ Lỗi kết nối server.";
+    console.error(err);
+  }
+}
+
+function renderResult(data) {
+
+  console.log("FULL RESULT:", data);
+
+  // ===== Simulation =====
+function formatList(value) {
+  if (!value) return "";
+
+  if (Array.isArray(value)) {
+    return value
+      .filter(item => typeof item === "string" && item.trim() !== "")
+      .map(item => {
+        const clean = item.trim().replace(/^-+\s*/, "");
+        return "- " + clean;
+      })
+      .join("\n");
+  }
+
+  if (typeof value === "string") return value.trim();
+
+  return "";
+}
+const c = data.consequences || {};
+
+document.getElementById("shortTerm").innerText =
+  formatList(c.shortTerm);
+
+document.getElementById("longTerm").innerText =
+  formatList(c.longTerm);
+
+document.getElementById("risks").innerText =
+  formatList(c.risks);
+
+document.getElementById("conflicts").innerText =
+  formatList(c.conflicts);
+
+function formatText(value) {
+  if (!value) return "";
+
+  if (Array.isArray(value)) {
+    return value
+      .filter(v => typeof v === "string" && v.trim() !== "")
+      .map(v => "- " + v.trim())
+      .join("\n");
+  }
+
+  return value;
+}
+
+document.getElementById("summaryStrengths").innerText =
+  formatText(data.strengths || data.scores?.strengths);
+
+document.getElementById("summaryWeaknesses").innerText =
+  formatText(data.weaknesses || data.scores?.weaknesses);
+// ===== SCORE AUTO-DETECT =====
+const scoreObj = data.scores || {};
+
+// nếu backend có .score thì dùng nó
+const score = scoreObj.score || scoreObj;
+
+const {
+  clarity = 0,
+  accuracy = 0,
+  precision = 0,
+  relevance = 0,
+  depth = 0,
+  breadth = 0,
+  logic = 0,
+  significance = 0,
+  fairness = 0
+} = score;
+
+const total =
+  scoreObj.totalScore ??
+  (
+    clarity +
+    accuracy +
+    precision +
+    relevance +
+    depth +
+    breadth +
+    logic +
+    significance +
+    fairness
+  );
+
+document.getElementById("totalScore").innerText =
+  "Tổng điểm: " + total + " / 90";
+
+document.getElementById("clarityScore").innerText = clarity + " / 10";
+document.getElementById("accuracyScore").innerText = accuracy + " / 10";
+document.getElementById("precisionScore").innerText = precision + " / 10";
+document.getElementById("relevanceScore").innerText = relevance + " / 10";
+document.getElementById("depthScore").innerText = depth + " / 10";
+document.getElementById("breadthScore").innerText = breadth + " / 10";
+document.getElementById("logicScore").innerText = logic + " / 10";
+document.getElementById("significanceScore").innerText = significance + " / 10";
+document.getElementById("fairnessScore").innerText = fairness + " / 10";
+// 👇 THÊM Ở ĐÂY
+console.log("Mindmap data:", data.mindmaps);
+
+generateFinalMindmap(
+  { finalDecision: data.title || data.decision?.finalDecision },
+  data.mindmaps || {}
+);
+}
+
+
+
+function generateFinalMindmap(decision, mindmaps) {
+
+const container = document.getElementById("finalMindmap");
+const oldBtn = container.querySelector(".export-btn");
+container.innerHTML = "";
+if (oldBtn) container.appendChild(oldBtn);
+
+const viewport = document.createElement("div");
+viewport.className = "mindmap-viewport";
+container.appendChild(viewport);
+
+const width = 2000;
+const height = 1400;
+
+const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+svg.setAttribute("width", width);
+svg.setAttribute("height", height);
+svg.classList.add("mindmap-svg");
+viewport.appendChild(svg);
+
+  const rootX = width / 2;
+  const rootY = height / 2;
+
+  createNode(decision.finalDecision || "CHỦ ĐỀ", rootX, rootY, 0);
+
+  const roles = Object.keys(mindmaps);
+
+  // =========================
+  // THÊM: levelMap để chứa node theo level
+  // =========================
+  const levelMap = {};
+
+  // =========================
+  // TÍNH MAX DEPTH
+  // =========================
+  function getMaxDepth(children, depth = 1) {
+    let max = depth;
+    children.forEach(c => {
+      if (c.children && c.children.length > 0) {
+        max = Math.max(max, getMaxDepth(c.children, depth + 1));
+      }
+    });
+    return max;
+  }
+
+  let maxDepth = 1;
+
+  roles.forEach(role => {
+    const children = mindmaps[role]?.children || [];
+    maxDepth = Math.max(maxDepth, getMaxDepth(children));
+  });
+
+  maxDepth = Math.min(maxDepth, 5);
+
+  // =========================
+  // AUTO HORIZONTAL SPACING
+  // =========================
+  const maxHorizontal = width * 0.3; 
+  const horizontalSpacing = maxHorizontal / maxDepth;
+
+  const left = [];
+  const right = [];
+
+  roles.forEach((r, i) => {
+    if (i % 2 === 0) right.push(r);
+    else left.push(r);
+  });
+
+  renderSide(right, 1);
+  renderSide(left, -1);
+
+  // =========================
+  // THÊM: render tất cả level sau khi collect xong
+  // =========================
+  renderLevels();
+
+  // =========================
+  function renderSide(roleList, direction) {
+
+    const spacingY = height / (roleList.length + 1);
+
+    roleList.forEach((role, index) => {
+
+      const roleY = spacingY * (index + 1);
+      const roleX = rootX + (direction * horizontalSpacing);
+
+      const clampedX = clamp(roleX);
+
+      const roleName = mindmaps[role]?.name || role;
+createNode(roleName, clampedX, roleY, 1);
+      drawLine(rootX, rootY, clampedX, roleY, 1);
+
+      const children = mindmaps[role]?.children || [];
+
+      renderChildren(
+        children,
+        clampedX,
+        roleY,
+        direction,
+        2
+      );
+    });
+  }
+
+  // =========================
+  function renderLevels() {
+
+    Object.keys(levelMap).forEach(levelKey => {
+
+      const level = parseInt(levelKey);
+      const nodes = levelMap[level];
+
+      const spacingY = height / (nodes.length + 1);
+
+      nodes.forEach((nodeData, index) => {
+
+        const x = nodeData.parentX + (nodeData.direction * horizontalSpacing);
+        const y = spacingY * (index + 1);
+
+        const clampedX = clamp(x);
+
+        createNode(nodeData.text, clampedX, y, level);
+        drawLine(nodeData.parentX, nodeData.parentY, clampedX, y, level);
+
+        if (nodeData.children.length > 0) {
+          renderChildren(
+            nodeData.children,
+            clampedX,
+            y,
+            nodeData.direction,
+            level + 1
+          );
+        }
+
+      });
+
+    });
+
+  }
+
+  // =========================
+function renderChildren(children, parentX, parentY, direction, level) {
+
+  if (!children || level > 5) return;
+
+  // 🔥 Tạo node tạm để đo chiều cao thật
+  const tempNodes = children.map(child => {
+    const temp = createNode(child.text, -9999, -9999, level);
+    return { child, element: temp, height: temp.offsetHeight };
+  });
+
+  // Tổng chiều cao node
+  let totalNodesHeight = tempNodes.reduce((sum, n) => sum + n.height, 0);
+
+  // 🔥 Khoảng cách động (auto fit container)
+  const availableSpace = height * 0.6;  // tăng không gian 
+  let verticalGap = (availableSpace - totalNodesHeight) / (children.length - 1);
+
+  // Giới hạn gap để không quá nhỏ hoặc quá to
+  verticalGap = Math.max(30, Math.min(90, verticalGap));
+
+  let totalHeight = totalNodesHeight + verticalGap * (children.length - 1);
+
+  let currentY = parentY - totalHeight / 2;
+
+  tempNodes.forEach(({ child, element, height }) => {
+
+    const x = parentX + (direction * horizontalSpacing);
+    const y = currentY + height / 2;
+
+    const clampedX = clamp(x);
+
+    element.style.left = clampedX + "px";
+    element.style.top = y + "px";
+
+    drawLine(parentX, parentY, clampedX, y, level);
+
+    currentY += height + verticalGap;
+
+    if (child.children && child.children.length > 0) {
+      renderChildren(
+        child.children,
+        clampedX,
+        y,
+        direction,
+        level + 1
+      );
+    }
+
+  });
+}
+  // =========================
+  function createNode(text, x, y, level) {
+    const node = document.createElement("div");
+    node.className = "mindmap-node level-" + level;
+    node.innerText = text;
+    node.style.left = x + "px";
+    node.style.top = y + "px";
+    node.style.transform = "translate(-50%, -50%)";
+    viewport.appendChild(node);
+    return node;
+  }
+
+  // =========================
+function drawLine(x1, y1, x2, y2, level = 1) {
+
+  const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+
+  // 🎯 RÚT NGẮN HỢP LÝ HƠN
+  let shortenStart, shortenEnd;
+
+  if (level <= 2) {
+    shortenStart = 25;
+    shortenEnd   = 35;
+  } else {
+    shortenStart = 15;
+    shortenEnd   = 20;
+  }
+
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const length = Math.sqrt(dx * dx + dy * dy);
+  if (!length) return;
+
+  const unitX = dx / length;
+  const unitY = dy / length;
+
+  const newX1 = x1 + unitX * shortenStart;
+  const newY1 = y1 + unitY * shortenStart;
+
+  const newX2 = x2 - unitX * shortenEnd;
+  const newY2 = y2 - unitY * shortenEnd;
+
+  line.setAttribute("x1", newX1);
+  line.setAttribute("y1", newY1);
+  line.setAttribute("x2", newX2);
+  line.setAttribute("y2", newY2);
+
+  // 🎨 FIX CHẮC CHẮN DARK / LIGHT
+line.classList.add("mindmap-line");
+
+line.setAttribute("stroke-width", "1.4");
+line.setAttribute("stroke-linecap", "round");
+
+svg.appendChild(line);
+}
+  // =========================
+  function clamp(x) {
+    return Math.max(80, Math.min(width - 80, x));
+  }
+
+// =========================
+// ZOOM + DRAG
+// =========================
+
+let scale = 1;
+let isDragging = false;
+let startX, startY;
+
+// 🔥 CĂN GIỮA BAN ĐẦU
+let translateX = (container.clientWidth - width) / 2;
+let translateY = (container.clientHeight - height) / 2;
+
+updateTransform();
+
+function updateTransform() {
+  viewport.style.transform =
+    `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+}
+
+// ===== ZOOM (wheel) =====
+container.addEventListener("wheel", (e) => {
+  e.preventDefault();
+
+  const zoomSpeed = 0.1;
+
+  if (e.deltaY < 0) scale += zoomSpeed;
+  else scale -= zoomSpeed;
+
+  scale = Math.min(Math.max(0.5, scale), 2.5);
+
+  updateTransform();
+});
+
+// ===== DRAG =====
+container.addEventListener("mousedown", (e) => {
+  isDragging = true;
+  container.style.cursor = "grabbing";
+  startX = e.clientX - translateX;
+  startY = e.clientY - translateY;
+});
+
+window.addEventListener("mouseup", () => {
+  isDragging = false;
+  container.style.cursor = "grab";
+});
+
+container.addEventListener("mousemove", (e) => {
+  if (!isDragging) return;
+
+  translateX = e.clientX - startX;
+  translateY = e.clientY - startY;
+
+  updateTransform();
+});
+
+// ===== DOUBLE CLICK RESET =====
+container.addEventListener("dblclick", () => {
+  scale = 1;
+  translateX = 0;
+  translateY = 0;
+  updateTransform();
+});
+}
+
+function renderTree(node, parent, level) {
+
+  if (!node) return;
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "mindmap-node";
+  wrapper.style.marginLeft = (level * 20) + "px";
+
+  if (node.text) {
+    const label = document.createElement("div");
+    label.innerText = "• " + node.text;
+    wrapper.appendChild(label);
+  }
+
+  parent.appendChild(wrapper);
+
+  if (node.children && node.children.length > 0) {
+    node.children.forEach(child => {
+      renderTree(child, wrapper, level + 1);  // 👈 KEY FIX: append vào wrapper
+    });
+  }
+}
+
+function redoDecision() {
+  // quay lại trang quyết định
+  window.location.href = "Decision.html";
+}
+
+function finishSession() {
+
+  const toast = document.getElementById("toast");
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    window.location.href = "History.html";
+  }, 1200);
+}
+window.addEventListener("DOMContentLoaded", runSimulation);
+
+
+</script>
+<script src="authFetch.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<script>
+async function exportMindmapImage(event) {
+
+  event.stopPropagation();
+
+  const container = document.getElementById("finalMindmap");
+  const exportBtn = container.querySelector(".export-btn");
+
+  // 🔥 ẨN NÚT TRƯỚC KHI CHỤP
+  exportBtn.style.display = "none";
+
+  // ép line thành màu đen khi export
+  container.classList.add("exporting");
+
+  const canvas = await html2canvas(container, {
+    backgroundColor: "#ffffff",
+    scale: 2
+  });
+
+  container.classList.remove("exporting");
+
+  // 🔥 HIỆN LẠI NÚT
+  exportBtn.style.display = "block";
+
+  const link = document.createElement("a");
+  link.download = "mindmap.png";
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
+</script>
+<div id="toast" class="toast">✔ Phiên tranh luận đã hoàn thành!</div>
+</body>
+</html>

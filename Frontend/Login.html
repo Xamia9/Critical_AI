@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Critical AI | Authentication</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
+<style>
+* {
+  box-sizing: border-box;
+  font-family: Inter, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, #2B1E4A, #24163F 60%);
+  color: #ffffff;
+}
+
+/* ===== TOPBAR ===== */
+.topbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 16px 64px;
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+}
+
+.topbar .logo {
+  font-weight: 900;
+  font-size: 21px;
+  letter-spacing: 0.5px;
+  color: white;
+}
+
+.topbar nav a {
+  margin-left: 28px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  color: white !important;
+  opacity: 0.9;
+}
+
+.topbar nav a:hover {
+  opacity: 1;
+}
+
+/* ===== AUTH LAYOUT ===== */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding-top: 80px;
+}
+
+.auth-card {
+  width: 420px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 22px;
+  padding: 40px;
+  border: 1px solid rgba(123,140,255,0.45);
+  backdrop-filter: blur(16px);
+
+  box-shadow:
+    0 0 35px rgba(74,91,255,0.35),
+    0 0 60px rgba(197,44,90,0.25);
+}
+
+
+/* Title */
+.auth-card h1 {
+  font-size: 32px;
+  font-weight: 900;
+  margin-bottom: 24px;
+
+  text-shadow:
+    0 0 10px rgba(74,91,255,0.6),
+    0 0 25px rgba(197,44,90,0.4);
+}
+
+
+/* Tabs */
+.tabs {
+  display: flex;
+  margin-bottom: 28px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 14px;
+  padding: 4px;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.tab.active {
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+  color: white;
+}
+
+
+/* Form */
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+input {
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.06);
+  color: white;
+  font-size: 14px;
+  outline: none;
+}
+
+input:focus {
+  border-color: #4A5BFF;
+  background: rgba(74,91,255,0.12);
+}
+
+
+/* Button */
+button {
+  margin-top: 10px;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+  color: white;
+  transition: 0.25s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(123,140,255,0.4);
+}
+
+/* Toggle text */
+.switch-text {
+  margin-top: 20px;
+  font-size: 13px;
+  opacity: 0.7;
+  text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo">Critical AI</div>
+  <nav>
+    <a href="Introduction.html">Giới thiệu</a>
+    <a href="DefineIssue.html">Luyện Tập</a>
+    <a href="History.html">Lịch sử</a>
+    <a href="Login.html">Đăng nhập</a>
+  </nav>
+</div>
+
+<div class="container">
+  <div class="auth-card">
+
+    <h1 id="formTitle">Chào mừng trở lại</h1>
+
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('login')">Đăng nhập</div>
+      <div class="tab" onclick="switchTab('signup')">Đăng ký</div>
+    </div>
+
+    <form id="authForm">
+      <input type="email" id="email" placeholder="Địa chỉ email" required>
+      <input type="password" id="password" placeholder="Mật khẩu" required>
+      <input type="text" id="extraField" placeholder="Họ và tên" style="display:none;">
+      <button type="submit">Tiếp tục</button>
+    </form>
+
+    <div class="switch-text">
+      Bảo mật thông tin đăng nhập cho hành trình trải nghiệm của bạn.
+    </div>
+
+  </div>
+</div>
+
+<style>
+:root {
+  --bg-light: #F1F2F6;
+  --card-light: #FFFFFF;
+  --text-light: #1E293B;
+  --input-light: #F8FAFC;
+  --border-light: #E2E8F0;
+  --primary-gradient: linear-gradient(135deg, #C9BBFF, #7B8CFF);
+}
+
+/* ===== LIGHT MODE ===== */
+body.light-mode {
+  background: radial-gradient(circle at top, #EEF0FF, #F7F8FF 70%);
+  color: #1E1E2F !important;
+}
+
+
+/* Auth Card giữ viền tím giống dark */
+body.light-mode .auth-card {
+
+  background: #ffffff !important;
+  border: 1px solid rgba(74,91,255,0.35);
+  box-shadow:
+    0 0 20px rgba(74,91,255,0.25),
+    0 0 40px rgba(197,44,90,0.15);
+  backdrop-filter: none;
+}
+body.light-mode .auth-card h1 {
+  background: linear-gradient(135deg, #FF2E88, #5B3CFF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+}
+
+/* Tabs */
+body.light-mode .tabs {
+  background: #EEF0FF !important;
+}
+
+body.light-mode .tab.active {
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+  color: white;
+}
+
+/* Inputs */
+body.light-mode input {
+  background: var(--input-light) !important;
+  border: 1px solid var(--border-light) !important;
+  color: #111827 !important;
+}
+
+body.light-mode input:focus {
+  border-color: #7B8CFF !important;
+  background: #EEF2FF !important;
+}
+
+/* Button */
+body.light-mode .tab.active {
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF) !important;
+  color: white !important;
+}
+
+
+body.light-mode button {
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF) !important;
+  color: white !important;
+}
+
+
+/* ===== THEME BUTTON FIXED ===== */
+.theme-toggle-btn {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  font-size: 18px;
+  line-height: 1;
+  font-weight: normal;
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+  display: flex;              /* căn giữa icon */
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  transition: 0.3s ease;
+  z-index: 9999;
+  color: white;               /* ép icon luôn trắng */
+}
+
+.theme-toggle-btn:hover {
+  transform: scale(1.1);
+}
+
+/* Light mode vẫn giữ icon trắng */
+body.light-mode .theme-toggle-btn {
+  background: #7B8CFF;
+  color: white !important;
+}
+</style>
+
+<button class="theme-toggle-btn" onclick="toggleTheme()">🌙</button>
+
+<script>
+function toggleTheme() {
+  document.body.classList.toggle("light-mode");
+  const btn = document.querySelector(".theme-toggle-btn");
+
+  if (document.body.classList.contains("light-mode")) {
+    localStorage.setItem("theme", "light");
+    btn.textContent = "☀";
+  } else {
+    localStorage.setItem("theme", "dark");
+    btn.textContent = "🌙";
+  }
+}
+
+window.onload = function() {
+  const savedTheme = localStorage.getItem("theme");
+  const btn = document.querySelector(".theme-toggle-btn");
+
+  if (savedTheme === "light") {
+    document.body.classList.add("light-mode");
+    btn.textContent = "☀";
+  }
+};
+</script>
+<script>
+let currentMode = "login";
+
+function switchTab(type) {
+  currentMode = type;
+
+  const tabs = document.querySelectorAll('.tab');
+  tabs.forEach(tab => tab.classList.remove('active'));
+
+  if(type === 'login') {
+    tabs[0].classList.add('active');
+    document.getElementById('formTitle').innerText = "Chào mừng trở lại";
+    document.getElementById('extraField').style.display = "none";
+  } else {
+    tabs[1].classList.add('active');
+    document.getElementById('formTitle').innerText = "Tạo tài khoản mới";
+    document.getElementById('extraField').style.display = "block";
+  }
+}
+
+document.getElementById("authForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const name = document.getElementById("extraField").value;
+
+  try {
+    const endpoint = currentMode === "login"
+      ? "/api/auth/login"
+      : "/api/auth/register";
+
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+    body: JSON.stringify({
+      username: name,
+      email,
+      password
+    })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.message || "Có lỗi xảy ra");
+      return;
+    }
+
+    // lưu token
+    localStorage.setItem("token", data.token);
+
+    alert("Thành công!");
+    window.location.href = "DefineIssue.html";
+
+  } catch (err) {
+    console.error(err);
+    alert("Lỗi kết nối server");
+  }
+});
+</script>
+</body>
+</html>

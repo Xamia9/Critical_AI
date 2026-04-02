@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Critical AI | Overview</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
+<style>
+* {
+  box-sizing: border-box;
+  font-family: Inter, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, #2B1E4A, #24163F 60%);
+  color: #ffffff;
+  padding-top: 140px;
+  padding-left: 90px;
+  padding-right: 90px;
+  padding-bottom: 60px;
+}
+
+/* ===== TOP BAR ===== */
+.topbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  width: 100%;
+  padding: 16px 64px;
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+}
+
+.logo {
+  font-weight: 900;
+  font-size: 21px;
+  color: white;
+}
+
+.topbar nav a {
+  margin-left: 28px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  color: white;
+  opacity: 0.9;
+}
+
+.topbar nav a:hover {
+  opacity: 1;
+}
+
+/* ===== TITLE ===== */
+h1 {
+  font-size: 52px;
+  font-weight: 800;
+  text-align: left;   /* đổi chỗ này */
+  margin-bottom: 48px;
+    text-shadow:
+    0 0 15px rgba(74,91,255,0.6),
+    0 0 30px rgba(197,44,90,0.4);
+}
+
+/* ===== GRID LAYOUT ===== */
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+/* ===== GLASS PANEL ===== */
+
+.panel {
+  background: rgba(255,255,255,0.07);
+  border-radius: 20px;
+  padding: 28px;
+  border: 1px solid rgba(74,91,255,0.4);
+  backdrop-filter: blur(12px);
+  min-height: 260px;
+
+  box-shadow:
+    0 0 35px rgba(74,91,255,0.35),
+    0 0 60px rgba(197,44,90,0.25);
+}
+
+.panel-title {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 22px;
+
+  background: linear-gradient(135deg, #FF2E88, #5B3CFF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  position: relative;
+  letter-spacing: 0.4px;
+}
+
+/* gạch glow nhỏ phía dưới */
+.panel-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 50px;
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+  box-shadow: 0 0 10px rgba(74,91,255,0.6);
+}
+
+
+.text-box {
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: #cfd1e6;
+  white-space: pre-line;
+}
+
+/* ===== BUTTONS ===== */
+.button-group {
+  margin-top: 48px;
+  display: flex;
+  justify-content: flex-start; /* đẩy qua trái */
+  gap: 20px; /* khoảng cách giữa 2 nút */
+}
+
+button {
+  padding: 16px 44px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+/* ===== BACK BUTTON - GLOBAL STYLE ===== */
+/* ===== SHARED GRADIENT ===== */
+
+.btn-back,
+.btn-confirm {
+  padding: 16px 44px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  color: white;
+  transition: 0.25s ease;
+
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+  background-size: 200% 100%;
+}
+
+/* BACK = phần bên trái gradient */
+.btn-back {
+  background-position: left center;
+}
+
+/* CONFIRM = phần bên phải gradient */
+.btn-confirm {
+  background-position: right center;
+}
+
+/* hover */
+.btn-back:hover,
+.btn-confirm:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(74,91,255,0.35);
+}
+
+.theme-toggle-btn {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+
+  width: 38px !important;
+  height: 38px !important;
+  padding: 0 !important;
+
+  aspect-ratio: 1 / 1;   /* đảm bảo luôn là hình vuông */
+  border-radius: 50% !important;
+
+  border: none;
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 18px;
+  line-height: 1;
+  font-weight: normal;
+
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  color: white;
+  z-index: 9999;
+}
+
+.text-box ul {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.text-box li {
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+/* ===== LIGHT MODE ===== */
+
+body.light-mode {
+  background: radial-gradient(circle at top, #EEF0FF, #F7F8FF 70%);
+  color: #1E1E2F;
+}
+
+
+body.light-mode .topbar {
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+}
+
+body.light-mode .logo,
+body.light-mode .topbar nav a {
+  color: white !important;
+}
+body.light-mode h1 {
+  background: linear-gradient(135deg, #FF2E88, #5B3CFF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+}
+
+
+body.light-mode .panel {
+  background: #ffffff;
+  border: 1px solid rgba(74,91,255,0.35);
+  box-shadow:
+    0 0 20px rgba(74,91,255,0.25),
+    0 0 40px rgba(197,44,90,0.15);
+}
+
+
+body.light-mode .text-box {
+  color: #333;
+}
+
+
+</style>
+</head>
+
+<body>
+
+<!-- ===== TOPBAR ===== -->
+<div class="topbar">
+  <div class="logo">Critical AI</div>
+  <nav>
+    <a href="Introduction.html">Giới thiệu</a>
+    <a href="DefineIssue.html">Luyện Tập</a>
+    <a href="History.html">Lịch sử</a>
+    <a href="Login.html">Đăng nhập</a>
+  </nav>
+</div>
+
+<h1>Khái quát vấn đề</h1>
+
+<div class="container">
+
+  <div class="panel">
+    <div class="panel-title">Vấn đề</div>
+    <div class="text-box" id="userData">
+      Đang tải dữ liệu người dùng nhập...
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Quan điểm</div>
+    <div class="text-box" id="aiSummary">
+      AI đang phân tích vấn đề...
+    </div>
+  </div>
+
+</div>
+
+<div class="button-group">
+  <button class="btn-back" onclick="goBack()">Quay lại</button>
+  <button class="btn-confirm" onclick="confirmSummary()">Xác nhận</button>
+</div>
+
+<script>
+const debateId = localStorage.getItem("currentDebateId");
+
+const token = localStorage.getItem("token");
+
+fetch("/get-overview", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer " + token
+  },
+  body: JSON.stringify({ debateId })
+})
+
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("userData").innerText =
+      data.issue || "Chưa có dữ liệu.";
+
+    document.getElementById("aiSummary").innerText =
+      data.viewpoint || "Chưa có dữ liệu.";
+  })
+  .catch(err => {
+    document.getElementById("aiSummary").innerText =
+      "Không thể kết nối tới backend.";
+    console.error(err);
+  });
+
+
+</script>
+
+<button class="theme-toggle-btn" onclick="toggleTheme()">🌙</button>
+
+<script>
+function toggleTheme() {
+  document.body.classList.toggle("light-mode");
+  const btn = document.querySelector(".theme-toggle-btn");
+
+  if (document.body.classList.contains("light-mode")) {
+    localStorage.setItem("theme", "light");
+    btn.textContent = "☀";
+  } else {
+    localStorage.setItem("theme", "dark");
+    btn.textContent = "🌙";
+  }
+}
+
+window.onload = function() {
+  const savedTheme = localStorage.getItem("theme");
+  const btn = document.querySelector(".theme-toggle-btn");
+
+  if (savedTheme === "light") {
+    document.body.classList.add("light-mode");
+    btn.textContent = "☀";
+  }
+};
+</script>
+<script>
+function goBack() {
+  window.location.href = "DefineIssue.html";
+}
+
+
+async function confirmSummary() {
+  const btn = document.querySelector(".btn-confirm");
+  btn.disabled = true;
+
+  let timeLeft = 15; // số giây đếm ngược (tuỳ bạn chỉnh)
+  btn.innerText = `Đang tạo vai trò... ${timeLeft}s`;
+
+  // countdown
+  const countdown = setInterval(() => {
+    timeLeft--;
+    if (timeLeft > 0) {
+      btn.innerText = `Đang tạo vai... ${timeLeft}s`;
+    } else {
+      btn.innerText = `AI đang xử lý thêm...`;
+      clearInterval(countdown);
+    }
+  }, 1000);
+
+  try {
+    const debateId = localStorage.getItem("currentDebateId");
+    const token = localStorage.getItem("token");
+
+    const response = await fetch("/generate-roles", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
+      },
+      body: JSON.stringify({ debateId })
+    });
+
+    const result = await response.json();
+
+    clearInterval(countdown); // 🔥 dừng đếm khi API trả về
+
+    if (response.ok && result.success) {
+      localStorage.removeItem("draftAnswers");
+localStorage.removeItem("draftStep");
+      localStorage.removeItem("completedRoles");
+      window.location.href = "Roles.html";
+    } else {
+      alert("Lỗi tạo vai: " + (result.error || "Unknown error"));
+      btn.disabled = false;
+      btn.innerText = "Xác nhận";
+    }
+
+  } catch (err) {
+    clearInterval(countdown);
+    console.error(err);
+    alert("Lỗi kết nối server.");
+    btn.disabled = false;
+    btn.innerText = "Xác nhận";
+  }
+}
+</script>
+<script src="authFetch.js"></script>
+</body>
+</html>

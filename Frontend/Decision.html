@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Critical AI | Decision</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
+<style>
+* {
+  box-sizing: border-box;
+  font-family: Inter, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, #2B1E4A, #24163F 60%);
+  color: #ffffff;
+}
+
+
+/* ===== TOPBAR ===== */
+.topbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 16px 64px;
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+}
+
+.topbar .logo {
+  font-weight: 900;
+  font-size: 21px;
+  color: white;
+}
+
+.topbar nav a {
+  margin-left: 28px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  color: white;
+  opacity: 0.8;
+}
+
+.topbar nav a:hover {
+  opacity: 1;
+}
+
+/* ===== PAGE LAYOUT ===== */
+.container {
+  max-width: 950px;   /* gọn lại */
+  margin: auto;
+  padding-top: 120px;
+  padding-bottom: 80px;
+}
+
+h1 {
+  font-size: 48px;
+  font-weight: 900;
+  margin-bottom: 10px;
+  text-shadow:
+    0 0 8px rgba(123,140,255,0.5),
+    0 0 18px rgba(123,140,255,0.25);
+}
+
+.section-title {
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 28px;
+  letter-spacing: 0.5px;
+  position: relative;
+  display: inline-block;
+
+  background: linear-gradient(135deg, #FF2E88, #5B3CFF);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow: none;
+
+  transition: 0.3s ease;
+}
+
+/* underline giống hệ thống */
+.section-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 60%;
+  height: 3px;
+  border-radius: 4px;
+
+  background: linear-gradient(90deg, #C52C5A, #4A5BFF);
+  box-shadow: 0 0 12px rgba(74,91,255,0.7);
+
+  transition: 0.3s ease;
+}
+
+
+.subtitle {
+  opacity: 0.6;
+  margin-bottom: 40px;
+}
+
+/* ===== SECTION CARD ===== */
+.section-card {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(123,140,255,0.35);
+  backdrop-filter: blur(14px);
+  box-shadow: 
+    0 0 18px rgba(74,91,255,0.25),
+    0 0 32px rgba(197,44,90,0.15);
+  border-radius: 28px;
+  padding: 50px 60px;  
+  margin-bottom: 40px;
+}
+textarea, input[type="text"] {
+  max-width: 100%;
+}
+
+#questionTitle {
+  font-size: 20px;   /* giảm từ 26 xuống 20 */
+  font-weight: 700;  /* bớt đậm */
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.error-text {
+  margin-top: -10px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ff4d6d;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.section-card:hover {
+  box-shadow:
+    0 0 30px rgba(74,91,255,0.35),
+    0 0 50px rgba(197,44,90,0.25);
+}
+/* ===== FORM ===== */
+label {
+  font-weight: 600;
+  font-size: 15px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+textarea, input[type="text"] {
+  width: 100%;
+  padding: 14px 16px;        /* giảm padding */
+  margin-bottom: 22px;       /* bớt khoảng cách */
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.06);
+  color: white;
+  font-size: 16px;           /* giảm từ 18 xuống 16 */
+  resize: vertical;
+}
+
+
+textarea:focus, input:focus {
+  outline: none;
+  border-color: #4A5BFF;
+  background: rgba(123,140,255,0.08);
+}
+
+/* ===== RADIO GRID ===== */
+.radio-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.radio-option {
+  padding: 14px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  cursor: pointer;
+  text-align: center;
+  transition: 0.25s;
+}
+
+.radio-option:hover {
+  border-color: #4A5BFF;
+}
+
+.radio-option.active {
+  background: rgba(123,140,255,0.2);
+  border: 2px solid #4A5BFF;
+}
+
+/* ===== SCALE ===== */
+.scale {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.scale div {
+  flex: 1;
+  padding: 14px;
+  border-radius: 14px;
+  text-align: center;
+  font-size: 14px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.scale div:hover {
+  border-color: #4A5BFF;
+}
+
+.scale div.active {
+  background: rgba(123,140,255,0.25);
+  border: 2px solid #4A5BFF;
+}
+
+/* ================= BUTTON SYSTEM ================= */
+.button-group {
+  margin-top: 48px;
+  display: flex;
+  justify-content: flex-start;
+  gap: 20px;
+}
+
+button {
+  padding: 16px 44px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  color: white;
+  transition: 0.25s ease;
+
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+  background-size: 200% 100%;
+}
+
+.btn-back {
+  background-position: left center;
+}
+
+.btn-continue {
+  background-position: right center;
+}
+
+.btn-back:hover,
+.btn-continue:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(74,91,255,0.35);
+}
+
+
+/* ===== PURPLE GLOW SYSTEM ===== */
+.section-card {
+  box-shadow: 0 0 40px rgba(123,140,255,0.12);
+  transition: 0.3s ease;
+}
+
+.section-card:hover {
+  box-shadow: 0 0 55px rgba(123,140,255,0.25);
+}
+
+/* ===== LIGHT MODE ===== */
+body.light-mode {
+  background: radial-gradient(circle at top, #EEF0FF, #F7F8FF 70%);
+  color: #1E1E2F;
+}
+
+body.light-mode h1 {
+  background: linear-gradient(135deg, #FF2E88, #5B3CFF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+}
+
+body.light-mode .section-card {
+  background: #ffffff;
+  border: 1px solid rgba(74,91,255,0.35);
+  box-shadow:
+    0 0 20px rgba(74,91,255,0.25),
+    0 0 40px rgba(197,44,90,0.15),
+    inset 0 0 10px rgba(74,91,255,0.05);
+}
+
+
+/* Tăng glow khi hover cho giống các file khác */
+body.light-mode .section-card:hover {
+  box-shadow: 0 0 45px rgba(123,140,255,0.35);
+}
+/* Inputs light */
+body.light-mode textarea,
+body.light-mode input[type="text"] {
+  background: rgba(0,0,0,0.04);
+  border: 1px solid rgba(0,0,0,0.1);
+  color: #1a1a22;
+}
+
+body.light-mode textarea:focus,
+body.light-mode input:focus {
+  border-color: #4A5BFF;
+  background: rgba(123,140,255,0.08);
+}
+
+/* Radio & scale light */
+body.light-mode .radio-option,
+body.light-mode .scale div {
+  background: rgba(0,0,0,0.04);
+  border: 1px solid rgba(0,0,0,0.08);
+  color: #1a1a22;
+}
+
+body.light-mode .radio-option.active,
+body.light-mode .scale div.active {
+  background: rgba(123,140,255,0.2);
+  border: 2px solid #4A5BFF;
+}
+
+.theme-toggle-btn {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  min-height: 42px !important;
+
+  padding: 0 !important;
+  border-radius: 50% !important;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  transition: 0.3s ease;
+  z-index: 9999;
+}
+
+.theme-toggle-btn:hover {
+  transform: scale(1.1);
+}
+
+body.light-mode .theme-toggle-btn {
+  background: #6d5df6;
+}
+
+.progress {
+  width: 100%;
+  height: 10px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+  border-radius: 20px;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 12px rgba(74,91,255,0.6);
+}
+
+.multi-note{
+  font-size: 14px;
+  color: #9ca3af;
+  margin-bottom: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+  <div class="logo">Critical AI</div>
+  <nav>
+    <a href="Introduction.html">Giới thiệu</a>
+    <a href="DefineIssue.html">Luyện Tập</a>
+    <a href="History.html">Lịch sử</a>
+    <a href="Login.html">Đăng nhập</a>
+  </nav>
+</div>
+
+<div class="container">
+
+<h1>Quan điểm & Quyết định</h1>
+<div class="subtitle">Hãy suy ngẫm lại góc nhìn của bạn sau khi hoàn thành tất cả các vai trò.</div>
+
+<div class="section-card">
+
+  <div class="progress">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <div id="questionTitle"></div>
+  <div id="questionContent"></div>
+
+  <div style="display:flex; justify-content:space-between;">
+    <button onclick="prevStep()">Quay lại</button>
+    <button id="nextBtn" onclick="nextStep()">Tiếp tục</button>
+  </div>
+
+</div>
+
+
+</div>
+
+<script>
+
+const steps = [
+
+{
+  key: "currentViewpoint",
+  title: "1. Quan điểm hiện tại của bạn là gì?",
+  type: "textarea",
+  placeholder: "Viết ngắn gọn quan điểm hiện tại của bạn..."
+},
+
+{
+  key: "changeLevel",
+  title: "2. Bạn có thay đổi quan điểm sau khi hoàn thành 3 vai trò không?",
+  type: "radio",
+  options: [
+    "Không đổi",
+    "Đổi một phần",
+    "Đổi nhiều"
+  ]
+},
+
+{
+  key: "mostInfluencedBy",
+  title: "3. Sau khi hoàn thành 3 vai trò, bạn cảm thấy mình đang bị ảnh hưởng nhiều nhất bởi yếu tố nào?",
+  type: "radio",
+  options: [
+    "Lợi ích thực tế",
+    "Rủi ro / hậu quả",
+    "Ảnh hưởng người khác",
+    "Lập luận logic"
+  ]
+},
+
+{
+  key: "biggestGap",
+  title: "4. Lỗ hổng lớn nhất bạn nhận ra trong suy nghĩ ban đầu của mình là gì?",
+  type: "textarea",
+  placeholder: "Mô tả ngắn gọn lỗ hổng bạn nhận ra..."
+},
+
+{
+  key: "finalDecision",
+  title: "5. Sau quá trình phân tích, bạn quyết định sẽ làm gì tiếp theo với vấn đề này?",
+  type: "radio+text",
+  options: [
+    "Giữ nguyên và hành động theo suy nghĩ hiện tại",
+    "Điều chỉnh cách tiếp cận",
+    "Tạm thời chưa hành động, tiếp tục quan sát",
+    "Tìm thêm thông tin trước khi quyết định"
+  ],
+  placeholder: "Nếu có hành động cụ thể, hãy ghi rõ..."
+}
+
+];
+
+let currentStep = 0;
+let answers = {};
+
+const titleEl = document.getElementById("questionTitle");
+const contentEl = document.getElementById("questionContent");
+const progressBar = document.getElementById("progressBar");
+const nextBtn = document.getElementById("nextBtn");
+
+let errorEl;
+let isProcessing = false; // 🔒 đặt ở đây (ngoài mọi function)
+
+function goBack() {
+  window.location.href = "Roles.html";
+}
+
+
+</script>
+<button class="theme-toggle-btn" onclick="toggleTheme()">🌙</button>
+
+<script>
+function toggleTheme() {
+  document.body.classList.toggle("light-mode");
+  const btn = document.querySelector(".theme-toggle-btn");
+
+  if (document.body.classList.contains("light-mode")) {
+    localStorage.setItem("theme", "light");
+    btn.textContent = "☀";
+  } else {
+    localStorage.setItem("theme", "dark");
+    btn.textContent = "🌙";
+  }
+}
+
+window.onload = function() {
+  const savedTheme = localStorage.getItem("theme");
+  const btn = document.querySelector(".theme-toggle-btn");
+
+  if (savedTheme === "light") {
+    document.body.classList.add("light-mode");
+    btn.textContent = "☀";
+  }
+};
+
+
+function renderStep() {
+
+  const step = steps[currentStep];
+  titleEl.innerText = step.title;
+  let note = "";
+
+
+
+if(step.type === "checkbox"){
+  note = `<div class="multi-note">Có thể chọn nhiều hơn 1</div>`;
+}
+
+  // FIX PROGRESS (step 1 đã có %)
+  progressBar.style.width = ((currentStep + 1) / steps.length) * 100 + "%";
+
+  contentEl.innerHTML = note;
+
+  errorEl = document.createElement("div");
+errorEl.className = "error-text";
+errorEl.style.display = "none";
+
+  if(step.type === "radio" || step.type === "checkbox"){
+    const grid = document.createElement("div");
+    grid.className = "radio-grid";
+
+    step.options.forEach(opt=>{
+      const div = document.createElement("div");
+      div.className = "radio-option";
+      div.innerText = opt;
+
+
+
+      if(
+  (Array.isArray(answers[step.key]) && answers[step.key].includes(opt)) ||
+  answers[step.key] === opt
+){
+  div.classList.add("active");
+}
+
+      
+ 
+
+div.onclick = ()=>{
+
+  if(step.type === "radio"){
+    grid.querySelectorAll(".radio-option").forEach(o=>o.classList.remove("active"));
+    div.classList.add("active");
+    answers[step.key] = opt;
+  }
+
+  if(step.type === "checkbox"){
+    if(!answers[step.key]) answers[step.key] = [];
+
+    if(div.classList.contains("active")){
+      div.classList.remove("active");
+      answers[step.key] = answers[step.key].filter(v => v !== opt);
+    } else {
+      div.classList.add("active");
+      answers[step.key].push(opt);
+    }
+  }
+
+  if(errorEl) errorEl.style.display = "none";
+};
+
+      grid.appendChild(div);
+    });
+
+    contentEl.appendChild(grid);
+  }
+
+  if(step.type === "textarea"){
+    const ta = document.createElement("textarea");
+    ta.rows = 4;
+    ta.placeholder = step.placeholder || "";
+    ta.value = answers[step.key] || "";
+    ta.oninput = ()=>{
+  answers[step.key] = ta.value;
+  if(errorEl) errorEl.style.display = "none";
+};
+
+    contentEl.appendChild(ta);
+  }
+
+  if(step.type === "radio+text"){
+
+  const grid = document.createElement("div");
+  grid.className = "radio-grid";
+
+  step.options.forEach(opt=>{
+    const div = document.createElement("div");
+    div.className = "radio-option";
+    div.innerText = opt;
+
+    if(answers[step.key]?.choice === opt){
+      div.classList.add("active");
+    }
+
+    div.onclick = ()=>{
+      grid.querySelectorAll(".radio-option").forEach(o=>o.classList.remove("active"));
+      div.classList.add("active");
+
+      if(!answers[step.key]) answers[step.key] = {};
+      answers[step.key].choice = opt;
+
+      if(errorEl) errorEl.style.display = "none";
+    };
+
+    grid.appendChild(div);
+  });
+
+  contentEl.appendChild(grid);
+
+  const input = document.createElement("input");
+  input.type = "text";
+  input.placeholder = step.placeholder || "";
+  input.value = answers[step.key]?.detail || "";
+
+  input.oninput = ()=>{
+    if(!answers[step.key]) answers[step.key] = {};
+    answers[step.key].detail = input.value;
+  };
+
+  contentEl.appendChild(input);
+}
+if(step.type === "text"){
+  const input = document.createElement("input");
+  input.type = "text";
+  input.placeholder = step.placeholder || "";
+  input.value = answers[step.key] || "";
+
+  input.oninput = ()=>{
+    answers[step.key] = input.value;
+    if(errorEl) errorEl.style.display = "none";
+  };
+
+  contentEl.appendChild(input);
+}
+  if(step.type === "number"){
+  const input = document.createElement("input");
+  input.type = "number";
+  input.min = 0;
+  input.max = 100;
+  input.placeholder = step.placeholder || "";
+  input.value = answers[step.key] || "";
+
+  input.oninput = ()=>{
+    answers[step.key] = input.value;
+    if(errorEl) errorEl.style.display = "none";
+  };
+
+  contentEl.appendChild(input);
+}
+
+  contentEl.appendChild(errorEl);
+
+  if(currentStep === steps.length - 1){
+    nextBtn.innerText = "Tổng quan";
+  } else {
+    nextBtn.innerText = "Tiếp tục";
+  }
+}
+
+function nextStep(){
+
+  const step = steps[currentStep];
+  const value = answers[step.key];
+
+  // validate riêng cho radio+text
+  if(step.type === "radio+text"){
+    if(!value || !value.choice){
+      errorEl.innerText = "Bạn chưa chọn phương án.";
+      errorEl.style.display = "block";
+      return;
+    }
+  }
+
+  // validate chung
+  if(
+    step.type !== "radio+text" &&
+    (
+      !value ||
+      (Array.isArray(value) && value.length === 0) ||
+      (typeof value === "string" && value.trim() === "")
+    )
+  ){
+    errorEl.innerText = "Bạn chưa trả lời câu hỏi kìa, hãy hoàn thành trước khi tiếp tục nhé.";
+    errorEl.style.display = "block";
+    return;
+  }
+
+  errorEl.style.display = "none";
+
+  if(currentStep < steps.length - 1){
+    currentStep++;
+    renderStep();
+  } else {
+    handleSubmit();
+  }
+}
+
+function prevStep(){
+  if(currentStep > 0){
+    currentStep--;
+    renderStep();
+  }
+}
+
+async function handleSubmit(){
+
+  const debateId = localStorage.getItem("currentDebateId");
+  if(!debateId) return;
+
+  try{
+    const res = await fetch("/submit-decision",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({
+        debateId,
+        decision: answers
+      })
+    });
+
+    const data = await res.json();
+
+    if(data.success){
+      window.location.href="SimulationScoring.html";
+    }
+
+  }catch(err){
+    alert("Lỗi server");
+  }
+}
+async function loadDecision() {
+  const debateId = localStorage.getItem("currentDebateId");
+  if (!debateId) return;
+
+  try {
+    const res = await fetch("/get-decision", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ debateId })
+    });
+
+    const data = await res.json();
+    if (!data || !data.decision) return;
+
+    answers = data.decision || {}; // 🔥 load trực tiếp vào answers
+    renderStep();            // 🔥 render lại step đầu
+
+  } catch (err) {
+    console.error("Load decision error:", err);
+  }
+}
+window.addEventListener("DOMContentLoaded", async () => {
+  await loadDecision();
+  if(Object.keys(answers).length === 0){
+    renderStep();
+  }
+});
+</script>
+<script src="authFetch.js"></script>
+</body>
+</html>
