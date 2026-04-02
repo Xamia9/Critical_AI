@@ -388,8 +388,8 @@ document.getElementById("authForm").addEventListener("submit", async function(e)
     window.location.href = "DefineIssue.html";
 
   } catch (err) {
-    console.error(err);
-    alert("Lỗi kết nối server");
+    console.error("Fetch error:", err);
+    alert("Lỗi kết nối server: " + err.message);
   }
 });
 </script>
