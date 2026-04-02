@@ -29,6 +29,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("."));
 
+app.get("/", (req, res) => {
+  res.send("Server is running 🚀");
+});
+
 import authRoutes from "./routes/auth.js";
 app.use("/api/auth", authRoutes);
 
