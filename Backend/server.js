@@ -56,11 +56,20 @@ app.get("/", (req, res) => {
 });
 
 // Catch-all route to serve HTML files from Frontend
-app.get("/*.html", (req, res) => {
-  const fileName = req.params[0] + ".html";
-  const filePath = join(frontendPath, fileName);
-  console.log("Serving HTML file:", filePath);
-  res.sendFile(filePath);
+app.use((req, res, next) => {
+  if (req.path.endsWith(".html")) {
+    const fileName = req.path.slice(1); // Remove leading /
+    const filePath = join(frontendPath, fileName);
+    console.log("Serving HTML file:", filePath);
+    res.sendFile(filePath, (err) => {
+      if (err) {
+        console.log("File not found:", filePath);
+        next();
+      }
+    });
+  } else {
+    next();
+  }
 });
 
 import authRoutes from "./routes/auth.js";
