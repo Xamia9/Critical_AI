@@ -1,6 +1,12 @@
 import express from "express";
 import cors from "cors";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
 import { v4 as uuidv4 } from "uuid";
+
+// ES Module __dirname equivalent
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "./models/User.js";
@@ -12,8 +18,8 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
 
-mongoose.connect("mongodb://127.0.0.1:27017/criticalai")
-  .then(() => console.log("MongoDB Local connected"))
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB connected"))
   .catch(err => console.error("Mongo error:", err));
 
   
@@ -28,9 +34,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.static("."));
+app.use(express.static("../Frontend"));
 
 app.get("/", (req, res) => {
-  res.send("Server is running 🚀");
+  res.sendFile(join(__dirname, "../Frontend/Introduction.html"));
 });
 
 import authRoutes from "./routes/auth.js";

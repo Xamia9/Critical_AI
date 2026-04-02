@@ -115,15 +115,10 @@ This line is already in your `server.js` at line 30.
    - **Name:** `criticalai-backend`
    - **Region:** Singapore (or closest to you)
    - **Branch:** `main`
-   - **Root Directory:** Leave empty (or `Backend` if structure differs)
+   - **Root Directory:** Leave empty
    - **Runtime:** Node
    - **Build Command:** `cd Backend && npm install`
-   - **Start Command:** `cd Backend && npm start`
-   
-   ⚠️ **Important:** If your repository structure has Backend in root, use:
-   - **Root Directory:** (leave empty)
-   - **Build Command:** `npm install`
-   - **Start Command:** `npm start`
+   - **Start Command:** `node Backend/server.js`
 
 6. Click **"Create Web Service"**
 
