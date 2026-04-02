@@ -647,7 +647,8 @@ app.delete("/api/history/:id", authMiddleware, async (req, res) => {
     res.status(500).json({ error: "Delete failed" });
   }
 });
-app.listen(3000, () => {
-  console.log("Server chạy tại http://localhost:3000");
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server chạy tại http://localhost:${PORT}`);
 });
 
