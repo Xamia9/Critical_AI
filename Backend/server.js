@@ -33,11 +33,34 @@ const JWT_SECRET = process.env.JWT_SECRET;
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(express.static("."));
-app.use(express.static("../Frontend"));
 
+// Debug: Log paths in production
+if (process.env.NODE_ENV === 'production') {
+  console.log("Production mode - Static paths:");
+  console.log("__dirname:", __dirname);
+  console.log("Frontend path:", join(__dirname, "..", "Frontend"));
+}
+
+// Serve static files from Frontend folder (absolute path)
+const frontendPath = join(__dirname, "..", "Frontend");
+app.use(express.static(frontendPath));
+
+// Also serve root level static files
+app.use(express.static(join(__dirname, "..")));
+
+// Serve Introduction.html at root
 app.get("/", (req, res) => {
-  res.sendFile(join(__dirname, "../Frontend/Introduction.html"));
+  const filePath = join(frontendPath, "Introduction.html");
+  console.log("Serving Introduction.html from:", filePath);
+  res.sendFile(filePath);
+});
+
+// Catch-all route to serve HTML files from Frontend
+app.get("/*.html", (req, res) => {
+  const fileName = req.params[0] + ".html";
+  const filePath = join(frontendPath, fileName);
+  console.log("Serving HTML file:", filePath);
+  res.sendFile(filePath);
 });
 
 import authRoutes from "./routes/auth.js";
