@@ -93,8 +93,9 @@ const apiKeys = [
   process.env.GEMINI_KEY_6
 ].filter(Boolean);
 
-console.log("Loaded keys:", apiKeys);
-console.log("Total keys:", apiKeys.length);
+console.log("Environment:", process.env.NODE_ENV || "development");
+console.log("Loaded API keys count:", apiKeys.length);
+console.log("Keys present:", apiKeys.map((k, i) => `Key ${i+1}: ${k ? 'YES' : 'NO'}`).join(', '));
 
 let currentKeyIndex = 0;
 

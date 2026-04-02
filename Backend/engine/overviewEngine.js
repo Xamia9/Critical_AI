@@ -19,12 +19,20 @@ Vấn đề:
 ${issue}
 `;
 
-  const raw = await generateWithRotation(prompt, true);
+  try {
+    const raw = await generateWithRotation(prompt, true);
+    console.log("Overview AI raw response:", raw);
+    
+    // Clean the response
+    const cleaned = raw.replace(/```json/g, "").replace(/```/g, "").trim();
+    const json = JSON.parse(cleaned);
 
-  const json = JSON.parse(raw);
-
-  return {
-    title: json.title || "Debate",
-    summary: json.summary || issue
-  };
+    return {
+      title: json.title || "Debate",
+      summary: json.summary || issue
+    };
+  } catch (err) {
+    console.error("Overview generation error:", err);
+    throw err;
+  }
 }
