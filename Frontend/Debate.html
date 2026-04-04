@@ -569,7 +569,87 @@ body.light-mode .task-node {
   line-height: 1.6;
 }
 
-/* Criterion block container */
+/* Main feedback sections (Điểm Mạnh, Lỗ Hổng Chính, etc.) */
+#feedbackContent .feedback-section {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 0;
+  margin-bottom: 20px;
+  margin-top: 8px;
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+  box-shadow: 
+    0 4px 20px rgba(74, 91, 255, 0.15),
+    0 8px 32px rgba(197, 44, 90, 0.1);
+  transition: 0.3s ease;
+}
+
+#feedbackContent .feedback-section:hover {
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 6px 24px rgba(74, 91, 255, 0.25),
+    0 12px 40px rgba(197, 44, 90, 0.15);
+}
+
+/* Section header box */
+#feedbackContent .section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, rgba(197, 44, 90, 0.25), rgba(74, 91, 255, 0.25));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Section icon */
+#feedbackContent .section-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+  color: white;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+/* Section title */
+#feedbackContent .section-title {
+  display: inline;
+  font-weight: 900;
+  font-size: 18px;
+  color: #FFD6FF;
+  letter-spacing: 0.3px;
+  text-shadow: 
+    0 0 10px rgba(255, 214, 255, 0.5),
+    0 0 20px rgba(197, 44, 90, 0.4);
+}
+
+/* Section content/body */
+#feedbackContent .section-content {
+  padding: 16px 20px;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.7;
+}
+
+/* Bullet points in sections */
+#feedbackContent .section-content li,
+#feedbackContent .section-content .bullet-item {
+  display: block;
+  margin-left: 8px;
+  margin-bottom: 8px;
+  padding-left: 8px;
+  border-left: 3px solid rgba(74, 91, 255, 0.4);
+}
+
+/* Criterion block container (legacy Tiêu chí style) */
 #feedbackContent .criterion-block {
   background: rgba(255, 255, 255, 0.06);
   border-left: 4px solid #FF2E88;
@@ -582,13 +662,6 @@ body.light-mode .task-node {
     0 4px 16px rgba(74, 91, 255, 0.15),
     0 8px 24px rgba(197, 44, 90, 0.1);
   transition: 0.3s ease;
-}
-
-#feedbackContent .criterion-block:hover {
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: 
-    0 6px 20px rgba(74, 91, 255, 0.25),
-    0 12px 32px rgba(197, 44, 90, 0.15);
 }
 
 /* Criterion title - prominently styled */
@@ -655,16 +728,39 @@ body.light-mode .task-node {
 }
 
 /* ================= LIGHT MODE FEEDBACK STYLES ================= */
+body.light-mode #feedbackContent .feedback-section {
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 
+    0 4px 20px rgba(74, 91, 255, 0.12),
+    0 8px 32px rgba(197, 44, 90, 0.08);
+}
+
+body.light-mode #feedbackContent .feedback-section:hover {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+body.light-mode #feedbackContent .section-header {
+  background: linear-gradient(135deg, rgba(197, 44, 90, 0.15), rgba(74, 91, 255, 0.15));
+  border-bottom-color: rgba(74, 91, 255, 0.3);
+}
+
+body.light-mode #feedbackContent .section-title {
+  color: #5B3CFF;
+  text-shadow: none;
+}
+
+body.light-mode #feedbackContent .section-content {
+  color: #1E1E2F;
+}
+
+body.light-mode #feedbackContent .section-content li,
+body.light-mode #feedbackContent .section-content .bullet-item {
+  border-left-color: rgba(74, 91, 255, 0.5);
+}
+
 body.light-mode #feedbackContent .criterion-block {
   background: rgba(255, 255, 255, 0.5);
   border-left: 4px solid #5B3CFF;
-  box-shadow: 
-    0 4px 16px rgba(74, 91, 255, 0.12),
-    0 8px 24px rgba(197, 44, 90, 0.08);
-}
-
-body.light-mode #feedbackContent .criterion-block:hover {
-  background: rgba(255, 255, 255, 0.7);
 }
 
 body.light-mode #feedbackContent strong.criterion-name,
@@ -677,7 +773,8 @@ body.light-mode #feedbackContent .criterion-description {
   color: #1E1E2F;
 }
 
-body.light-mode #feedbackContent .criterion-icon {
+body.light-mode #feedbackContent .criterion-icon,
+body.light-mode #feedbackContent .section-icon {
   background: linear-gradient(135deg, #C52C5A, #4A5BFF);
 }
 
@@ -1166,53 +1263,73 @@ function startNewDebate(){
 function formatFeedback(text) {
   if (!text) return "";
   
-  // Split by criterion patterns and build structured HTML
+  // Section header patterns to detect
+  const sectionPatterns = [
+    { pattern: /^Điểm\s*Mạnh:?/i, icon: "💪", title: "Điểm Mạnh" },
+    { pattern: /^Lỗ\s*Hổng\s*Chính:?/i, icon: "⚠️", title: "Lỗ Hổng Chính" },
+    { pattern: /^Giả\s*Định\s*Ẩn:?/i, icon: "🎭", title: "Giả Định Ẩn" },
+    { pattern: /^Khuyến\s*Nghị:?/i, icon: "💡", title: "Khuyến Nghị" },
+    { pattern: /^Điểm\s*Chưa\s*Tốt:?/i, icon: "❌", title: "Điểm Chưa Tốt" },
+    { pattern: /^Tiêu\s*Chí\s*\d+:?/i, icon: "📊", title: null }
+  ];
+  
+  // Split text into lines
   const lines = text.split('\n');
   let html = '';
-  let criterionIndex = 0;
+  let currentSection = null;
+  let sectionIndex = 0;
   
   lines.forEach((line, idx) => {
     line = line.trim();
     if (!line) return;
     
-    // Check if this line is a criterion title
-    const criterionMatch = line.match(/^(Tiêu chí\s*\d+):/i);
+    // Check if this line is a section header
+    let matchedSection = null;
+    for (const sp of sectionPatterns) {
+      if (sp.pattern.test(line)) {
+        matchedSection = sp;
+        break;
+      }
+    }
     
-    if (criterionMatch) {
-      criterionIndex++;
-      const criterionName = line;
+    if (matchedSection) {
+      // Close previous section if open
+      if (currentSection) {
+        html += '</div></div>';
+      }
       
-      // Start a new criterion block with icon and title
-      html += `<div class="criterion-block">`;
-      html += `<div class="criterion-title">`;
-      html += `<span class="criterion-icon">${criterionIndex}</span>`;
-      html += `<strong class="criterion-name">${criterionName}</strong>`;
+      sectionIndex++;
+      const sectionTitle = matchedSection.title || line;
+      const sectionIcon = matchedSection.icon;
+      
+      // Start new section with styled box
+      html += `<div class="feedback-section">`;
+      html += `<div class="section-header">`;
+      html += `<span class="section-icon">${sectionIcon}</span>`;
+      html += `<span class="section-title">${sectionTitle}</span>`;
       html += `</div>`;
-      html += `<div class="criterion-description">`;
-    } else if (line.match(/^(Điểm|Đánh giá|Khuyến nghị|Nhận xét|Nội dung|$)/i)) {
-      // Section headers within description
-      html += `<strong style="display:block;margin-top:12px;font-size:14px;color:#FFD6FF;">${line}</strong>`;
+      html += `<div class="section-content">`;
+      
+      currentSection = matchedSection;
     } else if (line.match(/^[-•*]/)) {
       // Bullet points
-      html += `<span style="display:block;margin-left:8px;margin-top:4px;">${line}</span>`;
-    } else if (criterionIndex > 0 && html.endsWith('">')) {
-      // Continuation of description
-      html += line + ' ';
-    } else if (criterionIndex > 0) {
-      // Still in description mode
-      html += line + ' ';
+      const bulletText = line.replace(/^[-•*]\s*/i, '');
+      html += `<div class="bullet-item">${bulletText}</div>`;
+    } else if (currentSection) {
+      // Content in current section
+      html += `<div>${line}</div>`;
     } else {
-      // Regular content before any criterion - wrap in block
+      // Regular content without section - wrap in basic block
       html += `<div class="criterion-block"><div class="criterion-description">${line}</div></div>`;
     }
   });
   
-  // Close any open description tags
-  if (html.endsWith('">')) {
-    html = html.trim() + '</div></div>';
+  // Close last open section
+  if (currentSection) {
+    html += '</div></div>';
   }
   
-  // Clean up any double closing tags
+  // Clean up closing tags
   html = html.replace(/<\/div><\/div><\/div>/g, '</div></div>');
   html = html.replace(/<\/div><\/div>/g, '</div></div>');
   
