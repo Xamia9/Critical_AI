@@ -172,8 +172,7 @@ Hậu quả tệ nhất có thể xảy ra: ${userInput.hauQuaSai}
 
 PHẦN VIEWPOINT
 Trạng thái hiện tại: ${userInput.trangThai}
-Lý do & lập trường:
-${userInput.lyDoTrangThai || "Người dùng chưa giải thích rõ lập trường."}
+Lý do chính: ${userInput.lyDoTrangThai}
 Mức độ chắc chắn: ${userInput.mucTuTin}%
 `;
 const prompt = `
@@ -227,10 +226,12 @@ let raw = await generateWithRotation(prompt, true);
 
     const parsed = JSON.parse(raw);
 
-// 🔥 GỌI AI TẠO TITLE + SUMMARY
+// 🔥 GỌI AI TẠO TITLE + SUMMARY (with trangThai and lyDoTrangThai context)
 const overview = await generateOverview(
   generateWithRotation,
-  parsed.issue
+  parsed.issue,
+  userInput.trangThai || "",
+  userInput.lyDoTrangThai || ""
 );
 
 const newDebate = await Debate.create({

@@ -1,4 +1,12 @@
-export async function generateOverview(generateWithRotation, issue) {
+export async function generateOverview(generateWithRotation, issue, trangThai = "", lyDoTrangThai = "") {
+
+  // Build additional context from trangThai if available
+  let trangThaiContext = "";
+  if (trangThai && lyDoTrangThai) {
+    trangThaiContext = `
+Trạng thái hiện tại: ${trangThai}
+Lý do chính: ${lyDoTrangThai}`;
+  }
 
   const prompt = `
 Bạn là hệ thống đặt tiêu đề và tóm tắt vấn đề tranh luận.
@@ -17,7 +25,7 @@ Trả về JSON:
 
 Vấn đề:
 ${issue}
-`;
+${trangThaiContext}`;
 
   try {
     const raw = await generateWithRotation(prompt, true);
