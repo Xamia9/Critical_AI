@@ -1044,53 +1044,43 @@ function renderSide(roleList, direction) {
   });
 }
 
-// ===== CHILDREN RENDERING WITH 20px COLLISION PADDING =====
+// ===== CHILDREN RENDERING WITH STRICT 30px NON-OVERLAP =====
 function renderChildren(children, parentX, parentY, direction, level) {
 
   if (!children || level > 5) return;
 
+  // Create temp nodes to measure
   const tempNodes = children.map(child => {
     const temp = createNode(child.text, -9999, -9999, level);
     return { child, element: temp, height: temp.offsetHeight, width: temp.offsetWidth };
   });
 
-  let totalNodesHeight = tempNodes.reduce((sum, n) => sum + n.height, 0);
+  // STRICT 30px minimum gap between node centers
+  const minNodeGap = 30;
+  const verticalGap = Math.max(minNodeGap * 2, 80); // At least 60px between centers (30px gap each side)
 
-  // Use more vertical space for better spread
-  const availableSpace = height * 0.55;
-  let verticalGap = (availableSpace - totalNodesHeight) / (children.length - 1);
-
-  // Increased minimum spacing with 20px collision padding
-  // Ensure at least nodeHeight + padding between centers
-  const minGapWithPadding = tempNodes.length > 0 ? 
-    Math.max(...tempNodes.map(n => n.height + nodeCollisionPadding * 2)) : nodeCollisionPadding * 2;
-  
-  verticalGap = Math.max(minGapWithPadding, Math.min(120, verticalGap));
-
-  let totalHeight = totalNodesHeight + verticalGap * (children.length - 1);
-
-  let currentY = parentY - totalHeight / 2;
-
-  // Level-based spacing multiplier to make deeper levels more spread out
-  const levelSpacingMultiplier = 1 + (level - 2) * 0.15;
-
-  // Add extra horizontal padding based on level to prevent collision
-  const horizontalPadding = nodeCollisionPadding * (level - 1);
+  let currentY = parentY - (tempNodes.length * verticalGap) / 2;
 
   tempNodes.forEach(({ child, element, height: nodeHeight, width: nodeWidth }) => {
-
-    const x = parentX + (direction * horizontalSpacing * levelSpacingMultiplier) + horizontalPadding;
+    
+    // Calculate position - more horizontal spread for each level
+    const levelMultiplier = 1 + (level - 2) * 0.2;
+    const x = parentX + (direction * horizontalSpacing * levelMultiplier);
     const y = currentY + nodeHeight / 2;
 
     const clampedX = clamp(x);
 
+    // Set position
     element.style.left = clampedX + "px";
     element.style.top = y + "px";
 
+    // Draw edge from PARENT center to CHILD center
     drawLine(parentX, parentY, clampedX, y, level);
 
+    // Move to next position
     currentY += nodeHeight + verticalGap;
 
+    // Recursively render children
     if (child.children && child.children.length > 0) {
       renderChildren(child.children, clampedX, y, direction, level + 1);
     }
