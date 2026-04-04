@@ -978,10 +978,9 @@ svg.setAttribute("height", height);
 svg.classList.add("mindmap-svg");
 viewport.appendChild(svg);
 
-// Store all edges to draw after layout is calculated
+// Store edges to draw after layout
 const edgesToDraw = [];
 
-// ===== TREE LAYOUT WITH PROPER BRANCH SEPARATION =====
 const rootX = width / 2;
 const rootY = height / 2;
 
@@ -1008,96 +1007,89 @@ roles.forEach(role => {
 });
 maxDepth = Math.min(maxDepth, 5);
 
-// ===== SEPARATE BRANCHES INTO LEFT/RIGHT GROUPS =====
-const leftBranches = [];
-const rightBranches = [];
+// ===== DYNAMIC HORIZONTAL SPACING (ORIGINAL VERSION) =====
+const maxHorizontal = width * 0.3;
+const horizontalSpacing = maxHorizontal / maxDepth;
 
-roles.forEach((role, index) => {
-  if (index % 2 === 0) {
-    rightBranches.push(role);
-  } else {
-    leftBranches.push(role);
-  }
+// Separate branches left/right
+const left = [];
+const right = [];
+
+roles.forEach((r, i) => {
+  if (i % 2 === 0) right.push(r);
+  else left.push(r);
 });
 
-// Calculate spacing parameters
-const levelDistance = 320; // Horizontal distance between levels
-const siblingDistance = 100; // Minimum vertical distance between siblings
-const branchGap = 180; // Extra gap between different branches
+// ===== INCREASED BRANCH GAP BETWEEN YELLOW/PINK (和其他) =====
+const branchGap = 60; // Additional gap between branches on same side
 
-// ===== RENDER RIGHT BRANCHES =====
-let rightOffset = 0;
-rightBranches.forEach((role, branchIndex) => {
-  const branchStartX = rootX + levelDistance + (branchIndex * branchGap);
-  renderBranch(role, branchStartX, 1, branchIndex, rightBranches.length);
-});
-
-// ===== RENDER LEFT BRANCHES =====
-leftBranches.forEach((role, branchIndex) => {
-  const branchStartX = rootX - levelDistance - (branchIndex * branchGap);
-  renderBranch(role, branchStartX, -1, branchIndex, leftBranches.length);
-});
-
-// ===== BRANCH RENDERER =====
-function renderBranch(role, startX, direction, branchIndex, totalBranches) {
-  const roleLabel = rolesData[role]?.ten || mindmaps[role]?.name || role;
-  const roleY = rootY;
+// Render right branches with gap
+right.forEach((role, idx) => {
+  const spacingY = height / (right.length + 1);
+  const roleY = spacingY * (idx + 1);
+  const roleX = rootX + horizontalSpacing + (idx * branchGap);
   
-  createNode(roleLabel, startX, roleY, 1);
-  edgesToDraw.push({ x1: rootX, y1: rootY, x2: startX, y2: roleY, level: 1 });
-
+  const clampedX = Math.max(100, Math.min(width - 100, roleX));
+  const roleLabel = rolesData[role]?.ten || mindmaps[role]?.name || role;
+  
+  createNode(roleLabel, clampedX, roleY, 1);
+  edgesToDraw.push({ x1: rootX, y1: rootY, x2: clampedX, y2: roleY, level: 1 });
+  
   const children = mindmaps[role]?.children || [];
-  if (children.length > 0) {
-    renderChildNodes(children, startX, roleY, direction, 2, role);
-  }
-}
+  renderChildren(children, clampedX, roleY, 1, 2);
+});
 
-// ===== CHILD NODES WITH PROPER TREE LAYOUT =====
-function renderChildNodes(children, parentX, parentY, direction, level, parentRole) {
+// Render left branches with gap
+left.forEach((role, idx) => {
+  const spacingY = height / (left.length + 1);
+  const roleY = spacingY * (idx + 1);
+  const roleX = rootX - horizontalSpacing - (idx * branchGap);
+  
+  const clampedX = Math.max(100, Math.min(width - 100, roleX));
+  const roleLabel = rolesData[role]?.ten || mindmaps[role]?.name || role;
+  
+  createNode(roleLabel, clampedX, roleY, 1);
+  edgesToDraw.push({ x1: rootX, y1: rootY, x2: clampedX, y2: roleY, level: 1 });
+  
+  const children = mindmaps[role]?.children || [];
+  renderChildren(children, clampedX, roleY, -1, 2);
+});
+
+// ===== CHILDREN RENDERING =====
+function renderChildren(children, parentX, parentY, direction, level) {
   if (!children || level > 5) return;
 
-  // Create temp nodes to measure heights
-  const tempNodes = children.map((child, idx) => {
+  const tempNodes = children.map(child => {
     const temp = createNode(child.text, -9999, -9999, level);
-    return { 
-      child, 
-      element: temp, 
-      height: temp.offsetHeight,
-      width: temp.offsetWidth,
-      index: idx 
-    };
+    return { child, element: temp, height: temp.offsetHeight };
   });
 
-  // Calculate total height needed for all nodes
-  const totalNodesHeight = tempNodes.reduce((sum, n) => sum + n.height, 0);
-  const totalGaps = Math.max(0, (children.length - 1) * siblingDistance);
-  const totalHeight = totalNodesHeight + totalGaps;
+  let totalNodesHeight = tempNodes.reduce((sum, n) => sum + n.height, 0);
+  
+  const availableSpace = height * 0.6;
+  let verticalGap = (availableSpace - totalNodesHeight) / (children.length - 1 || 1);
+  verticalGap = Math.max(40, Math.min(100, verticalGap));
 
-  // Position children vertically centered around parent
+  let totalHeight = totalNodesHeight + verticalGap * (children.length - 1);
   let currentY = parentY - totalHeight / 2;
 
-  // Horizontal position with level-based multiplier for more spread
-  const levelMultiplier = 1 + (level - 2) * 0.25;
-  const childX = parentX + (direction * levelDistance * levelMultiplier);
+  const levelMultiplier = 1 + (level - 2) * 0.15;
 
-  tempNodes.forEach(({ child, element, height: nodeHeight, width: nodeWidth, index }) => {
-    // Add branch-specific offset to prevent overlapping with other branches
-    const branchOffset = direction * (level - 2) * 40;
-    const finalX = childX + branchOffset;
-    
+  tempNodes.forEach(({ child, element, height: nodeHeight }) => {
+    const x = parentX + (direction * horizontalSpacing * levelMultiplier);
     const y = currentY + nodeHeight / 2;
+    
+    const clampedX = Math.max(100, Math.min(width - 100, x));
 
-    element.style.left = finalX + "px";
+    element.style.left = clampedX + "px";
     element.style.top = y + "px";
+    
+    edgesToDraw.push({ x1: parentX, y1: parentY, x2: clampedX, y2: y, level: level });
 
-    // Store edge for later rendering
-    edgesToDraw.push({ x1: parentX, y1: parentY, x2: finalX, y2: y, level: level });
+    currentY += nodeHeight + verticalGap;
 
-    currentY += nodeHeight + siblingDistance;
-
-    // Render grandchildren
     if (child.children && child.children.length > 0) {
-      renderChildNodes(child.children, finalX, y, direction, level + 1, parentRole);
+      renderChildren(child.children, clampedX, y, direction, level + 1);
     }
   });
 }
@@ -1116,29 +1108,21 @@ function createNode(text, x, y, level) {
 
 // ===== DRAW ALL EDGES AFTER LAYOUT =====
 function drawAllEdges() {
-  edgesToDraw.forEach(edge => {
-    drawLine(edge.x1, edge.y1, edge.x2, edge.y2, edge.level);
-  });
+  edgesToDraw.forEach(edge => drawLine(edge.x1, edge.y1, edge.x2, edge.y2, edge.level));
 }
-
-// Call drawAllEdges after all nodes are positioned
 drawAllEdges();
 
 // ===== EDGE RENDERING =====
 function drawLine(x1, y1, x2, y2, level = 1) {
   const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
 
-  // More aggressive line shortening for cleaner look
   let shortenStart, shortenEnd;
-  if (level === 1) {
-    shortenStart = 40;
-    shortenEnd = 45;
-  } else if (level === 2) {
-    shortenStart = 30;
+  if (level <= 2) {
+    shortenStart = 25;
     shortenEnd = 35;
   } else {
-    shortenStart = 20;
-    shortenEnd = 25;
+    shortenStart = 15;
+    shortenEnd = 20;
   }
 
   const dx = x2 - x1;
@@ -1149,15 +1133,10 @@ function drawLine(x1, y1, x2, y2, level = 1) {
   const unitX = dx / length;
   const unitY = dy / length;
 
-  const newX1 = x1 + unitX * shortenStart;
-  const newY1 = y1 + unitY * shortenStart;
-  const newX2 = x2 - unitX * shortenEnd;
-  const newY2 = y2 - unitY * shortenEnd;
-
-  line.setAttribute("x1", newX1);
-  line.setAttribute("y1", newY1);
-  line.setAttribute("x2", newX2);
-  line.setAttribute("y2", newY2);
+  line.setAttribute("x1", x1 + unitX * shortenStart);
+  line.setAttribute("y1", y1 + unitY * shortenStart);
+  line.setAttribute("x2", x2 - unitX * shortenEnd);
+  line.setAttribute("y2", y2 - unitY * shortenEnd);
 
   line.classList.add("mindmap-line");
   line.setAttribute("stroke-width", "1.4");
@@ -1171,23 +1150,22 @@ let scale = 1;
 let isDragging = false;
 let startX, startY;
 
-// Center initially
 let translateX = (container.clientWidth - width) / 2;
 let translateY = (container.clientHeight - height) / 2;
 
 updateTransform();
 
-// ===== ZOOM (wheel) - Simple center-based like SimulationScoring =====
+function updateTransform() {
+  viewport.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+}
+
+// ===== ZOOM =====
 container.addEventListener("wheel", (e) => {
   e.preventDefault();
-
   const zoomSpeed = 0.1;
-
   if (e.deltaY < 0) scale += zoomSpeed;
   else scale -= zoomSpeed;
-
   scale = Math.min(Math.max(0.5, scale), 2.5);
-
   updateTransform();
 });
 
@@ -1206,24 +1184,18 @@ window.addEventListener("mouseup", () => {
 
 container.addEventListener("mousemove", (e) => {
   if (!isDragging) return;
-
   translateX = e.clientX - startX;
   translateY = e.clientY - startY;
-
   updateTransform();
 });
 
-// ===== DOUBLE CLICK RESET - Center like SimulationScoring =====
+// ===== DOUBLE CLICK RESET =====
 container.addEventListener("dblclick", () => {
   scale = 1;
   translateX = 0;
   translateY = 0;
   updateTransform();
 });
-
-function updateTransform() {
-  viewport.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
-}
 }
 
 // ===== EXPORT PNG FUNCTION =====
