@@ -563,13 +563,126 @@ body.light-mode .task-node {
   color: white !important;
 }
 
-#feedbackContent strong {
-  display: block;
-  margin-top: 14px;
-  margin-bottom: 6px;
+/* ================= AI FEEDBACK ENHANCED STYLING ================= */
+#feedbackContent {
+  color: var(--text-dark);
+  line-height: 1.6;
+}
+
+/* Criterion block container */
+#feedbackContent .criterion-block {
+  background: rgba(255, 255, 255, 0.06);
+  border-left: 4px solid #FF2E88;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  margin-top: 8px;
+  backdrop-filter: blur(8px);
+  box-shadow: 
+    0 4px 16px rgba(74, 91, 255, 0.15),
+    0 8px 24px rgba(197, 44, 90, 0.1);
+  transition: 0.3s ease;
+}
+
+#feedbackContent .criterion-block:hover {
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 6px 20px rgba(74, 91, 255, 0.25),
+    0 12px 32px rgba(197, 44, 90, 0.15);
+}
+
+/* Criterion title - prominently styled */
+#feedbackContent .criterion-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Icon/bullet indicator */
+#feedbackContent .criterion-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+  color: white;
+  font-size: 14px;
   font-weight: 800;
-  font-size: 16px;
+}
+
+#feedbackContent strong.criterion-name {
+  display: inline;
+  font-weight: 900;
+  font-size: 17px;
   color: #FFD6FF;
+  letter-spacing: 0.3px;
+  text-shadow: 
+    0 0 8px rgba(255, 214, 255, 0.4),
+    0 0 16px rgba(197, 44, 90, 0.3);
+}
+
+/* Criterion description - less emphasized */
+#feedbackContent .criterion-description {
+  display: block;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.7;
+  padding-left: 0;
+  margin-top: 8px;
+}
+
+/* Legacy strong styling - enhanced with proper spacing */
+#feedbackContent > strong {
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  font-weight: 900;
+  font-size: 17px;
+  color: #FFD6FF;
+  text-shadow: 
+    0 0 8px rgba(255, 214, 255, 0.4),
+    0 0 16px rgba(197, 44, 90, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 12px;
+}
+
+/* ================= LIGHT MODE FEEDBACK STYLES ================= */
+body.light-mode #feedbackContent .criterion-block {
+  background: rgba(255, 255, 255, 0.5);
+  border-left: 4px solid #5B3CFF;
+  box-shadow: 
+    0 4px 16px rgba(74, 91, 255, 0.12),
+    0 8px 24px rgba(197, 44, 90, 0.08);
+}
+
+body.light-mode #feedbackContent .criterion-block:hover {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+body.light-mode #feedbackContent strong.criterion-name,
+body.light-mode #feedbackContent > strong {
+  color: #5B3CFF;
+  text-shadow: none;
+}
+
+body.light-mode #feedbackContent .criterion-description {
+  color: #1E1E2F;
+}
+
+body.light-mode #feedbackContent .criterion-icon {
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+}
+
+body.light-mode #feedbackContent .criterion-title {
+  border-bottom-color: rgba(74, 91, 255, 0.3);
 }
 </style>
 </head>
@@ -1052,13 +1165,58 @@ function startNewDebate(){
 
 function formatFeedback(text) {
   if (!text) return "";
-
-  return text
-    // In đậm tiêu chí
-    .replace(/(Tiêu chí\s*\d+:[^\n]*)/g, "<strong>$1</strong>")
+  
+  // Split by criterion patterns and build structured HTML
+  const lines = text.split('\n');
+  let html = '';
+  let criterionIndex = 0;
+  
+  lines.forEach((line, idx) => {
+    line = line.trim();
+    if (!line) return;
     
-    // Xuống dòng đẹp
-    .replace(/\n/g, "<br>");
+    // Check if this line is a criterion title
+    const criterionMatch = line.match(/^(Tiêu chí\s*\d+):/i);
+    
+    if (criterionMatch) {
+      criterionIndex++;
+      const criterionName = line;
+      
+      // Start a new criterion block with icon and title
+      html += `<div class="criterion-block">`;
+      html += `<div class="criterion-title">`;
+      html += `<span class="criterion-icon">${criterionIndex}</span>`;
+      html += `<strong class="criterion-name">${criterionName}</strong>`;
+      html += `</div>`;
+      html += `<div class="criterion-description">`;
+    } else if (line.match(/^(Điểm|Đánh giá|Khuyến nghị|Nhận xét|Nội dung|$)/i)) {
+      // Section headers within description
+      html += `<strong style="display:block;margin-top:12px;font-size:14px;color:#FFD6FF;">${line}</strong>`;
+    } else if (line.match(/^[-•*]/)) {
+      // Bullet points
+      html += `<span style="display:block;margin-left:8px;margin-top:4px;">${line}</span>`;
+    } else if (criterionIndex > 0 && html.endsWith('">')) {
+      // Continuation of description
+      html += line + ' ';
+    } else if (criterionIndex > 0) {
+      // Still in description mode
+      html += line + ' ';
+    } else {
+      // Regular content before any criterion - wrap in block
+      html += `<div class="criterion-block"><div class="criterion-description">${line}</div></div>`;
+    }
+  });
+  
+  // Close any open description tags
+  if (html.endsWith('">')) {
+    html = html.trim() + '</div></div>';
+  }
+  
+  // Clean up any double closing tags
+  html = html.replace(/<\/div><\/div><\/div>/g, '</div></div>');
+  html = html.replace(/<\/div><\/div>/g, '</div></div>');
+  
+  return html || text;
 }
 </script>
 <script src="authFetch.js"></script>
