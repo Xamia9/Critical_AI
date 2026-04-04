@@ -90,7 +90,12 @@ const apiKeys = [
   process.env.GEMINI_KEY_3,
   process.env.GEMINI_KEY_4,
   process.env.GEMINI_KEY_5,
-  process.env.GEMINI_KEY_6
+  process.env.GEMINI_KEY_6,
+  process.env.GEMINI_KEY_7,
+  process.env.GEMINI_KEY_8,
+  process.env.GEMINI_KEY_9,
+  process.env.GEMINI_KEY_10,
+  process.env.GEMINI_KEY_11
 ].filter(Boolean);
 
 console.log("Environment:", process.env.NODE_ENV || "development");
