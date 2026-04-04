@@ -5,6 +5,9 @@
 <title>Critical AI | History</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<!-- SweetAlert2 for notifications -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="notification.js"></script>
 
 <style>
 * {
@@ -865,8 +868,8 @@ async function deleteDebate(event, debateId) {
 
   event.stopPropagation();
 
-  const confirmDelete = confirm("Bạn có chắc muốn xóa cuộc tranh luận này?");
-  if (!confirmDelete) return;
+  const confirmDelete = await showConfirm("Xác nhận xóa", "Bạn có chắc muốn xóa cuộc tranh luận này?");
+  if (!confirmDelete.isConfirmed) return;
 
   const token = localStorage.getItem("token");
 
@@ -881,7 +884,7 @@ async function deleteDebate(event, debateId) {
     loadHistory(); // reload lại danh sách
 
   } catch (err) {
-    alert("Không thể xóa.");
+    showError("Không thể xóa.");
     console.error(err);
   }
 }
@@ -1281,7 +1284,7 @@ async function exportMindmapImage(event) {
     link.click();
 
   } catch (err) {
-    alert("Không thể xuất ảnh.");
+    showError("Không thể xuất ảnh.");
     console.error(err);
   }
 

@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <title>Critical AI | Overview</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<!-- SweetAlert2 for notifications -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="notification.js"></script>
 
 <style>
 * {
@@ -399,7 +402,7 @@ localStorage.removeItem("draftStep");
       localStorage.removeItem("completedRoles");
       window.location.href = "Roles.html";
     } else {
-      alert("Lỗi tạo vai: " + (result.error || "Unknown error"));
+      showError("Lỗi tạo vai: " + (result.error || "Unknown error"));
       btn.disabled = false;
       btn.innerText = "Xác nhận";
     }
@@ -407,7 +410,7 @@ localStorage.removeItem("draftStep");
   } catch (err) {
     clearInterval(countdown);
     console.error(err);
-    alert("Lỗi kết nối server.");
+    showError("Lỗi kết nối server.");
     btn.disabled = false;
     btn.innerText = "Xác nhận";
   }

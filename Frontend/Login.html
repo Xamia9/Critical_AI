@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <title>Critical AI | Authentication</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<!-- SweetAlert2 for notifications -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="notification.js"></script>
 
 <style>
 * {
@@ -377,19 +380,19 @@ document.getElementById("authForm").addEventListener("submit", async function(e)
     const data = await response.json();
 
     if (!response.ok) {
-      alert(data.message || "Có lỗi xảy ra");
+      showError(data.message || "Có lỗi xảy ra");
       return;
     }
 
     // lưu token
     localStorage.setItem("token", data.token);
 
-    alert("Thành công!");
+    showSuccess("Đăng nhập thành công!");
     window.location.href = "DefineIssue.html";
 
   } catch (err) {
     console.error("Fetch error:", err);
-    alert("Lỗi kết nối server: " + err.message);
+    showError("Lỗi kết nối server: " + err.message);
   }
 });
 </script>

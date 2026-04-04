@@ -172,7 +172,6 @@ Hậu quả tệ nhất có thể xảy ra: ${userInput.hauQuaSai}
 
 PHẦN VIEWPOINT
 Trạng thái hiện tại: ${userInput.trangThai}
-Lý do chính: ${userInput.lyDoTrangThai}
 Mức độ chắc chắn: ${userInput.mucTuTin}%
 `;
 const prompt = `
@@ -196,7 +195,6 @@ const prompt = `
 2) PHẦN VIEWPOINT:
    - Viết 3–4 bullet ngắn:
      - Quan điểm hiện tại
-     - Lý do chính
      - Mức độ chắc chắn (giữ nguyên % nếu có)
   
 
