@@ -978,18 +978,14 @@ svg.setAttribute("height", height);
 svg.classList.add("mindmap-svg");
 viewport.appendChild(svg);
 
-// Store edges to draw after layout
-const edgesToDraw = [];
-
 const rootX = width / 2;
 const rootY = height / 2;
 
-// Create root node
 createNode(decision.finalDecision || "CHỦ ĐỀ", rootX, rootY, 0);
 
 const roles = Object.keys(mindmaps);
 
-// Calculate max depth
+// ===== TÍNH MAX DEPTH =====
 function getMaxDepth(children, depth = 1) {
   let max = depth;
   children.forEach(c => {
@@ -1001,17 +997,19 @@ function getMaxDepth(children, depth = 1) {
 }
 
 let maxDepth = 1;
+
 roles.forEach(role => {
   const children = mindmaps[role]?.children || [];
   maxDepth = Math.max(maxDepth, getMaxDepth(children));
 });
+
 maxDepth = Math.min(maxDepth, 5);
 
-// ===== DYNAMIC HORIZONTAL SPACING (ORIGINAL VERSION) =====
+// ===== ORIGINAL SPACING WITH 20px COLLISION PADDING =====
 const maxHorizontal = width * 0.3;
 const horizontalSpacing = maxHorizontal / maxDepth;
+const nodeCollisionPadding = 20; // 20px minimum gap between node borders
 
-// Separate branches left/right
 const left = [];
 const right = [];
 
@@ -1020,71 +1018,76 @@ roles.forEach((r, i) => {
   else left.push(r);
 });
 
-// ===== INCREASED BRANCH GAP BETWEEN YELLOW/PINK (和其他) =====
-const branchGap = 60; // Additional gap between branches on same side
+renderSide(right, 1);
+renderSide(left, -1);
 
-// Render right branches with gap
-right.forEach((role, idx) => {
-  const spacingY = height / (right.length + 1);
-  const roleY = spacingY * (idx + 1);
-  const roleX = rootX + horizontalSpacing + (idx * branchGap);
-  
-  const clampedX = Math.max(100, Math.min(width - 100, roleX));
-  const roleLabel = rolesData[role]?.ten || mindmaps[role]?.name || role;
-  
-  createNode(roleLabel, clampedX, roleY, 1);
-  edgesToDraw.push({ x1: rootX, y1: rootY, x2: clampedX, y2: roleY, level: 1 });
-  
-  const children = mindmaps[role]?.children || [];
-  renderChildren(children, clampedX, roleY, 1, 2);
-});
+// ===== RENDER SIDE =====
+function renderSide(roleList, direction) {
 
-// Render left branches with gap
-left.forEach((role, idx) => {
-  const spacingY = height / (left.length + 1);
-  const roleY = spacingY * (idx + 1);
-  const roleX = rootX - horizontalSpacing - (idx * branchGap);
-  
-  const clampedX = Math.max(100, Math.min(width - 100, roleX));
-  const roleLabel = rolesData[role]?.ten || mindmaps[role]?.name || role;
-  
-  createNode(roleLabel, clampedX, roleY, 1);
-  edgesToDraw.push({ x1: rootX, y1: rootY, x2: clampedX, y2: roleY, level: 1 });
-  
-  const children = mindmaps[role]?.children || [];
-  renderChildren(children, clampedX, roleY, -1, 2);
-});
+  // Increase spacingY for more vertical spread
+  const spacingY = height / (roleList.length + 1);
 
-// ===== CHILDREN RENDERING =====
+  roleList.forEach((role, index) => {
+
+    const roleY = spacingY * (index + 1);
+    const roleX = rootX + (direction * horizontalSpacing);
+
+    const clampedX = clamp(roleX);
+    const roleLabel = rolesData[role]?.ten || mindmaps[role]?.name || role;
+
+    createNode(roleLabel, clampedX, roleY, 1);
+    drawLine(rootX, rootY, clampedX, roleY, 1);
+
+    const children = mindmaps[role]?.children || [];
+
+    renderChildren(children, clampedX, roleY, direction, 2);
+  });
+}
+
+// ===== CHILDREN RENDERING WITH 20px COLLISION PADDING =====
 function renderChildren(children, parentX, parentY, direction, level) {
+
   if (!children || level > 5) return;
 
   const tempNodes = children.map(child => {
     const temp = createNode(child.text, -9999, -9999, level);
-    return { child, element: temp, height: temp.offsetHeight };
+    return { child, element: temp, height: temp.offsetHeight, width: temp.offsetWidth };
   });
 
   let totalNodesHeight = tempNodes.reduce((sum, n) => sum + n.height, 0);
+
+  // Use more vertical space for better spread
+  const availableSpace = height * 0.55;
+  let verticalGap = (availableSpace - totalNodesHeight) / (children.length - 1);
+
+  // Increased minimum spacing with 20px collision padding
+  // Ensure at least nodeHeight + padding between centers
+  const minGapWithPadding = tempNodes.length > 0 ? 
+    Math.max(...tempNodes.map(n => n.height + nodeCollisionPadding * 2)) : nodeCollisionPadding * 2;
   
-  const availableSpace = height * 0.6;
-  let verticalGap = (availableSpace - totalNodesHeight) / (children.length - 1 || 1);
-  verticalGap = Math.max(40, Math.min(100, verticalGap));
+  verticalGap = Math.max(minGapWithPadding, Math.min(120, verticalGap));
 
   let totalHeight = totalNodesHeight + verticalGap * (children.length - 1);
+
   let currentY = parentY - totalHeight / 2;
 
-  const levelMultiplier = 1 + (level - 2) * 0.15;
+  // Level-based spacing multiplier to make deeper levels more spread out
+  const levelSpacingMultiplier = 1 + (level - 2) * 0.15;
 
-  tempNodes.forEach(({ child, element, height: nodeHeight }) => {
-    const x = parentX + (direction * horizontalSpacing * levelMultiplier);
+  // Add extra horizontal padding based on level to prevent collision
+  const horizontalPadding = nodeCollisionPadding * (level - 1);
+
+  tempNodes.forEach(({ child, element, height: nodeHeight, width: nodeWidth }) => {
+
+    const x = parentX + (direction * horizontalSpacing * levelSpacingMultiplier) + horizontalPadding;
     const y = currentY + nodeHeight / 2;
-    
-    const clampedX = Math.max(100, Math.min(width - 100, x));
+
+    const clampedX = clamp(x);
 
     element.style.left = clampedX + "px";
     element.style.top = y + "px";
-    
-    edgesToDraw.push({ x1: parentX, y1: parentY, x2: clampedX, y2: y, level: level });
+
+    drawLine(parentX, parentY, clampedX, y, level);
 
     currentY += nodeHeight + verticalGap;
 
@@ -1106,16 +1109,12 @@ function createNode(text, x, y, level) {
   return node;
 }
 
-// ===== DRAW ALL EDGES AFTER LAYOUT =====
-function drawAllEdges() {
-  edgesToDraw.forEach(edge => drawLine(edge.x1, edge.y1, edge.x2, edge.y2, edge.level));
-}
-drawAllEdges();
-
 // ===== EDGE RENDERING =====
 function drawLine(x1, y1, x2, y2, level = 1) {
+
   const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
 
+  // Calculate line shortening based on level
   let shortenStart, shortenEnd;
   if (level <= 2) {
     shortenStart = 25;
@@ -1133,11 +1132,17 @@ function drawLine(x1, y1, x2, y2, level = 1) {
   const unitX = dx / length;
   const unitY = dy / length;
 
-  line.setAttribute("x1", x1 + unitX * shortenStart);
-  line.setAttribute("y1", y1 + unitY * shortenStart);
-  line.setAttribute("x2", x2 - unitX * shortenEnd);
-  line.setAttribute("y2", y2 - unitY * shortenEnd);
+  const newX1 = x1 + unitX * shortenStart;
+  const newY1 = y1 + unitY * shortenStart;
+  const newX2 = x2 - unitX * shortenEnd;
+  const newY2 = y2 - unitY * shortenEnd;
 
+  line.setAttribute("x1", newX1);
+  line.setAttribute("y1", newY1);
+  line.setAttribute("x2", newX2);
+  line.setAttribute("y2", newY2);
+
+  // Use CSS class for theme-aware colors
   line.classList.add("mindmap-line");
   line.setAttribute("stroke-width", "1.4");
   line.setAttribute("stroke-linecap", "round");
@@ -1145,27 +1150,87 @@ function drawLine(x1, y1, x2, y2, level = 1) {
   svg.appendChild(line);
 }
 
-// ===== ZOOM + DRAG (MATCHING SimulationScoring) =====
+// ===== CLAMP FUNCTION =====
+function clamp(x) {
+  return Math.max(80, Math.min(width - 80, x));
+}
+
+// ===== ZOOM + DRAG =====
 let scale = 1;
 let isDragging = false;
 let startX, startY;
 
+// Center initially
 let translateX = (container.clientWidth - width) / 2;
 let translateY = (container.clientHeight - height) / 2;
 
 updateTransform();
 
+// Add small delay to ensure container dimensions are ready, then fit view
+setTimeout(fitToView, 100);
+
+function fitToView() {
+  // Calculate bounding box of all nodes
+  const nodes = viewport.querySelectorAll(".mindmap-node");
+  if (nodes.length === 0) return;
+
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  
+  nodes.forEach(node => {
+    const rect = node.getBoundingClientRect();
+    // Account for viewport transform
+    const x = parseFloat(node.style.left) || 0;
+    const y = parseFloat(node.style.top) || 0;
+    const w = node.offsetWidth || 120;
+    const h = node.offsetHeight || 40;
+    
+    minX = Math.min(minX, x - w/2 - 50);
+    minY = Math.min(minY, y - h/2 - 50);
+    maxX = Math.max(maxX, x + w/2 + 50);
+    maxY = Math.max(maxY, y + h/2 + 50);
+  });
+
+  const contentWidth = maxX - minX;
+  const contentHeight = maxY - minY;
+  
+  if (contentWidth <= 0 || contentHeight <= 0) return;
+
+  const containerWidth = container.clientWidth;
+  const containerHeight = container.clientHeight;
+  
+  // Calculate scale to fit with padding
+  const padding = 60;
+  const scaleX = (containerWidth - padding * 2) / contentWidth;
+  const scaleY = (containerHeight - padding * 2) / contentHeight;
+  
+  scale = Math.min(scaleX, scaleY, 1);
+  scale = Math.max(0.3, Math.min(1.2, scale));
+  
+  // Center the content
+  const centerX = (minX + maxX) / 2;
+  const centerY = (minY + maxY) / 2;
+  
+  translateX = containerWidth / 2 - centerX * scale;
+  translateY = containerHeight / 2 - centerY * scale;
+  
+  updateTransform();
+}
+
 function updateTransform() {
   viewport.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
 }
 
-// ===== ZOOM =====
+// ===== ZOOM (wheel) =====
 container.addEventListener("wheel", (e) => {
   e.preventDefault();
+
   const zoomSpeed = 0.1;
+
   if (e.deltaY < 0) scale += zoomSpeed;
   else scale -= zoomSpeed;
+
   scale = Math.min(Math.max(0.5, scale), 2.5);
+
   updateTransform();
 });
 
@@ -1184,17 +1249,16 @@ window.addEventListener("mouseup", () => {
 
 container.addEventListener("mousemove", (e) => {
   if (!isDragging) return;
+
   translateX = e.clientX - startX;
   translateY = e.clientY - startY;
+
   updateTransform();
 });
 
 // ===== DOUBLE CLICK RESET =====
 container.addEventListener("dblclick", () => {
-  scale = 1;
-  translateX = 0;
-  translateY = 0;
-  updateTransform();
+  fitToView();
 });
 }
 
