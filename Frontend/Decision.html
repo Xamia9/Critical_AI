@@ -499,9 +499,6 @@ const nextBtn = document.getElementById("nextBtn");
 let errorEl;
 let isProcessing = false; // 🔒 đặt ở đây (ngoài mọi function)
 
-function goBack() {
-  window.location.href = "Roles.html";
-}
 
 
 </script>
@@ -734,10 +731,13 @@ function nextStep(){
 }
 
 function prevStep(){
-  if(currentStep > 0){
-    currentStep--;
-    renderStep();
+  if(currentStep === 0){
+    window.location.href = "Roles.html"; // 👈 về Roles nếu là bước đầu
+    return;
   }
+
+  currentStep--;
+  renderStep();
 }
 
 async function handleSubmit(){

@@ -978,14 +978,19 @@ svg.setAttribute("height", height);
 svg.classList.add("mindmap-svg");
 viewport.appendChild(svg);
 
+// Store all edges to draw after layout is calculated
+const edgesToDraw = [];
+
+// ===== TREE LAYOUT WITH PROPER BRANCH SEPARATION =====
 const rootX = width / 2;
 const rootY = height / 2;
 
+// Create root node
 createNode(decision.finalDecision || "CHỦ ĐỀ", rootX, rootY, 0);
 
 const roles = Object.keys(mindmaps);
 
-// ===== TÍNH MAX DEPTH =====
+// Calculate max depth
 function getMaxDepth(children, depth = 1) {
   let max = depth;
   children.forEach(c => {
@@ -997,96 +1002,102 @@ function getMaxDepth(children, depth = 1) {
 }
 
 let maxDepth = 1;
-
 roles.forEach(role => {
   const children = mindmaps[role]?.children || [];
   maxDepth = Math.max(maxDepth, getMaxDepth(children));
 });
-
 maxDepth = Math.min(maxDepth, 5);
 
-// ===== INCREASED HORIZONTAL SPACING FOR MORE SPREAD =====
-const maxHorizontal = width * 0.45; // Increased from 0.3 to 0.45 for more spread
-const baseHorizontalSpacing = maxHorizontal / maxDepth;
-// Add extra spacing for each level to make edges longer
-const horizontalSpacing = baseHorizontalSpacing * 1.2;
+// ===== SEPARATE BRANCHES INTO LEFT/RIGHT GROUPS =====
+const leftBranches = [];
+const rightBranches = [];
 
-const left = [];
-const right = [];
-
-roles.forEach((r, i) => {
-  if (i % 2 === 0) right.push(r);
-  else left.push(r);
+roles.forEach((role, index) => {
+  if (index % 2 === 0) {
+    rightBranches.push(role);
+  } else {
+    leftBranches.push(role);
+  }
 });
 
-renderSide(right, 1);
-renderSide(left, -1);
+// Calculate spacing parameters
+const levelDistance = 320; // Horizontal distance between levels
+const siblingDistance = 100; // Minimum vertical distance between siblings
+const branchGap = 180; // Extra gap between different branches
 
-// ===== RENDER SIDE =====
-function renderSide(roleList, direction) {
+// ===== RENDER RIGHT BRANCHES =====
+let rightOffset = 0;
+rightBranches.forEach((role, branchIndex) => {
+  const branchStartX = rootX + levelDistance + (branchIndex * branchGap);
+  renderBranch(role, branchStartX, 1, branchIndex, rightBranches.length);
+});
 
-  // Increase spacingY for more vertical spread
-  const spacingY = height / (roleList.length + 1);
+// ===== RENDER LEFT BRANCHES =====
+leftBranches.forEach((role, branchIndex) => {
+  const branchStartX = rootX - levelDistance - (branchIndex * branchGap);
+  renderBranch(role, branchStartX, -1, branchIndex, leftBranches.length);
+});
 
-  roleList.forEach((role, index) => {
+// ===== BRANCH RENDERER =====
+function renderBranch(role, startX, direction, branchIndex, totalBranches) {
+  const roleLabel = rolesData[role]?.ten || mindmaps[role]?.name || role;
+  const roleY = rootY;
+  
+  createNode(roleLabel, startX, roleY, 1);
+  edgesToDraw.push({ x1: rootX, y1: rootY, x2: startX, y2: roleY, level: 1 });
 
-    const roleY = spacingY * (index + 1);
-    const roleX = rootX + (direction * horizontalSpacing);
-
-    const clampedX = clamp(roleX);
-    const roleLabel = rolesData[role]?.ten || mindmaps[role]?.name || role;
-
-    createNode(roleLabel, clampedX, roleY, 1);
-    drawLine(rootX, rootY, clampedX, roleY, 1);
-
-    const children = mindmaps[role]?.children || [];
-
-    renderChildren(children, clampedX, roleY, direction, 2);
-  });
+  const children = mindmaps[role]?.children || [];
+  if (children.length > 0) {
+    renderChildNodes(children, startX, roleY, direction, 2, role);
+  }
 }
 
-// ===== CHILDREN RENDERING WITH INCREASED SPACING =====
-function renderChildren(children, parentX, parentY, direction, level) {
-
+// ===== CHILD NODES WITH PROPER TREE LAYOUT =====
+function renderChildNodes(children, parentX, parentY, direction, level, parentRole) {
   if (!children || level > 5) return;
 
-  const tempNodes = children.map(child => {
+  // Create temp nodes to measure heights
+  const tempNodes = children.map((child, idx) => {
     const temp = createNode(child.text, -9999, -9999, level);
-    return { child, element: temp, height: temp.offsetHeight };
+    return { 
+      child, 
+      element: temp, 
+      height: temp.offsetHeight,
+      width: temp.offsetWidth,
+      index: idx 
+    };
   });
 
-  let totalNodesHeight = tempNodes.reduce((sum, n) => sum + n.height, 0);
+  // Calculate total height needed for all nodes
+  const totalNodesHeight = tempNodes.reduce((sum, n) => sum + n.height, 0);
+  const totalGaps = Math.max(0, (children.length - 1) * siblingDistance);
+  const totalHeight = totalNodesHeight + totalGaps;
 
-  // Use more vertical space for better spread
-  const availableSpace = height * 0.55;
-  let verticalGap = (availableSpace - totalNodesHeight) / (children.length - 1);
-
-  // Increased minimum spacing from 30 to 50 for more separation
-  verticalGap = Math.max(50, Math.min(120, verticalGap));
-
-  let totalHeight = totalNodesHeight + verticalGap * (children.length - 1);
-
+  // Position children vertically centered around parent
   let currentY = parentY - totalHeight / 2;
 
-  // Level-based spacing multiplier to make deeper levels more spread out
-  const levelSpacingMultiplier = 1 + (level - 2) * 0.15;
+  // Horizontal position with level-based multiplier for more spread
+  const levelMultiplier = 1 + (level - 2) * 0.25;
+  const childX = parentX + (direction * levelDistance * levelMultiplier);
 
-  tempNodes.forEach(({ child, element, height: nodeHeight }) => {
-
-    const x = parentX + (direction * horizontalSpacing * levelSpacingMultiplier);
+  tempNodes.forEach(({ child, element, height: nodeHeight, width: nodeWidth, index }) => {
+    // Add branch-specific offset to prevent overlapping with other branches
+    const branchOffset = direction * (level - 2) * 40;
+    const finalX = childX + branchOffset;
+    
     const y = currentY + nodeHeight / 2;
 
-    const clampedX = clamp(x);
-
-    element.style.left = clampedX + "px";
+    element.style.left = finalX + "px";
     element.style.top = y + "px";
 
-    drawLine(parentX, parentY, clampedX, y, level);
+    // Store edge for later rendering
+    edgesToDraw.push({ x1: parentX, y1: parentY, x2: finalX, y2: y, level: level });
 
-    currentY += nodeHeight + verticalGap;
+    currentY += nodeHeight + siblingDistance;
 
+    // Render grandchildren
     if (child.children && child.children.length > 0) {
-      renderChildren(child.children, clampedX, y, direction, level + 1);
+      renderChildNodes(child.children, finalX, y, direction, level + 1, parentRole);
     }
   });
 }
@@ -1103,19 +1114,31 @@ function createNode(text, x, y, level) {
   return node;
 }
 
+// ===== DRAW ALL EDGES AFTER LAYOUT =====
+function drawAllEdges() {
+  edgesToDraw.forEach(edge => {
+    drawLine(edge.x1, edge.y1, edge.x2, edge.y2, edge.level);
+  });
+}
+
+// Call drawAllEdges after all nodes are positioned
+drawAllEdges();
+
 // ===== EDGE RENDERING =====
 function drawLine(x1, y1, x2, y2, level = 1) {
-
   const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
 
-  // Calculate line shortening based on level
+  // More aggressive line shortening for cleaner look
   let shortenStart, shortenEnd;
-  if (level <= 2) {
-    shortenStart = 25;
+  if (level === 1) {
+    shortenStart = 40;
+    shortenEnd = 45;
+  } else if (level === 2) {
+    shortenStart = 30;
     shortenEnd = 35;
   } else {
-    shortenStart = 15;
-    shortenEnd = 20;
+    shortenStart = 20;
+    shortenEnd = 25;
   }
 
   const dx = x2 - x1;
@@ -1136,7 +1159,6 @@ function drawLine(x1, y1, x2, y2, level = 1) {
   line.setAttribute("x2", newX2);
   line.setAttribute("y2", newY2);
 
-  // Use CSS class for theme-aware colors
   line.classList.add("mindmap-line");
   line.setAttribute("stroke-width", "1.4");
   line.setAttribute("stroke-linecap", "round");
@@ -1144,12 +1166,7 @@ function drawLine(x1, y1, x2, y2, level = 1) {
   svg.appendChild(line);
 }
 
-// ===== CLAMP FUNCTION =====
-function clamp(x) {
-  return Math.max(80, Math.min(width - 80, x));
-}
-
-// ===== ZOOM + DRAG =====
+// ===== ZOOM + DRAG (MATCHING SimulationScoring) =====
 let scale = 1;
 let isDragging = false;
 let startX, startY;
@@ -1160,61 +1177,7 @@ let translateY = (container.clientHeight - height) / 2;
 
 updateTransform();
 
-// Add small delay to ensure container dimensions are ready, then fit view
-setTimeout(fitToView, 100);
-
-function fitToView() {
-  // Calculate bounding box of all nodes
-  const nodes = viewport.querySelectorAll(".mindmap-node");
-  if (nodes.length === 0) return;
-
-  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-  
-  nodes.forEach(node => {
-    const rect = node.getBoundingClientRect();
-    // Account for viewport transform
-    const x = parseFloat(node.style.left) || 0;
-    const y = parseFloat(node.style.top) || 0;
-    const w = node.offsetWidth || 120;
-    const h = node.offsetHeight || 40;
-    
-    minX = Math.min(minX, x - w/2 - 50);
-    minY = Math.min(minY, y - h/2 - 50);
-    maxX = Math.max(maxX, x + w/2 + 50);
-    maxY = Math.max(maxY, y + h/2 + 50);
-  });
-
-  const contentWidth = maxX - minX;
-  const contentHeight = maxY - minY;
-  
-  if (contentWidth <= 0 || contentHeight <= 0) return;
-
-  const containerWidth = container.clientWidth;
-  const containerHeight = container.clientHeight;
-  
-  // Calculate scale to fit with padding
-  const padding = 60;
-  const scaleX = (containerWidth - padding * 2) / contentWidth;
-  const scaleY = (containerHeight - padding * 2) / contentHeight;
-  
-  scale = Math.min(scaleX, scaleY, 1);
-  scale = Math.max(0.3, Math.min(1.2, scale));
-  
-  // Center the content
-  const centerX = (minX + maxX) / 2;
-  const centerY = (minY + maxY) / 2;
-  
-  translateX = containerWidth / 2 - centerX * scale;
-  translateY = containerHeight / 2 - centerY * scale;
-  
-  updateTransform();
-}
-
-function updateTransform() {
-  viewport.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
-}
-
-// ===== ZOOM (wheel) =====
+// ===== ZOOM (wheel) - Simple center-based like SimulationScoring =====
 container.addEventListener("wheel", (e) => {
   e.preventDefault();
 
@@ -1250,10 +1213,17 @@ container.addEventListener("mousemove", (e) => {
   updateTransform();
 });
 
-// ===== DOUBLE CLICK RESET =====
+// ===== DOUBLE CLICK RESET - Center like SimulationScoring =====
 container.addEventListener("dblclick", () => {
-  fitToView();
+  scale = 1;
+  translateX = 0;
+  translateY = 0;
+  updateTransform();
 });
+
+function updateTransform() {
+  viewport.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+}
 }
 
 // ===== EXPORT PNG FUNCTION =====
