@@ -335,9 +335,13 @@ body.light-mode .main h1 {
   white-space: normal;
   word-wrap: break-word;
   min-width: 120px;
-  max-width: 200px;
+  max-width: 180px;
   text-align: center;
   color: white;
+}
+
+.mindmap-node:hover {
+  transform: scale(1.05);
 }
 
 /* LEVEL COLORS */
@@ -846,11 +850,11 @@ function resumeDebate(debateId) {
     }
 
     if (!status.hasScores) {
-      return window.location.href = "Simulation.html";
+      return window.location.href = "SimulationScoring.html";
     }
 
     // ✅ ĐÃ HOÀN THÀNH → quay lại trang cuối bạn có
-    return window.location.href = "Simulation.html"; 
+    return window.location.href = "SimulationScoring.html"; 
   })
   .catch(() => {
     window.location.href = "Overview.html";
@@ -1001,9 +1005,11 @@ roles.forEach(role => {
 
 maxDepth = Math.min(maxDepth, 5);
 
-// ===== DYNAMIC HORIZONTAL SPACING =====
-const maxHorizontal = width * 0.3;
-const horizontalSpacing = maxHorizontal / maxDepth;
+// ===== INCREASED HORIZONTAL SPACING FOR MORE SPREAD =====
+const maxHorizontal = width * 0.45; // Increased from 0.3 to 0.45 for more spread
+const baseHorizontalSpacing = maxHorizontal / maxDepth;
+// Add extra spacing for each level to make edges longer
+const horizontalSpacing = baseHorizontalSpacing * 1.2;
 
 const left = [];
 const right = [];
@@ -1019,6 +1025,7 @@ renderSide(left, -1);
 // ===== RENDER SIDE =====
 function renderSide(roleList, direction) {
 
+  // Increase spacingY for more vertical spread
   const spacingY = height / (roleList.length + 1);
 
   roleList.forEach((role, index) => {
@@ -1038,7 +1045,7 @@ function renderSide(roleList, direction) {
   });
 }
 
-// ===== CHILDREN RENDERING =====
+// ===== CHILDREN RENDERING WITH INCREASED SPACING =====
 function renderChildren(children, parentX, parentY, direction, level) {
 
   if (!children || level > 5) return;
@@ -1050,18 +1057,23 @@ function renderChildren(children, parentX, parentY, direction, level) {
 
   let totalNodesHeight = tempNodes.reduce((sum, n) => sum + n.height, 0);
 
-  const availableSpace = height * 0.6;
+  // Use more vertical space for better spread
+  const availableSpace = height * 0.55;
   let verticalGap = (availableSpace - totalNodesHeight) / (children.length - 1);
 
-  verticalGap = Math.max(30, Math.min(90, verticalGap));
+  // Increased minimum spacing from 30 to 50 for more separation
+  verticalGap = Math.max(50, Math.min(120, verticalGap));
 
   let totalHeight = totalNodesHeight + verticalGap * (children.length - 1);
 
   let currentY = parentY - totalHeight / 2;
 
+  // Level-based spacing multiplier to make deeper levels more spread out
+  const levelSpacingMultiplier = 1 + (level - 2) * 0.15;
+
   tempNodes.forEach(({ child, element, height: nodeHeight }) => {
 
-    const x = parentX + (direction * horizontalSpacing);
+    const x = parentX + (direction * horizontalSpacing * levelSpacingMultiplier);
     const y = currentY + nodeHeight / 2;
 
     const clampedX = clamp(x);
