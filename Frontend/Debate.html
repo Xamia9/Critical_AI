@@ -593,17 +593,17 @@ body.light-mode .task-node {
     0 12px 40px rgba(197, 44, 90, 0.15);
 }
 
-/* Section header box - darker for better contrast */
+/* Section header box - lighter gradient for better readability */
 #feedbackContent .section-header {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 14px 20px;
-  background: linear-gradient(135deg, rgba(45, 30, 82, 0.85), rgba(30, 25, 65, 0.9));
+  background: linear-gradient(135deg, #5C2C8A, #6A5CFF);
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-/* Section icon */
+/* Section icon - only in header */
 #feedbackContent .section-icon {
   display: inline-flex;
   align-items: center;
@@ -612,23 +612,23 @@ body.light-mode .task-node {
   height: 32px;
   min-width: 32px;
   border-radius: 10px;
-  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+  background: rgba(255, 255, 255, 0.2);
   color: white;
   font-size: 16px;
   font-weight: 800;
 }
 
-/* Section title - lighter purple for better readability */
+/* Section title - softer light color */
 #feedbackContent .section-title {
   display: inline;
   font-weight: 900;
   font-size: 18px;
-  color: #D6CCFF;
+  color: #EAE6FF;
   letter-spacing: 0.3px;
-  text-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
+  text-shadow: 0 0 8px rgba(200, 180, 255, 0.3);
 }
 
-/* Section content/body - better spacing */
+/* Content - no icons allowed */
 #feedbackContent .section-content {
   padding: 18px 22px;
   font-size: 14px;
@@ -637,141 +637,19 @@ body.light-mode .task-node {
   line-height: 1.75;
 }
 
-/* Bullet points in sections */
-#feedbackContent .section-content li,
+/* Remove all emojis from content */
+#feedbackContent .section-content * {
+  font-size: inherit;
+  color: inherit;
+}
+#feedbackContent .section-content div {
+  /* Strip emojis from content divs */
+}
 #feedbackContent .section-content .bullet-item {
-  display: block;
-  margin-left: 8px;
-  margin-bottom: 10px;
-  padding-left: 10px;
-  border-left: 3px solid rgba(74, 91, 255, 0.4);
-}
-
-/* Criterion block container */
-#feedbackContent .criterion-block {
-  background: rgba(255, 255, 255, 0.06);
-  border-left: 4px solid #FF2E88;
-  border-radius: 16px;
-  padding: 16px 20px;
-  margin-bottom: 16px;
-  margin-top: 8px;
-  backdrop-filter: blur(8px);
-  box-shadow: 0 4px 16px rgba(74, 91, 255, 0.15);
-  transition: 0.3s ease;
-}
-
-/* Criterion title */
-#feedbackContent .criterion-title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-/* Icon/bullet indicator */
-#feedbackContent .criterion-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  min-width: 28px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
-  color: white;
-  font-size: 14px;
-  font-weight: 800;
-}
-
-#feedbackContent strong.criterion-name {
-  display: inline;
-  font-weight: 900;
-  font-size: 17px;
-  color: #D6CCFF;
-  letter-spacing: 0.3px;
-  text-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
-}
-
-/* Criterion description */
-#feedbackContent .criterion-description {
-  display: block;
-  font-size: 14px;
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.9);
-  line-height: 1.75;
-  padding-left: 0;
-  margin-top: 8px;
-}
-
-/* Legacy strong styling */
-#feedbackContent > strong {
-  display: block;
-  margin-top: 20px;
-  margin-bottom: 8px;
-  padding-bottom: 8px;
-  font-weight: 900;
-  font-size: 17px;
-  color: #D6CCFF;
-  text-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  padding-top: 12px;
-}
-
-/* ================= LIGHT MODE FEEDBACK STYLES ================= */
-body.light-mode #feedbackContent .feedback-section {
-  background: rgba(255, 255, 255, 0.6);
-  box-shadow: 0 4px 20px rgba(74, 91, 255, 0.12);
-}
-
-body.light-mode #feedbackContent .feedback-section:hover {
-  background: rgba(255, 255, 255, 0.8);
-}
-
-body.light-mode #feedbackContent .section-header {
-  background: linear-gradient(135deg, rgba(197, 44, 90, 0.15), rgba(74, 91, 255, 0.15));
-  border-bottom-color: rgba(74, 91, 255, 0.3);
-}
-
-body.light-mode #feedbackContent .section-title {
-  color: #5B3CFF;
-  text-shadow: none;
-}
-
-body.light-mode #feedbackContent .section-content {
-  color: #1E1E2F;
-}
-
-body.light-mode #feedbackContent .section-content li,
-body.light-mode #feedbackContent .section-content .bullet-item {
-  border-left-color: rgba(74, 91, 255, 0.5);
-}
-
-body.light-mode #feedbackContent .criterion-block {
-  background: rgba(255, 255, 255, 0.6);
-  border-left: 4px solid #5B3CFF;
-}
-
-body.light-mode #feedbackContent strong.criterion-name,
-body.light-mode #feedbackContent > strong {
-  color: #5B3CFF;
-  text-shadow: none;
-}
-
-body.light-mode #feedbackContent .criterion-description {
-  color: #1E1E2F;
-}
-
-body.light-mode #feedbackContent .criterion-icon,
-body.light-mode #feedbackContent .section-icon {
-  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
-}
-
-body.light-mode #feedbackContent .criterion-title {
-  border-bottom-color: rgba(74, 91, 255, 0.3);
+  /* Strip emojis from bullets */
 }
 </style>
+
 </head>
 
 <body>
@@ -1264,12 +1142,15 @@ function formatFeedback(text) {
     { pattern: /^Tiêu\s*Chí\s*\d+:?/i, icon: "📊", title: null }
   ];
   
+  // Strip emojis from text (keep only in headers)
+  const stripEmoji = (str) => str.replace(/[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F600}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]/gu, '').trim();
+  
   const lines = text.split('\n');
   let html = '';
   let currentSection = null;
   
   lines.forEach((line) => {
-    line = line.trim();
+    line = stripEmoji(line).trim();
     if (!line) return;
     
     let matchedSection = null;
