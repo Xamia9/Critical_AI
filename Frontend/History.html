@@ -311,8 +311,9 @@ body.light-mode .main h1 {
   position: absolute;
   width: 2000px;
   height: 1400px;
-  transform-origin: 0 0;   /* 🔥 QUAN TRỌNG */
+  transform-origin: 0 0;
 }
+
 .mindmap-svg {
   position: absolute;
   top: 0;
@@ -320,42 +321,49 @@ body.light-mode .main h1 {
   width: 100%;
   height: 100%;
   pointer-events: none;
-    z-index: 1;
-}
-
-
-.mindmap-node {
-  position: absolute;
-  z-index: 2;   /* đảm bảo node nằm trên line */
+  z-index: 1;
 }
 
 .mindmap-node {
   position: absolute;
-  padding: 14px 22px;
-  line-height: 1.6;
-  margin: 10px;
+  z-index: 2;
+  padding: 10px 18px;
   border-radius: 14px;
   font-weight: 600;
   font-size: 14px;
-
+  line-height: 1.4;
   white-space: normal;
-  word-break: break-word;
-
-  min-width: 140px;
-  max-width: none;        /* 🔥 bỏ giới hạn */
-  max-width: 320px;       /* nếu muốn rộng vừa phải */
-  
+  word-wrap: break-word;
+  min-width: 120px;
+  max-width: 200px;
+  text-align: center;
   color: white;
 }
 
-
-
+/* LEVEL COLORS */
 .level-0 { background: linear-gradient(135deg, #C52C5A, #4A5BFF); font-weight: 800; }
 .level-1 { background: #8B7CFF; }
 .level-2 { background: #7ED6DF; }
 .level-3 { background: #F8A5C2; }
 .level-4 { background: #F5CD79; }
 .level-5 { background: #55E6C1; }
+
+/* ===== EDGE COLORS - DARK MODE (default) ===== */
+.mindmap-line {
+  stroke: #ffffff;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}
+
+/* ===== EDGE COLORS - LIGHT MODE ===== */
+body.light-mode .mindmap-line {
+  stroke: #333333;
+}
+
+/* ===== EXPORT MODE ===== */
+.exporting .mindmap-line {
+  stroke: #000000 !important;
+}
 
 /* ===== SECTION CARD ===== */
 .section-card {
@@ -810,44 +818,39 @@ generateFinalMindmap(
 
 
 function resumeDebate(debateId) {
-
   localStorage.setItem("currentDebateId", debateId);
 
-const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
 
-fetch("/debate-status", {
-  method: "POST",
-  headers: { 
-    "Content-Type": "application/json",
-    "Authorization": "Bearer " + token
-  },
-  body: JSON.stringify({ debateId })
-})
-
+  fetch("/debate-status", {
+    method: "POST",
+    headers: { 
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + token
+    },
+    body: JSON.stringify({ debateId })
+  })
   .then(res => res.json())
   .then(status => {
 
     if (!status.hasRoles) {
-      window.location.href = "Overview.html";
-      return;
+      return window.location.href = "Overview.html";
     }
 
     if (!status.allCompleted) {
-      window.location.href = "Roles.html";
-      return;
+      return window.location.href = "Roles.html";
     }
 
     if (!status.hasDecision) {
-      window.location.href = "Decision.html";
-      return;
+      return window.location.href = "Decision.html";
     }
 
     if (!status.hasScores) {
-      window.location.href = "Simulation.html";
-      return;
+      return window.location.href = "Simulation.html";
     }
 
-    window.location.href = "Result.html";
+    // ✅ ĐÃ HOÀN THÀNH → quay lại trang cuối bạn có
+    return window.location.href = "Simulation.html"; 
   })
   .catch(() => {
     window.location.href = "Overview.html";
@@ -953,14 +956,9 @@ function createScoreBox(title, value){
 function generateFinalMindmap(decision, mindmaps, rolesData = {}) {
 
 const container = document.getElementById("finalMindmap");
+const oldBtn = container.querySelector(".export-btn");
 container.innerHTML = "";
-
-// ===== EXPORT BUTTON =====
-const exportBtn = document.createElement("button");
-exportBtn.className = "export-btn";
-exportBtn.innerText = "⬇ Xuất PNG";
-exportBtn.onclick = (e) => exportMindmapImage(e);
-container.appendChild(exportBtn);
+if (oldBtn) container.appendChild(oldBtn);
 
 // ===== VIEWPORT =====
 const viewport = document.createElement("div");
@@ -973,7 +971,6 @@ const height = 1400;
 const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 svg.setAttribute("width", width);
 svg.setAttribute("height", height);
-svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
 svg.classList.add("mindmap-svg");
 viewport.appendChild(svg);
 
@@ -988,7 +985,7 @@ const roles = Object.keys(mindmaps);
 function getMaxDepth(children, depth = 1) {
   let max = depth;
   children.forEach(c => {
-    if (c.children?.length) {
+    if (c.children && c.children.length > 0) {
       max = Math.max(max, getMaxDepth(c.children, depth + 1));
     }
   });
@@ -1004,8 +1001,9 @@ roles.forEach(role => {
 
 maxDepth = Math.min(maxDepth, 5);
 
-// ===== HORIZONTAL SPACING TĂNG MẠNH =====
-const horizontalSpacing = 350 + (maxDepth * 40);
+// ===== DYNAMIC HORIZONTAL SPACING =====
+const maxHorizontal = width * 0.3;
+const horizontalSpacing = maxHorizontal / maxDepth;
 
 const left = [];
 const right = [];
@@ -1028,8 +1026,8 @@ function renderSide(roleList, direction) {
     const roleY = spacingY * (index + 1);
     const roleX = rootX + (direction * horizontalSpacing);
 
-    const clampedX = roleX;
-    const roleLabel = rolesData[role]?.ten || role;
+    const clampedX = clamp(roleX);
+    const roleLabel = rolesData[role]?.ten || mindmaps[role]?.name || role;
 
     createNode(roleLabel, clampedX, roleY, 1);
     drawLine(rootX, rootY, clampedX, roleY, 1);
@@ -1040,7 +1038,7 @@ function renderSide(roleList, direction) {
   });
 }
 
-// ===== CHILDREN (GIỐNG SIMULATION) =====
+// ===== CHILDREN RENDERING =====
 function renderChildren(children, parentX, parentY, direction, level) {
 
   if (!children || level > 5) return;
@@ -1050,47 +1048,38 @@ function renderChildren(children, parentX, parentY, direction, level) {
     return { child, element: temp, height: temp.offsetHeight };
   });
 
-  let totalNodesHeight =
-    tempNodes.reduce((sum, n) => sum + n.height, 0);
+  let totalNodesHeight = tempNodes.reduce((sum, n) => sum + n.height, 0);
 
   const availableSpace = height * 0.6;
-  let verticalGap =
-    (availableSpace - totalNodesHeight) / (children.length - 1);
+  let verticalGap = (availableSpace - totalNodesHeight) / (children.length - 1);
 
   verticalGap = Math.max(30, Math.min(90, verticalGap));
 
-  let totalHeight =
-    totalNodesHeight + verticalGap * (children.length - 1);
+  let totalHeight = totalNodesHeight + verticalGap * (children.length - 1);
 
   let currentY = parentY - totalHeight / 2;
 
-  tempNodes.forEach(({ child, element, height }) => {
+  tempNodes.forEach(({ child, element, height: nodeHeight }) => {
 
     const x = parentX + (direction * horizontalSpacing);
-    const y = currentY + height / 2;
+    const y = currentY + nodeHeight / 2;
 
-    const clampedX = x;
+    const clampedX = clamp(x);
 
     element.style.left = clampedX + "px";
     element.style.top = y + "px";
 
     drawLine(parentX, parentY, clampedX, y, level);
 
-    currentY += height + verticalGap;
+    currentY += nodeHeight + verticalGap;
 
-    if (child.children?.length) {
-      renderChildren(
-        child.children,
-        clampedX,
-        y,
-        direction,
-        level + 1
-      );
+    if (child.children && child.children.length > 0) {
+      renderChildren(child.children, clampedX, y, direction, level + 1);
     }
   });
 }
 
-// ===== NODE =====
+// ===== NODE CREATION =====
 function createNode(text, x, y, level) {
   const node = document.createElement("div");
   node.className = "mindmap-node level-" + level;
@@ -1102,93 +1091,127 @@ function createNode(text, x, y, level) {
   return node;
 }
 
+// ===== EDGE RENDERING =====
 function drawLine(x1, y1, x2, y2, level = 1) {
 
-  const line = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "line"
-  );
+  const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+
+  // Calculate line shortening based on level
+  let shortenStart, shortenEnd;
+  if (level <= 2) {
+    shortenStart = 25;
+    shortenEnd = 35;
+  } else {
+    shortenStart = 15;
+    shortenEnd = 20;
+  }
 
   const dx = x2 - x1;
   const dy = y2 - y1;
   const length = Math.sqrt(dx * dx + dy * dy);
   if (!length) return;
 
-  let shortenStart = 18;
-  let shortenEnd = 22;
-
-  if (length < 120) {
-    shortenStart = 0;
-    shortenEnd = 0;
-  }
-
   const unitX = dx / length;
   const unitY = dy / length;
 
-  line.setAttribute("x1", x1 + unitX * shortenStart);
-  line.setAttribute("y1", y1 + unitY * shortenStart);
-  line.setAttribute("x2", x2 - unitX * shortenEnd);
-  line.setAttribute("y2", y2 - unitY * shortenEnd);
+  const newX1 = x1 + unitX * shortenStart;
+  const newY1 = y1 + unitY * shortenStart;
+  const newX2 = x2 - unitX * shortenEnd;
+  const newY2 = y2 - unitY * shortenEnd;
 
+  line.setAttribute("x1", newX1);
+  line.setAttribute("y1", newY1);
+  line.setAttribute("x2", newX2);
+  line.setAttribute("y2", newY2);
+
+  // Use CSS class for theme-aware colors
   line.classList.add("mindmap-line");
-
-  const isLight = document.body.classList.contains("light-mode");
-  const lineColor = isLight ? "#000" : "#ffffff";
-
-  line.setAttribute("stroke", lineColor);
-  line.setAttribute("stroke-width", "2");
+  line.setAttribute("stroke-width", "1.4");
   line.setAttribute("stroke-linecap", "round");
-  line.setAttribute("vector-effect", "non-scaling-stroke");
 
   svg.appendChild(line);
 }
-// ===== ZOOM + DRAG PRO VERSION =====
 
+// ===== CLAMP FUNCTION =====
+function clamp(x) {
+  return Math.max(80, Math.min(width - 80, x));
+}
+
+// ===== ZOOM + DRAG =====
 let scale = 1;
-let minScale = 0.2;   // 🔥 zoom nhỏ hơn nữa
-let maxScale = 5;     // 🔥 zoom to hơn nhiều
-
 let isDragging = false;
 let startX, startY;
 
+// Center initially
 let translateX = (container.clientWidth - width) / 2;
 let translateY = (container.clientHeight - height) / 2;
 
 updateTransform();
 
-function updateTransform() {
-  viewport.style.transform =
-    `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+// Add small delay to ensure container dimensions are ready, then fit view
+setTimeout(fitToView, 100);
+
+function fitToView() {
+  // Calculate bounding box of all nodes
+  const nodes = viewport.querySelectorAll(".mindmap-node");
+  if (nodes.length === 0) return;
+
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  
+  nodes.forEach(node => {
+    const rect = node.getBoundingClientRect();
+    // Account for viewport transform
+    const x = parseFloat(node.style.left) || 0;
+    const y = parseFloat(node.style.top) || 0;
+    const w = node.offsetWidth || 120;
+    const h = node.offsetHeight || 40;
+    
+    minX = Math.min(minX, x - w/2 - 50);
+    minY = Math.min(minY, y - h/2 - 50);
+    maxX = Math.max(maxX, x + w/2 + 50);
+    maxY = Math.max(maxY, y + h/2 + 50);
+  });
+
+  const contentWidth = maxX - minX;
+  const contentHeight = maxY - minY;
+  
+  if (contentWidth <= 0 || contentHeight <= 0) return;
+
+  const containerWidth = container.clientWidth;
+  const containerHeight = container.clientHeight;
+  
+  // Calculate scale to fit with padding
+  const padding = 60;
+  const scaleX = (containerWidth - padding * 2) / contentWidth;
+  const scaleY = (containerHeight - padding * 2) / contentHeight;
+  
+  scale = Math.min(scaleX, scaleY, 1);
+  scale = Math.max(0.3, Math.min(1.2, scale));
+  
+  // Center the content
+  const centerX = (minX + maxX) / 2;
+  const centerY = (minY + maxY) / 2;
+  
+  translateX = containerWidth / 2 - centerX * scale;
+  translateY = containerHeight / 2 - centerY * scale;
+  
+  updateTransform();
 }
 
-// ===== ZOOM THEO CON TRỎ CHUỘT =====
-container.addEventListener("wheel", (e) => {
+function updateTransform() {
+  viewport.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+}
 
+// ===== ZOOM (wheel) =====
+container.addEventListener("wheel", (e) => {
   e.preventDefault();
 
-  const rect = container.getBoundingClientRect();
+  const zoomSpeed = 0.1;
 
-  const mouseX = e.clientX - rect.left;
-  const mouseY = e.clientY - rect.top;
+  if (e.deltaY < 0) scale += zoomSpeed;
+  else scale -= zoomSpeed;
 
-  const zoomFactor = 1.15; // 🔥 tốc độ zoom
-
-  const oldScale = scale;
-
-  if (e.deltaY < 0) {
-    scale *= zoomFactor;
-  } else {
-    scale /= zoomFactor;
-  }
-
-  scale = Math.max(minScale, Math.min(maxScale, scale));
-
-  // 🔥 Giữ điểm chuột cố định khi zoom
-  translateX =
-    mouseX - (mouseX - translateX) * (scale / oldScale);
-
-  translateY =
-    mouseY - (mouseY - translateY) * (scale / oldScale);
+  scale = Math.min(Math.max(0.5, scale), 2.5);
 
   updateTransform();
 });
@@ -1208,46 +1231,44 @@ window.addEventListener("mouseup", () => {
 
 container.addEventListener("mousemove", (e) => {
   if (!isDragging) return;
+
   translateX = e.clientX - startX;
   translateY = e.clientY - startY;
+
   updateTransform();
 });
 
 // ===== DOUBLE CLICK RESET =====
 container.addEventListener("dblclick", () => {
-  scale = 1;
-  translateX = (container.clientWidth - width) / 2;
-  translateY = (container.clientHeight - height) / 2;
-  updateTransform();
+  fitToView();
 });
+}
 
+// ===== EXPORT PNG FUNCTION =====
 async function exportMindmapImage(event) {
-
   event.stopPropagation();
 
-  const viewport = document.querySelector(".mindmap-viewport");
   const container = document.getElementById("finalMindmap");
+  const exportBtn = container.querySelector(".export-btn");
 
-  const oldTransform = viewport.style.transform;
+  // Hide button before capture
+  exportBtn.style.display = "none";
 
-  // Reset zoom
-  viewport.style.transform = "translate(0px,0px) scale(1)";
-
-  // ===== BẬT CHẾ ĐỘ EXPORT =====
+  // Add export class for black lines
   container.classList.add("exporting");
 
   try {
-
-    const canvas = await html2canvas(viewport, {
+    // Capture entire container
+    const canvas = await html2canvas(container, {
       backgroundColor: "#ffffff",
-      width: 2000,
-      height: 1400,
       scale: 2,
-      useCORS: true
+      useCORS: true,
+      logging: false
     });
 
+    // Create download link
     const link = document.createElement("a");
-    link.download = "critical-ai-history-mindmap.png";
+    link.download = "critical-ai-mindmap.png";
     link.href = canvas.toDataURL("image/png");
     link.click();
 
@@ -1256,11 +1277,11 @@ async function exportMindmapImage(event) {
     console.error(err);
   }
 
-  // ===== TẮT EXPORT MODE =====
+  // Remove export class
   container.classList.remove("exporting");
 
-  viewport.style.transform = oldTransform;
-}
+  // Show button again
+  exportBtn.style.display = "block";
 }
 
 function goToCriteria() {

@@ -172,6 +172,8 @@ Hậu quả tệ nhất có thể xảy ra: ${userInput.hauQuaSai}
 
 PHẦN VIEWPOINT
 Trạng thái hiện tại: ${userInput.trangThai}
+Lý do & lập trường:
+${userInput.lyDoTrangThai || "Người dùng chưa giải thích rõ lập trường."}
 Mức độ chắc chắn: ${userInput.mucTuTin}%
 `;
 const prompt = `
@@ -197,7 +199,7 @@ const prompt = `
      - Quan điểm hiện tại
      - Lý do chính
      - Mức độ chắc chắn (giữ nguyên % nếu có)
-     - Mức cam kết (làm / không làm / chưa biết)
+  
 
 - Quy tắc:
   - Xưng "bạn"
