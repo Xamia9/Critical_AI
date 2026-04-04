@@ -593,15 +593,16 @@ body.light-mode .task-node {
     0 12px 40px rgba(197, 44, 90, 0.15);
 }
 
-/* Section header box */
+/* Section header box - darker for better contrast */
 #feedbackContent .section-header {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 14px 20px;
-  background: linear-gradient(135deg, rgba(197, 44, 90, 0.25), rgba(74, 91, 255, 0.25));
+  background: linear-gradient(135deg, rgba(45, 30, 82, 0.85), rgba(30, 25, 65, 0.9));
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
+</style>
 
 /* Section icon */
 #feedbackContent .section-icon {
@@ -1263,27 +1264,25 @@ function startNewDebate(){
 function formatFeedback(text) {
   if (!text) return "";
   
-  // Section header patterns to detect
   const sectionPatterns = [
     { pattern: /^Điểm\s*Mạnh:?/i, icon: "💪", title: "Điểm Mạnh" },
     { pattern: /^Lỗ\s*Hổng\s*Chính:?/i, icon: "⚠️", title: "Lỗ Hổng Chính" },
     { pattern: /^Giả\s*Định\s*Ẩn:?/i, icon: "🎭", title: "Giả Định Ẩn" },
+    { pattern: /^Góc\s*Nhìn\s*Còn\s*Thiếu:?/i, icon: "🔍", title: "Góc Nhìn Còn Thiếu" },
+    { pattern: /^Hướng\s*Cải\s*Thiện:?/i, icon: "🚀", title: "Hướng Cải Thiện" },
     { pattern: /^Khuyến\s*Nghị:?/i, icon: "💡", title: "Khuyến Nghị" },
     { pattern: /^Điểm\s*Chưa\s*Tốt:?/i, icon: "❌", title: "Điểm Chưa Tốt" },
     { pattern: /^Tiêu\s*Chí\s*\d+:?/i, icon: "📊", title: null }
   ];
   
-  // Split text into lines
   const lines = text.split('\n');
   let html = '';
   let currentSection = null;
-  let sectionIndex = 0;
   
-  lines.forEach((line, idx) => {
+  lines.forEach((line) => {
     line = line.trim();
     if (!line) return;
     
-    // Check if this line is a section header
     let matchedSection = null;
     for (const sp of sectionPatterns) {
       if (sp.pattern.test(line)) {
@@ -1293,46 +1292,20 @@ function formatFeedback(text) {
     }
     
     if (matchedSection) {
-      // Close previous section if open
-      if (currentSection) {
-        html += '</div></div>';
-      }
-      
-      sectionIndex++;
+      if (currentSection) html += '</div></div>';
       const sectionTitle = matchedSection.title || line;
-      const sectionIcon = matchedSection.icon;
-      
-      // Start new section with styled box
-      html += `<div class="feedback-section">`;
-      html += `<div class="section-header">`;
-      html += `<span class="section-icon">${sectionIcon}</span>`;
-      html += `<span class="section-title">${sectionTitle}</span>`;
-      html += `</div>`;
-      html += `<div class="section-content">`;
-      
+      html += `<div class="feedback-section"><div class="section-header"><span class="section-icon">${matchedSection.icon}</span><span class="section-title">${sectionTitle}</span></div><div class="section-content">`;
       currentSection = matchedSection;
     } else if (line.match(/^[-•*]/)) {
-      // Bullet points
-      const bulletText = line.replace(/^[-•*]\s*/i, '');
-      html += `<div class="bullet-item">${bulletText}</div>`;
+      html += `<div class="bullet-item">${line.replace(/^[-•*]\s*/i, '')}</div>`;
     } else if (currentSection) {
-      // Content in current section
       html += `<div>${line}</div>`;
     } else {
-      // Regular content without section - wrap in basic block
       html += `<div class="criterion-block"><div class="criterion-description">${line}</div></div>`;
     }
   });
   
-  // Close last open section
-  if (currentSection) {
-    html += '</div></div>';
-  }
-  
-  // Clean up closing tags
-  html = html.replace(/<\/div><\/div><\/div>/g, '</div></div>');
-  html = html.replace(/<\/div><\/div>/g, '</div></div>');
-  
+  if (currentSection) html += '</div></div>';
   return html || text;
 }
 </script>
