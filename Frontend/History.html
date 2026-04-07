@@ -93,6 +93,7 @@ body {
 
   min-height: 100vh;   /* 🔥 đổi từ height thành min-height */
   box-sizing: border-box;
+  gap: 40px;
 }
 
 /* ================= GLASS CARD SYSTEM ================= */
@@ -728,7 +729,9 @@ body.light-mode .section-card {
 
 }
 
-
+.mindmap-container {
+  touch-action: none;
+}
 </style>
 
 <button class="theme-toggle-btn" onclick="toggleTheme()">🌙</button>
@@ -1284,28 +1287,57 @@ container.addEventListener("wheel", (e) => {
   updateTransform();
 });
 
-// ===== DRAG =====
-container.addEventListener("mousedown", (e) => {
-  isDragging = true;
-  container.style.cursor = "grabbing";
-  startX = e.clientX - translateX;
-  startY = e.clientY - translateY;
+// ===== TOUCH ZOOM + DRAG (MOBILE) =====
+let lastDistance = null;
+
+container.addEventListener("touchstart", (e) => {
+  if (e.touches.length === 1) {
+    // drag
+    isDragging = true;
+    startX = e.touches[0].clientX - translateX;
+    startY = e.touches[0].clientY - translateY;
+  }
+
+  if (e.touches.length === 2) {
+    // pinch zoom
+    lastDistance = getDistance(e.touches);
+  }
 });
 
-window.addEventListener("mouseup", () => {
+container.addEventListener("touchmove", (e) => {
+  e.preventDefault();
+
+  if (e.touches.length === 1 && isDragging) {
+    translateX = e.touches[0].clientX - startX;
+    translateY = e.touches[0].clientY - startY;
+    updateTransform();
+  }
+
+  if (e.touches.length === 2) {
+    const newDistance = getDistance(e.touches);
+
+    if (lastDistance) {
+      const delta = newDistance - lastDistance;
+      scale += delta * 0.005;
+      scale = Math.min(Math.max(0.5, scale), 2.5);
+      updateTransform();
+    }
+
+    lastDistance = newDistance;
+  }
+});
+
+container.addEventListener("touchend", () => {
   isDragging = false;
-  container.style.cursor = "grab";
+  lastDistance = null;
 });
 
-container.addEventListener("mousemove", (e) => {
-  if (!isDragging) return;
-
-  translateX = e.clientX - startX;
-  translateY = e.clientY - startY;
-
-  updateTransform();
-});
-
+// ===== HELPER =====
+function getDistance(touches) {
+  const dx = touches[0].clientX - touches[1].clientX;
+  const dy = touches[0].clientY - touches[1].clientY;
+  return Math.sqrt(dx * dx + dy * dy);
+}
 // ===== DOUBLE CLICK RESET =====
 container.addEventListener("dblclick", () => {
   fitToView();
