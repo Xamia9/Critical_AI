@@ -413,6 +413,19 @@ body {
   opacity: 0;
   transition: opacity 0.4s ease;
 }
+@media (max-width: 768px) {
+  .topbar nav {
+    display: none !important;
+  }
+
+  .mobile-menu {
+    display: none;
+  }
+
+  .mobile-menu.open {
+    display: flex !important;
+  }
+}
 </style>
 </head>
 
