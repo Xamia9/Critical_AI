@@ -486,7 +486,7 @@
 
   /* ========== GLASS EFFECT ========== */
   .glass {
-    padding: 20px !important;
+    padding: 16px !important;
     border-radius: 16px !important;
   }
 
@@ -549,4 +549,19 @@
 /* Hamburger is hidden on desktop */
 .hamburger {
   display: none;
+}
+
+.history-list {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden; /* 🔥 FIX CHÍNH */
+}
+#historyList {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden; /* 🔥 chặn tràn ngang */
+}
+.history-title {
+  word-break: break-word;
+  overflow: hidden;
 }

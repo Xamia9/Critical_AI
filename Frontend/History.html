@@ -573,6 +573,15 @@ body.light-mode .history-item.active {
 .exporting .mindmap-line {
   stroke: #000 !important;
 }
+.history-title {
+  overflow: hidden;
+  word-break: break-word;
+}
+.history-list {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden; /* 🔥 QUAN TRỌNG */
+}
 </style>
 </head>
 
@@ -700,7 +709,7 @@ body.light-mode .section-card {
     display: flex;
     flex-direction: column;
 
-    padding: 100px 16px 40px;
+    padding: 100px 12px 40px;
   }
 
   .history-list {
@@ -718,6 +727,8 @@ body.light-mode .section-card {
   }
 
 }
+
+
 </style>
 
 <button class="theme-toggle-btn" onclick="toggleTheme()">🌙</button>
@@ -768,7 +779,7 @@ const res = await fetch("/api/history", {
   item.className = "history-item glass";
 
 item.innerHTML = `
-  <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px; flex-wrap:nowrap;">
+  <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px; flex-wrap: wrap;">
 <div style="flex:1; min-width:0;">
   <div class="history-title">
     ${debate.title || "Không có tiêu đề"}
