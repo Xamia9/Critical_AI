@@ -6,6 +6,7 @@
 
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="mobile.css">
 
 
 <style>
@@ -426,6 +427,14 @@ body {
     <a href="History.html">Lịch sử</a>
     <a href="Login.html">Đăng nhập</a>
   </nav>
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
+</div>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#">Giới thiệu</a>
+  <a href="DefineIssue.html">Luyện Tập</a>
+  <a href="History.html">Lịch sử</a>
+  <a href="Login.html">Đăng nhập</a>
 </div>
 
 
@@ -720,6 +729,11 @@ window.addEventListener("load", function() {
 
   });
 });
+</script>
+<script>
+function toggleMenu() {
+  document.getElementById("mobileMenu").classList.toggle("open");
+}
 </script>
 </body>
 </html>

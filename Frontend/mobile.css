@@ -1,0 +1,553 @@
+/* ================================================
+   MOBILE RESPONSIVE STYLES - SHARED ACROSS ALL PAGES
+   Breakpoint: max-width: 768px
+   ================================================ */
+
+@media (max-width: 768px) {
+
+  /* ========== GLOBAL RESET ========== */
+  body {
+    overflow-x: hidden !important;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* ========== TOPBAR ========== */
+  .topbar {
+    padding: 12px 16px !important;
+  }
+
+  .topbar .logo,
+  .topbar .logo-top {
+    font-size: 18px !important;
+  }
+
+  .topbar nav {
+    display: none !important;
+  }
+
+  .hamburger {
+    display: block !important;
+    font-size: 24px;
+    cursor: pointer;
+    color: white;
+    padding: 4px;
+    user-select: none;
+  }
+
+  /* ========== MOBILE MENU ========== */
+  .mobile-menu {
+    display: none;
+    position: absolute;
+    top: 56px;
+    right: 12px;
+    background: rgba(20, 20, 40, 0.98);
+    border-radius: 12px;
+    padding: 12px;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 9999;
+    min-width: 160px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  }
+
+  .mobile-menu.open {
+    display: flex;
+  }
+
+  .mobile-menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+    font-weight: 500;
+  }
+
+  .mobile-menu a:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  /* ========== INTRO PAGE ========== */
+  .intro-container {
+    grid-template-columns: 1fr !important;
+    padding-top: 100px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    gap: 40px !important;
+    text-align: center;
+  }
+
+  .intro-left h1 {
+    font-size: 36px !important;
+    letter-spacing: -1px !important;
+  }
+
+  .intro-description {
+    font-size: 14px !important;
+    max-width: 100% !important;
+    margin-bottom: 30px !important;
+  }
+
+  .intro-description p {
+    margin-bottom: 16px;
+  }
+
+  .start-btn {
+    padding: 14px 36px !important;
+    font-size: 14px !important;
+  }
+
+  .image-panel {
+    display: none;
+  }
+
+  .scroll-down {
+    display: none;
+  }
+
+  /* ========== SECTIONS ========== */
+  .section {
+    padding: 50px 16px !important;
+    max-width: 100% !important;
+  }
+
+  .section h2 {
+    font-size: 28px !important;
+    margin-bottom: 40px !important;
+    letter-spacing: -0.5px !important;
+  }
+
+  .flow-box {
+    padding: 24px 16px !important;
+    font-size: 14px !important;
+    line-height: 1.8 !important;
+    margin-bottom: 50px !important;
+  }
+
+  .step {
+    margin-bottom: 40px !important;
+  }
+
+  .step h3 {
+    font-size: 18px !important;
+  }
+
+  .step p {
+    font-size: 14px !important;
+    line-height: 1.7 !important;
+  }
+
+  .step-image {
+    margin-top: 20px !important;
+  }
+
+  .step-image img {
+    border-radius: 12px !important;
+  }
+
+  /* ========== CRITERIA GRID ========== */
+  #criteria > div[style*="grid-template-columns"],
+  #criteria > div {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  /* ========== CONTAINERS ========== */
+  .container {
+    padding-top: 100px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  h1 {
+    font-size: 32px !important;
+    margin-bottom: 24px !important;
+  }
+
+  .subtitle {
+    font-size: 14px !important;
+    margin-bottom: 30px !important;
+  }
+
+  /* ========== CARDS & PANELS ========== */
+  .section-card {
+    padding: 24px 16px !important;
+    border-radius: 20px !important;
+    margin-bottom: 24px !important;
+  }
+
+  .panel {
+    padding: 20px !important;
+    min-height: auto !important;
+    border-radius: 16px !important;
+  }
+
+  .panel-title {
+    font-size: 18px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .text-box {
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+  }
+
+  /* ========== GRID LAYOUTS ========== */
+  .container {
+    grid-template-columns: 1fr !important;
+  }
+
+  .roles {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  .role-card {
+    padding: 20px !important;
+  }
+
+  .role-card h2 {
+    font-size: 20px !important;
+  }
+
+  .role-card p {
+    font-size: 14px !important;
+  }
+
+  .sim-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .score-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  /* ========== HISTORY PAGE ========== */
+  .history-list {
+    margin-right: 0 !important;
+    margin-bottom: 30px !important;
+    height: auto !important;
+    max-height: 300px !important;
+  }
+
+  .history-list h3 {
+    font-size: 18px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .history-item {
+    padding: 14px !important;
+    min-height: 80px !important;
+    font-size: 13px !important;
+  }
+
+  /* ========== AUTH / LOGIN ========== */
+  .auth-card {
+    width: calc(100% - 32px) !important;
+    max-width: 400px !important;
+    padding: 28px 20px !important;
+    border-radius: 18px !important;
+    margin: 16px !important;
+  }
+
+  .auth-card h1 {
+    font-size: 26px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .tabs {
+    margin-bottom: 20px !important;
+  }
+
+  .tab {
+    padding: 10px 8px !important;
+    font-size: 13px !important;
+  }
+
+  input {
+    padding: 12px 14px !important;
+    font-size: 14px !important;
+    margin-bottom: 12px !important;
+  }
+
+  /* ========== DEBATE PAGE ========== */
+  .debate-layout {
+    flex-direction: column !important;
+    gap: 20px !important;
+  }
+
+  .tree-panel {
+    width: 100% !important;
+  }
+
+  .feedback-panel {
+    width: 100% !important;
+    transform: none !important;
+    opacity: 1 !important;
+    padding: 16px !important;
+  }
+
+  .feedback-panel.active {
+    width: 100% !important;
+    padding: 16px !important;
+  }
+
+  .tree-node {
+    padding: 14px 16px !important;
+    margin: 20px 0 !important;
+    font-size: 14px !important;
+    max-width: 100% !important;
+  }
+
+  .branch-container {
+    margin-left: 20px !important;
+    padding-left: 24px !important;
+  }
+
+  /* ========== BUTTONS ========== */
+  .button-group {
+    flex-direction: column !important;
+    gap: 12px !important;
+    margin-top: 30px !important;
+  }
+
+  button,
+  .btn-back,
+  .btn-confirm,
+  .btn-continue,
+  .btn-complete,
+  .btn-primary,
+  .btn-secondary {
+    padding: 14px 24px !important;
+    font-size: 14px !important;
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+
+  /* ========== RADIO GRID & FORM ELEMENTS ========== */
+  .radio-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .radio-option {
+    padding: 14px !important;
+    font-size: 14px !important;
+  }
+
+  .scale {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  .scale div {
+    flex: 1 1 calc(33.333% - 8px) !important;
+    padding: 12px 8px !important;
+    font-size: 13px !important;
+  }
+
+  textarea {
+    min-height: 120px !important;
+    font-size: 14px !important;
+  }
+
+  /* ========== INPUTS & FORM ========== */
+  label {
+    font-size: 14px !important;
+    margin-bottom: 10px !important;
+  }
+
+  #questionTitle {
+    font-size: 16px !important;
+    margin-bottom: 18px !important;
+  }
+
+  .instruction-box {
+    padding: 20px !important;
+    margin-bottom: 24px !important;
+    font-size: 14px !important;
+    border-radius: 14px !important;
+  }
+
+  .instruction-title {
+    font-size: 15px !important;
+  }
+
+  /* ========== MINDMAP ========== */
+  .mindmap-container {
+    height: 400px !important;
+    border-radius: 14px !important;
+  }
+
+  .mindmap-viewport {
+    width: 1500px !important;
+    height: 1000px !important;
+  }
+
+  .mindmap-node {
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+    min-width: 80px !important;
+    max-width: 120px !important;
+  }
+
+  .export-btn {
+    padding: 8px 14px !important;
+    font-size: 12px !important;
+    border-radius: 10px !important;
+  }
+
+  /* ========== SCORE BOXES ========== */
+  .score-box {
+    padding: 16px !important;
+    font-size: 13px !important;
+    border-radius: 14px !important;
+  }
+
+  .score-value {
+    font-size: 28px !important;
+  }
+
+  .score-total {
+    font-size: 24px !important;
+  }
+
+  .score-desc {
+    font-size: 11px !important;
+  }
+
+  .score-summary-box {
+    padding: 20px !important;
+    border-radius: 16px !important;
+  }
+
+  /* ========== THEME TOGGLE ========== */
+  .theme-toggle-btn {
+    width: 40px !important;
+    height: 40px !important;
+    bottom: 16px !important;
+    right: 16px !important;
+    font-size: 16px !important;
+  }
+
+  /* ========== PROGRESS BAR ========== */
+  .progress {
+    height: 8px !important;
+    margin-bottom: 24px !important;
+    border-radius: 16px !important;
+  }
+
+  /* ========== MSG / CHAT ========== */
+  .msg {
+    padding: 12px 14px !important;
+    font-size: 14px !important;
+    max-width: 85% !important;
+    border-radius: 14px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .ai-box {
+    height: 180px !important;
+    font-size: 14px !important;
+    padding: 12px !important;
+  }
+
+  .mic-area {
+    padding: 16px !important;
+    border-radius: 12px !important;
+  }
+
+  /* ========== FOUNDERS SECTION ========== */
+  .section p {
+    font-size: 14px !important;
+    line-height: 1.7 !important;
+  }
+
+  /* ========== SUMMARY BLOCKS ========== */
+  .summary-block {
+    margin-bottom: 16px !important;
+  }
+
+  .label {
+    font-size: 14px !important;
+  }
+
+  .issue-text {
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+  }
+
+  /* ========== GLASS EFFECT ========== */
+  .glass {
+    padding: 20px !important;
+    border-radius: 16px !important;
+  }
+
+  .btn-wrapper button {
+    width: 100% !important;
+  }
+
+  /* ========== TOAST ========== */
+  .toast {
+    left: 16px !important;
+    right: 16px !important;
+    bottom: 80px !important;
+    font-size: 13px !important;
+    padding: 12px 16px !important;
+  }
+
+  /* ========== MULTI NOTE ========== */
+  .multi-note {
+    font-size: 12px !important;
+    margin-bottom: 8px !important;
+  }
+
+  /* ========== ERROR TEXT ========== */
+  .error-text {
+    font-size: 12px !important;
+    margin-top: -8px !important;
+    margin-bottom: 16px !important;
+  }
+
+  /* ========== SECTION TITLE ========== */
+  .section-title {
+    font-size: 18px !important;
+    margin-bottom: 18px !important;
+  }
+
+  .section-title::after {
+    width: 40px !important;
+    height: 3px !important;
+    bottom: -6px !important;
+  }
+
+  /* ========== LOADING BOX ========== */
+  #loadingBox {
+    padding: 20px !important;
+    margin-bottom: 24px !important;
+    border-radius: 14px !important;
+  }
+
+  #loadingBox > div:first-child {
+    font-size: 16px !important;
+  }
+
+  /* ========== CHECKBOX RADIO ========== */
+  .checkbox-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+}
+
+/* Hamburger is hidden on desktop */
+.hamburger {
+  display: none;
+}
