@@ -24,12 +24,12 @@ body {
 }
 
 
-/* ===== TOP BAR ===== */
 .topbar {
   position: fixed;
   top: 0;
   width: 100%;
   padding: 16px 64px;
+  min-height: 64px; /* 👈 thêm dòng này */
   background: linear-gradient(135deg, #C52C5A, #4A5BFF);
   display: flex;
   justify-content: space-between;
@@ -430,7 +430,9 @@ body {
     font-size: 22px;
     cursor: pointer;
   }
+
 }
+
 </style>
 </head>
 
@@ -446,7 +448,7 @@ body {
     <a href="History.html">Lịch sử</a>
     <a href="Login.html">Đăng nhập</a>
   </nav>
-
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
 </div>
 
 <div class="mobile-menu" id="mobileMenu">
