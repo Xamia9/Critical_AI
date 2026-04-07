@@ -38,10 +38,9 @@ body {
 }
 
 
-.topbar .logo-top {
+.logo-top {
   font-weight: 900;
   font-size: 21px;
-  letter-spacing: 0.5px;
   color: white;
 }
 
@@ -413,17 +412,23 @@ body {
   opacity: 0;
   transition: opacity 0.4s ease;
 }
+.hamburger {
+  display: none;
+}
+
 @media (max-width: 768px) {
-  .topbar nav {
-    display: none !important;
+  .topbar {
+    padding: 14px 16px;
   }
 
-  .mobile-menu {
+  .topbar nav {
     display: none;
   }
 
-  .mobile-menu.open {
-    display: flex !important;
+  .hamburger {
+    display: block;
+    font-size: 22px;
+    cursor: pointer;
   }
 }
 </style>
@@ -434,7 +439,7 @@ body {
 <button class="theme-toggle-btn" onclick="toggleTheme()">🌙</button>
 
 <div class="topbar">
-  <div class="logo">Critical AI</div>
+  <div class="logo-top">Critical AI</div>
   <nav>
     <a href="Introduction.html">Giới thiệu</a>
     <a href="DefineIssue.html">Luyện Tập</a>

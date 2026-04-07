@@ -110,11 +110,11 @@ body {
 
 /* ================= LEFT LIST ================= */
 .history-list {
-  margin-right: 40px;
   display: flex;
   flex-direction: column;
 
-height: 264vh;
+  margin-right: 0;
+  max-height: 100%;
 }
 
 #historyList {
@@ -682,6 +682,42 @@ body.light-mode .section-card {
 .theme-toggle-btn:hover {
   transform: scale(1.1);
 }
+.history-title {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.history-item {
+  font-size: 13.5px;
+  padding: 14px;
+}
+.history-item button {
+  flex-shrink: 0;
+}
+@media (max-width: 768px) {
+
+  .container {
+    display: flex;
+    flex-direction: column;
+
+    padding: 100px 16px 40px;
+  }
+
+  .history-list {
+    width: 100%;
+    margin: 0 0 20px 0;
+  }
+
+  #historyList {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .main {
+    width: 100%;
+  }
+
+}
 </style>
 
 <button class="theme-toggle-btn" onclick="toggleTheme()">🌙</button>
@@ -732,7 +768,7 @@ const res = await fetch("/api/history", {
   item.className = "history-item glass";
 
 item.innerHTML = `
-  <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
+  <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px; flex-wrap:nowrap;">
 <div style="flex:1; min-width:0;">
   <div class="history-title">
     ${debate.title || "Không có tiêu đề"}
