@@ -41,9 +41,9 @@
   /* ========== MOBILE MENU ========== */
   .mobile-menu {
     display: none;
-    position: absolute;
-    top: 56px;
-    right: 12px;
+    position: fixed;
+    top: 60px;
+    right: 16px;
     background: rgba(20, 20, 40, 0.98);
     border-radius: 12px;
     padding: 12px;
@@ -75,15 +75,15 @@
   /* ========== INTRO PAGE ========== */
   .intro-container {
     grid-template-columns: 1fr !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
     padding-top: 100px !important;
-    padding-left: 20px !important;
-    padding-right: 20px !important;
-    gap: 40px !important;
+    gap: 30px !important;
     text-align: center;
   }
 
   .intro-left h1 {
-    font-size: 36px !important;
+    font-size: 38px !important;
     letter-spacing: -1px !important;
   }
 
@@ -112,7 +112,7 @@
 
   /* ========== SECTIONS ========== */
   .section {
-    padding: 50px 16px !important;
+    padding: 60px 16px !important;
     max-width: 100% !important;
   }
 
@@ -123,8 +123,8 @@
   }
 
   .flow-box {
-    padding: 24px 16px !important;
-    font-size: 14px !important;
+    padding: 20px !important;
+    font-size: 16px !important;
     line-height: 1.8 !important;
     margin-bottom: 50px !important;
   }
