@@ -202,6 +202,7 @@ const prompt = `
   - Xưng "bạn"
   - Không viết mở đầu
   - Không giải thích thêm
+  - Viết bằng tiếng việt.
   - Mỗi bullet tối đa 1 dòng
   - Chỉ dùng "- "
   - Trả về đúng JSON
@@ -321,6 +322,7 @@ const prompt = `
 
     - Yêu cầu định dạng:
       - Không viết mở đầu.
+      - Viết bằng tiếng việt.
       - Không giải thích thêm.
       - Trình bày ngắn gọn, súc tích nhất có thể.
       - Trả về đúng JSON chuẩn.

@@ -83,6 +83,7 @@ QUY TẮC CỰC KỲ QUAN TRỌNG:
 
 - Mỗi mục hậu quả tối đa 4 bullet.
 - Mỗi mục là một array.
+- Viết bằng tiếng việt.
 - Mỗi phần tử trong array là một chuỗi.
 - Không dùng xuống dòng trong string.
 - Mỗi bullet tối đa 2 dòng.

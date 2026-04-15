@@ -157,6 +157,30 @@ h1 {
   gap: 20px;
 }
 
+/* ===== FIX MOBILE MENU ===== */
+.mobile-menu {
+  display: none;
+}
+
+.hamburger {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .topbar nav {
+    display: none;
+  }
+
+  .hamburger {
+    display: block;
+    font-size: 22px;
+    cursor: pointer;
+  }
+
+  .mobile-menu.open {
+    display: flex;
+  }
+}
 /* ===== BUTTON STYLE ĐỒNG BỘ ===== */
 .btn-secondary,
 .btn-primary {

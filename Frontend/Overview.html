@@ -263,7 +263,30 @@ body.light-mode .text-box {
   color: #333;
 }
 
+/* ===== FIX MOBILE MENU ===== */
+.mobile-menu {
+  display: none;
+}
 
+.hamburger {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .topbar nav {
+    display: none;
+  }
+
+  .hamburger {
+    display: block;
+    font-size: 22px;
+    cursor: pointer;
+  }
+
+  .mobile-menu.open {
+    display: flex;
+  }
+}
 </style>
 </head>
 

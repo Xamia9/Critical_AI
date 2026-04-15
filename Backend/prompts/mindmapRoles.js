@@ -51,12 +51,14 @@ Chỉ ra:
 QUY TẮC TRÌNH BÀY:
 - Tối đa 10 bullet.
 - Mỗi bullet tối đa 2 dòng.
+- Viết bằng tiếng việt.
 - Không viết đoạn văn dài.
 - Không viết lại nội dung người dùng.
 - Không tạo lập luận mới hoàn chỉnh.
 - Phải bắt đầu bằng "- " cho mỗi bullet.
 - Không viết chữ "TRẢ LỜI THEO MẪU" trong phản hồi.
 - Trả lời càng ngắn gọn càng tốt.
+
 
 TRẢ LỜI THEO MẪU:
 
