@@ -38,6 +38,14 @@ app.use(cors({
 }));
 app.use(express.json());
 
+// === THÊM ĐOẠN NÀY ĐỂ GIỮ SERVER LUÔN THỨC ===
+app.get('/healthcheck', (req, res) => {
+  res.status(200).send('Server is alive!');
+});
+// ==========================================
+
+
+
 // Debug: Log paths in production
 if (process.env.NODE_ENV === 'production') {
   console.log("Production mode - Static paths:");
@@ -660,6 +668,8 @@ app.delete("/api/history/:id", authMiddleware, async (req, res) => {
     res.status(500).json({ error: "Delete failed" });
   }
 });
+
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server chạy tại http://localhost:${PORT}`);
