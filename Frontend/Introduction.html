@@ -412,25 +412,15 @@ body {
   opacity: 0;
   transition: opacity 0.4s ease;
 }
-.hamburger {
-  display: none;
-}
-
 @media (max-width: 768px) {
   .topbar {
     padding: 14px 16px;
+    justify-content: center;
   }
 
   .topbar nav {
     display: none;
   }
-
-  .hamburger {
-    display: block;
-    font-size: 22px;
-    cursor: pointer;
-  }
-
 }
 
 </style>
@@ -448,15 +438,9 @@ body {
     <a href="History.html">Lịch sử</a>
     <a href="Login.html">Đăng nhập</a>
   </nav>
-  <div class="hamburger" onclick="toggleMenu()">☰</div>
+
 </div>
 
-<div class="mobile-menu" id="mobileMenu">
-  <a href="Introduction.html">Giới thiệu</a>
-  <a href="DefineIssue.html">Luyện Tập</a>
-  <a href="History.html">Lịch sử</a>
-  <a href="Login.html">Đăng nhập</a>
-</div>
 
 
 <!-- HERO -->
