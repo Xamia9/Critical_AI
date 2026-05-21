@@ -6,7 +6,6 @@
 <title>Critical AI | Overview</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="mobile.css">
-<!-- SweetAlert2 for notifications -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="notification.js"></script>
 
@@ -31,7 +30,7 @@ body {
   margin-left: auto;
   margin-right: auto;
 }
-/* ===== TOP BAR ===== */
+
 .topbar {
   position: fixed;
   left: 0;
@@ -65,26 +64,24 @@ body {
   opacity: 1;
 }
 
-/* ===== TITLE ===== */
+
 h1 {
   font-size: 52px;
   font-weight: 800;
-  text-align: left;   /* đổi chỗ này */
+  text-align: left; 
   margin-bottom: 48px;
     text-shadow:
     0 0 15px rgba(74,91,255,0.6),
     0 0 30px rgba(197,44,90,0.4);
 }
 
-/* ===== GRID LAYOUT ===== */
+
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 32px;
   width: 100%;
 }
-
-/* ===== GLASS PANEL ===== */
 
 .panel {
   background: rgba(255,255,255,0.07);
@@ -113,7 +110,6 @@ h1 {
   letter-spacing: 0.4px;
 }
 
-/* gạch glow nhỏ phía dưới */
 .panel-title::after {
   content: "";
   position: absolute;
@@ -126,7 +122,6 @@ h1 {
   box-shadow: 0 0 10px rgba(74,91,255,0.6);
 }
 
-
 .text-box {
   font-size: 15.5px;
   line-height: 1.7;
@@ -134,12 +129,11 @@ h1 {
   white-space: pre-line;
 }
 
-/* ===== BUTTONS ===== */
 .button-group {
   margin-top: 48px;
   display: flex;
-  justify-content: flex-start; /* đẩy qua trái */
-  gap: 20px; /* khoảng cách giữa 2 nút */
+  justify-content: flex-start;
+  gap: 20px;
 }
 
 button {
@@ -152,7 +146,6 @@ button {
   transition: 0.2s;
 }
 
-/* ===== BACK BUTTON - GLOBAL STYLE ===== */
 
 .btn-back,
 .btn-confirm {
@@ -169,17 +162,14 @@ button {
   background-size: 200% 100%;
 }
 
-/* BACK = phần bên trái gradient */
 .btn-back {
   background-position: left center;
 }
 
-/* CONFIRM = phần bên phải gradient */
 .btn-confirm {
   background-position: right center;
 }
 
-/* hover */
 .btn-back:hover,
 .btn-confirm:hover {
   transform: translateY(-2px);
@@ -195,7 +185,7 @@ button {
   height: 38px !important;
   padding: 0 !important;
 
-  aspect-ratio: 1 / 1;   /* đảm bảo luôn là hình vuông */
+  aspect-ratio: 1 / 1;
   border-radius: 50% !important;
 
   border: none;
@@ -225,8 +215,6 @@ button {
   line-height: 1.6;
 }
 
-/* ===== LIGHT MODE ===== */
-
 body.light-mode {
   background: radial-gradient(circle at top, #EEF0FF, #F7F8FF 70%);
   color: #1E1E2F;
@@ -249,7 +237,6 @@ body.light-mode h1 {
   text-shadow: none;
 }
 
-
 body.light-mode .panel {
   background: #ffffff;
   border: 1px solid rgba(74,91,255,0.35);
@@ -258,12 +245,10 @@ body.light-mode .panel {
     0 0 40px rgba(197,44,90,0.15);
 }
 
-
 body.light-mode .text-box {
   color: #333;
 }
 
-/* ===== FIX MOBILE MENU ===== */
 .mobile-menu {
   display: none;
 }
@@ -292,7 +277,6 @@ body.light-mode .text-box {
 
 <body>
 
-<!-- ===== TOPBAR ===== -->
 <div class="topbar">
   <div class="logo">Critical AI</div>
   <nav>
@@ -403,7 +387,7 @@ async function confirmSummary() {
   const btn = document.querySelector(".btn-confirm");
   btn.disabled = true;
 
-  let timeLeft = 15; // số giây đếm ngược (tuỳ bạn chỉnh)
+  let timeLeft = 15;
   btn.innerText = `Đang tạo vai trò... ${timeLeft}s`;
 
   // countdown
@@ -432,7 +416,7 @@ async function confirmSummary() {
 
     const result = await response.json();
 
-    clearInterval(countdown); // 🔥 dừng đếm khi API trả về
+    clearInterval(countdown);
 
     if (response.ok && result.success) {
       localStorage.removeItem("draftAnswers");

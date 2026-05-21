@@ -1,5 +1,6 @@
 import { buildSimulationPrompt } from "../prompts/simulationPrompt.js";
 
+// Chấm điểm
 export async function runSimulation(generateWithRotation, decision, mindmaps) {
 
   const prompt = buildSimulationPrompt(decision, mindmaps);
@@ -13,7 +14,6 @@ export async function runSimulation(generateWithRotation, decision, mindmaps) {
     console.error("JSON parse error:", err);
   }
 
-  // Clamp helper để đảm bảo điểm luôn 0–10
   const clamp = (n) =>
     Number.isInteger(n) ? Math.max(0, Math.min(10, n)) : 0;
 

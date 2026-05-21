@@ -1,3 +1,4 @@
+// Xác thực đăng nhập bằng JWT
 import jwt from "jsonwebtoken";
 
 const authMiddleware = (req, res, next) => {

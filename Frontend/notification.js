@@ -1,8 +1,3 @@
-/**
- * Critical AI - Custom Notification System
- * Based on SweetAlert2 with dark theme styling
- */
-
 const swalTheme = {
   confirmButtonColor: '#4A5BFF',
   cancelButtonColor: '#6B7280',
@@ -23,7 +18,7 @@ const swalTheme = {
 
 /**
  * Show success notification (toast style)
- * @param {string} message - The message to display
+ * @param {string} message 
  */
 function showSuccess(message) {
   Swal.fire({

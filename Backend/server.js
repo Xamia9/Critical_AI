@@ -4,7 +4,6 @@ import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { v4 as uuidv4 } from "uuid";
 
-// ES Module __dirname equivalent
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 import bcrypt from "bcrypt";
@@ -18,6 +17,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
 
+// kết nối MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))
   .catch(err => console.error("Mongo error:", err));
@@ -29,7 +29,7 @@ import authMiddleware from "./middleware/authMiddleware.js";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-
+// Tạo server Express + cors
 const app = express();
 app.use(cors({
   origin: '*',
@@ -38,39 +38,35 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// === THÊM ĐOẠN NÀY ĐỂ GIỮ SERVER LUÔN THỨC ===
+// Giữ cho web luôn thức
 app.get('/healthcheck', (req, res) => {
   res.status(200).send('Server is alive!');
 });
-// ==========================================
 
 
-
-// Debug: Log paths in production
 if (process.env.NODE_ENV === 'production') {
   console.log("Production mode - Static paths:");
   console.log("__dirname:", __dirname);
   console.log("Frontend path:", join(__dirname, "..", "Frontend"));
 }
 
-// Serve static files from Frontend folder (absolute path)
 const frontendPath = join(__dirname, "..", "Frontend");
 app.use(express.static(frontendPath));
 
-// Also serve root level static files
+
 app.use(express.static(join(__dirname, "..")));
 
-// Serve Introduction.html at root
+
 app.get("/", (req, res) => {
   const filePath = join(frontendPath, "Introduction.html");
   console.log("Serving Introduction.html from:", filePath);
   res.sendFile(filePath);
 });
 
-// Catch-all route to serve HTML files from Frontend
+
 app.use((req, res, next) => {
   if (req.path.endsWith(".html")) {
-    const fileName = req.path.slice(1); // Remove leading /
+    const fileName = req.path.slice(1); 
     const filePath = join(frontendPath, fileName);
     console.log("Serving HTML file:", filePath);
     res.sendFile(filePath, (err) => {
@@ -87,9 +83,7 @@ app.use((req, res, next) => {
 import authRoutes from "./routes/auth.js";
 app.use("/api/auth", authRoutes);
 
-// ===== MULTI API KEY SYSTEM =====
-
-
+// Gemini API keys
 const apiKeys = [
   process.env.GEMINI_KEY_1,
   process.env.GEMINI_KEY_2,
@@ -117,6 +111,7 @@ function getModel() {
   });
 }
 
+// Đổi key nếu hết quota
 async function generateWithRotation(prompt, forceJson = false) {
   for (let i = 0; i < apiKeys.length; i++) {
 
@@ -152,8 +147,6 @@ async function generateWithRotation(prompt, forceJson = false) {
       ) {
         continue; // thử key tiếp theo
       }
-
-      // Lỗi mạng / fetch failed → vẫn thử key tiếp theo
       continue;
     }
   }
@@ -161,6 +154,7 @@ async function generateWithRotation(prompt, forceJson = false) {
   throw new Error("All API keys failed");
 }
 
+// Overview Issue
 app.post("/summarize", authMiddleware, async (req, res) => {
   console.log("REQ BODY:", req.body);
   try {
@@ -231,7 +225,6 @@ let raw = await generateWithRotation(prompt, true);
 
     const parsed = JSON.parse(raw);
 
-// 🔥 GỌI AI TẠO TITLE + SUMMARY (with trangThai and lyDoTrangThai context)
 const overview = await generateOverview(
   generateWithRotation,
   parsed.issue,
@@ -242,8 +235,8 @@ const overview = await generateOverview(
 const newDebate = await Debate.create({
   userId: req.userId,
 
-  title: overview.title,          // 🔥 AI đặt
-  summary: overview.summary,      // 🔥 AI tóm tắt
+  title: overview.title,        
+  summary: overview.summary,     
   status: "in_progress",
 
   issue: parsed.issue,
@@ -275,7 +268,6 @@ mindmaps: {
   }
 });
 
-// ===== ROUTE CHO OVERVIEW =====
 app.post("/get-overview", authMiddleware, async (req, res) => {
   const { debateId } = req.body;
   const debate = await Debate.findById(debateId);
@@ -292,7 +284,7 @@ app.post("/get-overview", authMiddleware, async (req, res) => {
 
 
 
-///tạo 3 vai trò///
+// Tạo 3 vai trò
 app.post("/generate-roles", authMiddleware, async (req, res) => {
   try {
     const { debateId } = req.body;
@@ -390,6 +382,7 @@ app.post("/get-roles", authMiddleware, async (req, res) => {
   res.json(debate.roles);
 });
 
+// feedback mindmap
 import { getMindmapRolePrompt } from "./prompts/mindmapRoles.js";
 
 app.post("/mindmap-debate", authMiddleware, async (req, res) => {
@@ -407,36 +400,30 @@ if (!debate) {
       return res.status(400).json({ error: "Role không hợp lệ" });
     }
 
-    // Nếu role đã hoàn thành → chặn
     if (debate.roleStatus[role] === "completed") {
       return res.json({
         error: "Vai trò này đã hoàn thành."
       });
     }
 
-
     if (debate.roleAttempts[role] === undefined) {
       debate.roleAttempts[role] = 0;
     }
 
-    // Nếu đã đủ 3 lượt → bắt buộc hoàn thành
-if (debate.roleAttempts[role] >= 3) {
-  debate.roleStatus[role] = "completed";
-  return res.json({
-    forceComplete: true,
-    attempts: debate.roleAttempts[role]
-  });
-}
-
+    if (debate.roleAttempts[role] >= 3) {
+      debate.roleStatus[role] = "completed";
+      return res.json({
+        forceComplete: true,
+        attempts: debate.roleAttempts[role]
+      });
+    }
 
     debate.roleAttempts[role] += 1;
 
-// LƯU MINDMAP ĐÚNG CẤU TRÚC
-// LẤY TÊN ROLE TỪ debate.roles
 const roleName = debate.roles?.[role]?.ten || role;
 
 debate.mindmaps[role] = {
-  name: roleName,   // 🔥 THÊM DÒNG NÀY
+  name: roleName,
   text: task,
   children: tree
 };
@@ -458,7 +445,7 @@ const mappedRole = roleMap[role];
 const mindmapText = JSON.stringify(tree, null, 2);
 
 const prompt = getMindmapRolePrompt(
-  mappedRole,        // ✅ dùng mappedRole
+  mappedRole,     
   task,
   mindmapText,
   debate.roleAttempts[role]
@@ -482,7 +469,7 @@ let text = await generateWithRotation(prompt);
   }
 });
 
-
+// sumit decision
 app.post("/submit-decision", authMiddleware, async (req, res) => {
   const { debateId, decision } = req.body;
 
@@ -499,6 +486,7 @@ app.post("/submit-decision", authMiddleware, async (req, res) => {
   res.json({ success: true });
 });
 
+// lấy data decision
 app.post("/get-decision", authMiddleware, async (req, res) => {
   const { debateId } = req.body;
   const debate = await Debate.findById(debateId);
@@ -513,7 +501,7 @@ app.post("/get-decision", authMiddleware, async (req, res) => {
   });
 });
 
-
+// Mô phỏng hậu quả + chấm điểm
 app.post("/run-simulation", authMiddleware, async (req, res) => {
   try {
     const { debateId } = req.body;
@@ -540,7 +528,6 @@ await Debate.findByIdAndUpdate(debateId, {
   weaknesses: result.weaknesses
 });
 
-// SAU ĐÓ MỚI TRẢ RESPONSE
 res.json({
   scores: {
     score: result.score,
@@ -561,14 +548,13 @@ res.json({
   }
 });
 
-
+// Lưu lịch sử
 app.get("/api/history", authMiddleware, async (req, res) => {
   const debates = await Debate.find({ userId: req.userId })
     .sort({ createdAt: -1 });
 
   res.json(debates);
 });
-
 
 app.get("/api/protected", authMiddleware, (req, res) => {
   res.json({ message: "You are authenticated", user: req.user });
@@ -657,7 +643,7 @@ app.delete("/api/history/:id", authMiddleware, async (req, res) => {
   try {
     await Debate.findOneAndDelete({
       _id: req.params.id,
-      userId: req.userId   // 🔥 QUAN TRỌNG: chỉ xoá của user đó
+      userId: req.userId 
     });
 
     res.json({ success: true });
@@ -672,4 +658,3 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server chạy tại http://localhost:${PORT}`);
 });
-

@@ -6,7 +6,6 @@
 <title>Critical AI | Define Issue</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="mobile.css">
-<!-- SweetAlert2 for notifications -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="notification.js"></script>
 
@@ -16,7 +15,6 @@
   font-family: Inter, sans-serif;
 }
 
-/* ================= ROOT ================= */
 :root {
   --bg-dark-1: #2B1E4A;
   --bg-dark-2: #24163F;
@@ -39,14 +37,12 @@
   --text-light-soft: #475569;
 }
 
-/* ================= BODY ================= */
 body {
   margin: 0;
   background: radial-gradient(circle at top, var(--bg-dark-1), var(--bg-dark-2) 60%);
   color: var(--text-dark);
 }
 
-/* ================= TOPBAR ================= */
 .topbar {
   position: fixed;
   top: 0;
@@ -78,7 +74,7 @@ body {
   opacity: 1;
 }
 
-/* ================= LAYOUT ================= */
+
 .container {
   max-width: 950px;
   margin: auto;
@@ -86,7 +82,7 @@ body {
   padding-bottom: 80px;
 }
 
-/* ================= TITLE ================= */
+
 h1 {
   font-size: 48px;
   font-weight: 900;
@@ -102,7 +98,7 @@ h1 {
   color: var(--text-soft);
 }
 
-/* ================= GLASS CARD ================= */
+
 .section-card {
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(123,140,255,0.35);
@@ -129,7 +125,7 @@ h1 {
   position: relative;
 }
 
-/* gạch glow phía dưới */
+
 .section-title::after {
   content: "";
   position: absolute;
@@ -142,7 +138,7 @@ h1 {
   box-shadow: 0 0 12px rgba(74,91,255,0.6);
 }
 
-/* ================= INPUT ================= */
+
 label {
   font-weight: 600;
   font-size: 15px;
@@ -172,7 +168,8 @@ input[type="number"]:focus {
   border-color: #4A5BFF;
   background: rgba(74,91,255,0.1);
 }
-/* ================= RADIO GRID ================= */
+
+
 .radio-grid {
   display: grid;
 grid-template-columns: repeat(3, 1fr);
@@ -188,10 +185,10 @@ margin-bottom: 28px;
   text-align: center;
   transition: 0.25s;
 
-  display: flex;              /* thêm */
-  align-items: center;        /* thêm */
-  justify-content: center;    /* thêm */
-  line-height: 1.4;           /* thêm */
+  display: flex;           
+  align-items: center;    
+  justify-content: center; 
+  line-height: 1.4;        
 }
 .radio-option:hover {
   border-color: #4A5BFF;
@@ -202,7 +199,7 @@ margin-bottom: 28px;
   border: 2px solid #4A5BFF;
 }
 
-/* ================= SCALE ================= */
+
 .scale {
   display: flex;
   justify-content: space-between;
@@ -230,7 +227,7 @@ margin-bottom: 28px;
   border: 2px solid #4A5BFF;
 }
 
-/* ================= BUTTON ================= */
+
 button {
   margin-top: 20px;
   padding: 16px 32px;
@@ -249,7 +246,7 @@ button:hover {
   box-shadow: 0 8px 28px rgba(74,91,255,0.35);
 }
 
-/* ================= LIGHT MODE ================= */
+
 body.light-mode {
   background: radial-gradient(circle at top, var(--bg-light-1), var(--bg-light-2) 70%);
   color: var(--text-light-main);
@@ -297,7 +294,7 @@ body.light-mode .subtitle {
   opacity: 0.85;
 }
 
-/* ================= PROGRESS ================= */
+
 .progress {
   width: 100%;
   height: 10px;
@@ -320,7 +317,7 @@ body.light-mode .progress {
   background: rgba(0,0,0,0.1);
 }
 
-/* ================= ERROR MESSAGE ================= */
+
 .error-text {
   margin-top: -10px;
   margin-bottom: 20px;
@@ -382,6 +379,44 @@ body.light-mode .instruction-box {
   background: #ffffff;
   border: 1px solid rgba(74,91,255,0.3);
 }
+
+.theme-toggle-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+
+  font-size: 18px;
+  font-weight: normal;
+
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  min-height: 38px;
+
+  padding: 0;
+  border-radius: 50%;
+  border: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
+  color: white;
+  font-size: 16px;
+  line-height: 1;
+
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  transition: transform 0.2s ease;
+
+  z-index: 9999;
+}
+
+.theme-toggle-btn:hover {
+  transform: scale(1.1);
+}
+
 </style>
 </head>
 
@@ -439,51 +474,10 @@ body.light-mode .instruction-box {
 
 </div>
 
-
 </div>
-
 
 <button class="theme-toggle-btn" onclick="toggleTheme()">🌙</button>
 
-<style>
-.theme-toggle-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-
-  font-size: 18px;
-  font-weight: normal;
-
-  width: 38px;
-  height: 38px;
-  min-width: 38px;
-  min-height: 38px;
-
-  padding: 0;
-  border-radius: 50%;
-  border: none;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background: linear-gradient(135deg, #C52C5A, #4A5BFF);
-  color: white;
-  font-size: 16px;   /* nhỏ lại */
-  line-height: 1;
-
-  cursor: pointer;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
-  transition: transform 0.2s ease;
-
-  z-index: 9999;
-}
-
-.theme-toggle-btn:hover {
-  transform: scale(1.1);
-}
-
-</style>
 
 <script>
 function toggleTheme() {
@@ -499,7 +493,6 @@ function toggleTheme() {
   }
 }
 
-/* LOAD SAVED THEME */
 window.onload = function() {
   const savedTheme = localStorage.getItem("theme");
   const btn = document.querySelector(".theme-toggle-btn");
@@ -609,7 +602,6 @@ const nextBtn = document.getElementById("nextBtn");
 
 let errorEl = null;
 
-// ===== RESTORE DRAFT IF EXISTS =====
 const savedAnswers = localStorage.getItem("draftAnswers");
 const savedStep = localStorage.getItem("draftStep");
 
@@ -642,7 +634,7 @@ if(currentStep === 0){
   const step = steps[currentStep];
   titleEl.innerText = step.title;
 
-  // progress
+
   progressBar.style.width = ((currentStep + 1) / steps.length) * 100 + "%";
 
   contentEl.innerHTML = "";
@@ -651,7 +643,7 @@ if(currentStep === 0){
   errorEl.className = "error-text";
   errorEl.style.display = "none";
 
-  /* ================= RADIO ================= */
+
 if(step.type === "radio"){
 
   const grid = document.createElement("div");
@@ -675,7 +667,7 @@ if(step.type === "radio"){
 
       errorEl.style.display = "none";
 
-      // ✅ Nếu là câu 6 thì render lại để hiện lý do
+
       if(step.key === "trangThai"){
         renderStep();
       }
@@ -686,7 +678,7 @@ if(step.type === "radio"){
 
   contentEl.appendChild(grid);
 
-  // ✅ HIỆN Ô NHẬP LÝ DO CHO CÂU 6
+
   if(step.key === "trangThai" && answers.trangThai){
 
     const label = document.createElement("label");
@@ -706,7 +698,7 @@ if(step.type === "radio"){
   }
 }
 
-  /* ================= CHECKBOX ================= */
+
   if(step.type === "checkbox"){
 
     const grid = document.createElement("div");
@@ -719,7 +711,7 @@ if(step.type === "radio"){
       div.className = "radio-option";
       div.innerText = opt;
 
-      // FIX: giữ trạng thái khi quay lại
+    
       if(answers[step.key].includes(opt)){
         div.classList.add("active");
       }
@@ -754,7 +746,7 @@ if(step.type === "radio"){
     contentEl.appendChild(grid);
   }
 
-  /* ================= TEXTAREA ================= */
+
   if(step.type === "textarea"){
     const ta = document.createElement("textarea");
     ta.placeholder = step.placeholder || "";
@@ -768,7 +760,7 @@ if(step.type === "radio"){
     contentEl.appendChild(ta);
   }
 
-  /* ================= RANGE (CÂU 7 FIX) ================= */
+
   if(step.type === "range"){
 
     const wrapper = document.createElement("div");
@@ -822,7 +814,6 @@ function nextStep(){
   errorEl.style.display = "none";
 
 
-// Bắt buộc nhập lý do ở câu 6
 if(step.key === "trangThai"){
   if(!answers.lyDoTrangThai || answers.lyDoTrangThai.trim() === ""){
     errorEl.innerText = "Bạn cần nhập lý do cho trạng thái này.";
@@ -841,10 +832,8 @@ if(step.key === "trangThai"){
 
 function prevStep(){
 
-  // Nếu đang ở bước đầu tiên
   if(currentStep === 0){
 
-    // Lưu tạm answers vào localStorage trước khi rời trang
     localStorage.setItem("draftAnswers", JSON.stringify(answers));
     localStorage.setItem("draftStep", currentStep);
 
@@ -852,7 +841,6 @@ function prevStep(){
     return;
   }
 
-  // Nếu không thì chỉ quay lại step trước
   currentStep--;
   renderStep();
 }
@@ -915,8 +903,6 @@ if(!result.debateId){
 clearInterval(countdown);
 
 localStorage.setItem("currentDebateId", result.debateId);
-
-// ✅ XÓA DRAFT TRƯỚC KHI CHUYỂN TRANG
 localStorage.removeItem("draftAnswers");
 localStorage.removeItem("draftStep");
 
@@ -931,7 +917,6 @@ window.location.href="Overview.html";
   }
   
 }
-
 
 renderStep();
 

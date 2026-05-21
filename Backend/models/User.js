@@ -1,3 +1,4 @@
+// Lưu thông tin người dùng
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({

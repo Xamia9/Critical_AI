@@ -1,3 +1,4 @@
+// Lưu lịch sử
 import mongoose from "mongoose";
 
 const debateSchema = new mongoose.Schema({

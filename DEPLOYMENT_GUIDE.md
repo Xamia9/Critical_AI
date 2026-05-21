@@ -1,4 +1,4 @@
-# 🚀 Critical AI - Deployment Guide
+# Critical AI - Deployment Guide
 
 ## Overview
 This guide will help you deploy Critical AI to **Render.com** with a cloud MongoDB database.
@@ -223,4 +223,4 @@ You should see a 401 error (no token) - this means the server is running!
 
 **MongoDB Atlas:** https://www.mongodb.com/atlas
 
-**Your deployed URL:** `https://criticalai-backend.onrender.com` (or your custom domain)
+**Your deployed URL:** `https://critical-ai-vn-nsg.onrender.com`

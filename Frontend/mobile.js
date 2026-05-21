@@ -1,19 +1,15 @@
-/**
- * Mobile Navigation Toggle
- * Handles hamburger menu functionality across all pages
- */
+// Hambuger menu (mobile)
 document.addEventListener("DOMContentLoaded", () => {
   const hamburger = document.querySelector(".hamburger");
   const mobileMenu = document.getElementById("mobileMenu");
 
   if (hamburger && mobileMenu) {
     hamburger.addEventListener("click", (e) => {
-      e.stopPropagation(); // tránh trigger document click
+      e.stopPropagation();
       mobileMenu.classList.toggle("open");
     });
   }
 
-  // Close menu when clicking outside
   document.addEventListener("click", (event) => {
     if (
       hamburger &&

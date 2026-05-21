@@ -1,6 +1,6 @@
+// Overview
 export async function generateOverview(generateWithRotation, issue, trangThai = "", lyDoTrangThai = "") {
 
-  // Build additional context from trangThai if available
   let trangThaiContext = "";
   if (trangThai && lyDoTrangThai) {
     trangThaiContext = `
@@ -31,7 +31,6 @@ ${trangThaiContext}`;
     const raw = await generateWithRotation(prompt, true);
     console.log("Overview AI raw response:", raw);
     
-    // Clean the response
     const cleaned = raw.replace(/```json/g, "").replace(/```/g, "").trim();
     const json = JSON.parse(cleaned);
 

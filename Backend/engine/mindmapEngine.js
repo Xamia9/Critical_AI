@@ -1,3 +1,4 @@
+// cập nhật mindmap
 export function updateMindmapState(state, aiResponse) {
   state.attempts += 1;
   state.latestScore = aiResponse.totalScore;

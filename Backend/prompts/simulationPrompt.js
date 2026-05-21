@@ -1,3 +1,4 @@
+// Chấm điểm + mô phỏng hậu quả
 export function buildSimulationPrompt(decision, mindmaps) {
   return `
 Bạn là chuyên gia mô phỏng và giám khảo tư duy phản biện theo mô hình Paul–Elder (9 tiêu chuẩn trí tuệ).

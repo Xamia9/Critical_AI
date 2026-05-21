@@ -6,7 +6,6 @@
 <title>Critical AI | Debate</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="mobile.css">
-<!-- SweetAlert2 for notifications -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="notification.js"></script>
 
@@ -16,7 +15,7 @@
   font-family: Inter, sans-serif;
 }
 
-/* ================= ROOT (SYNC DEFINE ISSUE) ================= */
+
 :root {
   --bg-dark-1: #2B1E4A;
   --bg-dark-2: #24163F;
@@ -39,14 +38,14 @@
   --text-light-main: #1E1E2F;
 }
 
-/* ================= BODY ================= */
+
 body {
   margin: 0;
   background: radial-gradient(circle at top, var(--bg-dark-1), var(--bg-dark-2) 60%);
   color: var(--text-dark);
 }
 
-/* ================= TOPBAR ================= */
+
 .topbar {
   position: fixed;
   top: 0;
@@ -78,7 +77,7 @@ body {
   opacity: 1;
 }
 
-/* ================= MAIN ================= */
+
 .container {
   padding-top: 140px;
   padding-left: 90px;
@@ -94,7 +93,7 @@ h1 {
    0 0 18px rgba(123,140,255,0.25);
  }
 
-/* ================= GLASS CARDS ================= */
+
 .topic-card,
 .debate-card {
   background: var(--glass-bg);
@@ -147,7 +146,7 @@ h1 {
 }
 
 
-/* ================= AI BOX ================= */
+
 .ai-box {
   background: rgba(0,0,0,0.35);
   border-radius: 14px;
@@ -157,7 +156,7 @@ h1 {
   font-size: 15px;
 }
 
-/* ================= MIC ================= */
+
 .mic-area {
   border: 1px dashed rgba(255,255,255,0.25);
   border-radius: 14px;
@@ -185,11 +184,11 @@ h1 {
   box-shadow: 0 8px 28px rgba(74,91,255,0.35);
 }
 
-/* ================= BUTTONS ================= */
+
 .button-group {
   margin-top: 48px;
   display: flex;
-  justify-content: flex-start; /* đẩy qua trái */
+  justify-content: flex-start;
   gap: 20px;
 }
 
@@ -207,18 +206,18 @@ button {
   background-size: 200% 100%;
 }
 
-/* ===== BACK BUTTON ===== */
+
 .btn-back {
   background-position: left center;
 }
 
-/* ===== CONFIRM / COMPLETE BUTTON ===== */
+
 .btn-confirm,
 .btn-complete {
   background-position: right center;
 }
 
-/* ===== HOVER EFFECT ===== */
+
 .btn-back:hover,
 .btn-confirm:hover,
 .btn-complete:hover {
@@ -226,14 +225,14 @@ button {
   box-shadow: 0 8px 22px rgba(74,91,255,0.35);
 }
 
-/* ================= FOOTER ================= */
+
 .footer {
   margin-top: 40px;
   font-size: 12px;
   opacity: 0.4;
 }
 
-/* ================= LIGHT MODE ================= */
+
 body.light-mode {
   background: radial-gradient(
     circle at top,
@@ -273,9 +272,6 @@ body.light-mode .topic-card {
 }
 
 
-
-
-/* ================= THEME BUTTON ================= */
 .theme-toggle-btn {
   position: fixed;
   bottom: 20px;
@@ -284,7 +280,7 @@ body.light-mode .topic-card {
   width: 38px;
   height: 38px;
 
-  padding: 0;              /* QUAN TRỌNG */
+  padding: 0;  
   min-width: 38px;
   min-height: 38px;
 
@@ -388,17 +384,13 @@ padding: 24px;
 }
 
 
-/* ================= TREE STRUCTURE ================= */
-
-/* ================= TREE ================= */
-
 .branch-container {
   position: relative;
   margin-left: 90px;
   padding-left: 40px;
 }
 
-/* đường dọc */
+
 .branch-container::before {
   content: "";
   position: absolute;
@@ -409,7 +401,7 @@ padding: 24px;
   background: rgba(255,255,255,0.25);
 }
 
-/* đường ngang */
+
 .branch-container > .tree-node::before {
   content: "";
   position: absolute;
@@ -421,7 +413,6 @@ padding: 24px;
 }
 
 
-/* TASK */
 .task-node {
   font-weight: 900;
   font-size: 19px;
@@ -429,21 +420,19 @@ padding: 24px;
   color: white;
 }
 
-/* LUẬN ĐIỂM */
+
 .argument-node {
   background: rgba(255,255,255,0.08);
   border-left: 4px solid #5B3CFF;
 }
 
-/* LÝ LẼ / BẰNG CHỨNG */
+
 .support-node {
   background: rgba(255,255,255,0.05);
   border-left: 4px solid #FF2E88;
 }
-/* ================= TREE ================= */
 
 
-/* đường dọc */
 .branch-container::before {
   content: "";
   position: absolute;
@@ -454,7 +443,7 @@ padding: 24px;
   background: rgba(255,255,255,0.25);
 }
 
-/* đường ngang */
+
 .branch-container > .tree-node::before {
   content: "";
   position: absolute;
@@ -470,7 +459,7 @@ padding: 24px;
   width: 38px;
   height: 38px;
 
-  flex: 0 0 38px;     /* QUAN TRỌNG: không cho flex co giãn */
+  flex: 0 0 38px;
 
   border-radius: 50%;
   border: none;
@@ -525,7 +514,6 @@ body.light-mode .branch-container > .tree-node::before {
   width: 62%;
 }
 
-/* ================= TREE - LIGHT MODE FIX ================= */
 
 body.light-mode .tree-node {
   background: linear-gradient(
@@ -565,13 +553,13 @@ body.light-mode .task-node {
   color: white !important;
 }
 
-/* ================= AI FEEDBACK ENHANCED STYLING ================= */
+
 #feedbackContent {
   color: var(--text-dark);
   line-height: 1.6;
 }
 
-/* Main feedback sections (Điểm Mạnh, Lỗ Hổng Chính, etc.) */
+
 #feedbackContent .feedback-section {
   display: flex;
   flex-direction: column;
@@ -595,7 +583,7 @@ body.light-mode .task-node {
     0 12px 40px rgba(197, 44, 90, 0.15);
 }
 
-/* Section header box - lighter gradient for better readability */
+
 #feedbackContent .section-header {
   display: flex;
   align-items: center;
@@ -605,7 +593,7 @@ body.light-mode .task-node {
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-/* Section icon - only in header */
+
 #feedbackContent .section-icon {
   display: inline-flex;
   align-items: center;
@@ -620,7 +608,7 @@ body.light-mode .task-node {
   font-weight: 800;
 }
 
-/* Section title - softer light color */
+
 #feedbackContent .section-title {
   display: inline;
   font-weight: 900;
@@ -630,7 +618,7 @@ body.light-mode .task-node {
   text-shadow: 0 0 8px rgba(200, 180, 255, 0.3);
 }
 
-/* Content - no icons allowed */
+
 #feedbackContent .section-content {
   padding: 18px 22px;
   font-size: 14px;
@@ -639,7 +627,7 @@ body.light-mode .task-node {
   line-height: 1.75;
 }
 
-/* Remove all emojis from content */
+
 #feedbackContent .section-content * {
   font-size: inherit;
   color: inherit;
@@ -674,7 +662,6 @@ body.light-mode .task-node {
 
 
 
-
 <div class="debate-layout">
 
   <!-- TREE SIDE -->
@@ -695,16 +682,14 @@ body.light-mode .task-node {
       </button>
     </div>
 
-  </div> <!-- ✅ đóng tree-panel ở đây -->
+  </div>
 
-  <!-- ✅ FEEDBACK phải nằm ngang hàng với tree-panel -->
   <div class="feedback-panel" id="feedbackPanel">
     <h2>AI Phân tích</h2>
     <div id="feedbackContent"></div>
   </div>
 
 </div>
-
 
 
 <button class="theme-toggle-btn" onclick="toggleTheme()">🌙</button>
@@ -759,7 +744,7 @@ if(level === 2){
 
 node.innerText = node.dataset.placeholder;
 
-/* ===== Placeholder auto clear ===== */
+
 node.addEventListener("focus", () => {
   if(node.innerText.trim() === node.dataset.placeholder){
     node.innerText = "";
@@ -792,10 +777,9 @@ node.addEventListener("blur", () => {
 }
 
 
-/* Root add button */
 document.addEventListener("DOMContentLoaded", async () => {
 
-  /* ================= LẤY ROLE ================= */
+
   const roleKey = localStorage.getItem("currentRole");
 
   console.log("ROLE KEY:", roleKey);
@@ -812,7 +796,6 @@ if (!debateId) {
     return;
   }
 
-  /* ================= DOM CACHE ================= */
   const confirmBtn = document.querySelector(".btn-confirm");
   const completeBtn = document.getElementById("completeBtn");
   const roleTitle = document.getElementById("role-title");
@@ -824,7 +807,7 @@ if (!debateId) {
   const rootBtn = document.getElementById("addRootBtn");
 rootBtn.onclick = () => createBranch(treeContainer, 2);
 
-  /* ================= CHECK COMPLETED ================= */
+
   const completedRoles =
     JSON.parse(localStorage.getItem("completedRoles")) || {};
 
@@ -833,7 +816,6 @@ rootBtn.onclick = () => createBranch(treeContainer, 2);
     completeBtn.style.display = "none";
   }
 
-  /* ================= LOAD ROLE DATA ================= */
   try {
     const debateId = localStorage.getItem("currentDebateId");
 
@@ -855,11 +837,9 @@ console.log("Data:", data);
       window.location.href = "Roles.html";
       return;
     }
-
-    // Hiện tên vai trò
+   
     roleTitle.innerText = roleData.ten;
-
-    // Gán nhiệm vụ vào node gốc
+    
     taskNode.innerText = roleData.nhiemVu;
 
 } catch (err) {
@@ -867,7 +847,7 @@ console.log("Data:", data);
   return;
 }
 
-/* ================= RESTORE SAVED DATA ================= */
+
 
 const savedData =
   localStorage.getItem("debateData_" + roleKey + "_" + debateId);
@@ -879,15 +859,12 @@ if (parsed.task && parsed.task.trim() !== "") {
   taskNode.innerText = parsed.task;
 }
 
-  // Clear tree trước khi rebuild
   treeContainer.innerHTML = "";
 
-  // Rebuild tree
   if (parsed.tree && parsed.tree.length > 0) {
     rebuildTree(treeContainer, parsed.tree);
   }
 
-  // Restore feedback nếu có
   if (parsed.feedback) {
     feedbackPanel.classList.add("active");
     document
@@ -896,12 +873,11 @@ if (parsed.task && parsed.task.trim() !== "") {
 
     feedbackContent.innerHTML = formatFeedback(parsed.feedback);
 
-    // Khi đã từng phân tích → cho phép hoàn thành
     completeBtn.style.display = "inline-block";
   }
 }
 
-/* ================= REBUILD TREE ================= */
+
 function rebuildTree(parent, nodes, level = 2) {
 
   nodes.forEach(nodeData => {

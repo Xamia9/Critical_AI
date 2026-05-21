@@ -29,7 +29,7 @@ body {
   top: 0;
   width: 100%;
   padding: 16px 64px;
-  min-height: 64px; /* 👈 thêm dòng này */
+  min-height: 64px;
   background: linear-gradient(135deg, #C52C5A, #4A5BFF);
   display: flex;
   justify-content: space-between;
@@ -60,13 +60,12 @@ body {
 }
 
 
-/* ===== HERO LAYOUT ===== */
 .intro-container {
   padding-top: 140px;
   position: relative;
   padding-left: 120px;
   padding-right: 120px;
-  min-height: 100vh;   /* full màn hình */
+  min-height: 100vh;
   display: grid;
   grid-template-columns: 1.2fr 1fr;
   align-items: center;
@@ -131,8 +130,6 @@ body {
   100% { transform: translateY(0px); }
 }
 
-
-/* ===== NEW SECTIONS ===== */
 
 
 .section {
@@ -199,9 +196,9 @@ body.light-mode .section h2 {
   margin-bottom: 80px;
   text-align: center;
 
-  font-size: 18px;          /* to hơn */
-  font-weight: 700;         /* đậm hơn */
-  letter-spacing: 0.5px;    /* giãn nhẹ */
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
   line-height: 2.2;
 
   color: white;
@@ -218,7 +215,6 @@ body.light-mode .flow-box {
 }
 
 
-/* scroll fade */
 .fade {
   opacity:0;
   transform:translateY(40px);
@@ -229,7 +225,7 @@ body.light-mode .flow-box {
   transform:translateY(0);
 }
 
-/* ===== SCROLL DOWN BLOCK ===== */
+
 .scroll-down {
   position: absolute;
   bottom: 40px;
@@ -255,7 +251,7 @@ body.light-mode .flow-box {
   text-shadow: 0 0 15px rgba(91,60,255,0.8);
 }
 
-/* Bounce */
+
 @keyframes bounce {
   0% { transform: translateY(0); }
   50% { transform: translateY(10px); }
@@ -267,19 +263,19 @@ body.light-mode .flow-box {
   to { opacity: 1; }
 }
 
-/* Light mode arrow */
+
 body.light-mode .scroll-down .arrow {
   color: #5B3CFF;
   text-shadow: none;
 }
-/* ================= LIGHT MODE ================= */
+
 
 body.light-mode {
   background: radial-gradient(circle at top, #EEF0FF, #F7F8FF 70%);
   color: #1E1E2F !important;
 }
 
-/* HERO TITLE */
+
 body.light-mode .intro-left h1 {
   background: linear-gradient(135deg,#FF2E88,#5B3CFF);
   -webkit-background-clip: text;
@@ -288,7 +284,7 @@ body.light-mode .intro-left h1 {
   text-shadow: none;
 }
 
-/* Sections */
+
 body.light-mode .section h3 {
   background: linear-gradient(135deg,#FF2E88,#5B3CFF);
   -webkit-background-clip: text;
@@ -305,14 +301,13 @@ body.light-mode .flow-box {
   backdrop-filter: none;
 }
 
-/* Arrow */
+
 body.light-mode .scroll-down {
   color: #5B3CFF;
   text-shadow: none;
 }
 
 
-/* ===== THEME BUTTON (FINAL CLEAN VERSION) ===== */
 .theme-toggle-btn {
   position: fixed;
   bottom: 25px;
@@ -351,7 +346,7 @@ body.light-mode .theme-toggle-btn {
   color: white !important;
 }
 
-/* ===== STEP IMAGE ===== */
+
 .step-image {
   margin-top: 24px;
   display: flex;
@@ -373,7 +368,7 @@ body.light-mode .theme-toggle-btn {
   transform: scale(1.02);
 }
 
-/* Light mode */
+
 body.light-mode .step-image img {
   border: 1px solid rgba(74,91,255,0.25);
   box-shadow:
@@ -445,8 +440,6 @@ body {
 </div>
 
 
-
-<!-- HERO -->
 <div class="intro-container fade">
   <div class="intro-left">
     <h1>Critical AI</h1>
@@ -484,7 +477,6 @@ lỗ hổng logic và từng bước cấu trúc hóa quan điểm — để tư
 </div>
 
 
-<!-- GIỚI THIỆU -->
 <div class="section fade">
 
 
@@ -508,10 +500,10 @@ lỗ hổng logic và từng bước cấu trúc hóa quan điểm — để tư
 <div class="step">
   <h3>Bước 2: Tranh luận từ ba góc nhìn</h3>
   <p>
-    Hệ thống sẽ tạo ra ba vai đại diện cho ba góc nhìn khác nhau về vấn đề. Bạn sẽ lần lượt nhập lập luận cho từng vai, cố gắng xây dựng quan điểm một cách thuyết phục nhất.
+    Hệ thống sẽ tạo ra ba vai đại diện cho ba góc nhìn khác nhau về vấn đề. Bạn sẽ lần lượt nhập
+     lập luận cho từng vai, cố gắng xây dựng quan điểm một cách thuyết phục nhất.
   
   </p>
-
   <p>
     Ở mỗi vai, bạn xây dựng lập luận theo cấu trúc gồm: Luận điểm, Lý do, Bằng chứng và Hạn chế / Phản biện, trình bày theo dạng sơ đồ tư duy để đảm bảo tính logic và rõ ràng.
     Ấn vô dấu cộng để nhập luận điểm.
@@ -571,7 +563,7 @@ lỗ hổng logic và từng bước cấu trúc hóa quan điểm — để tư
 </div>
   </div>
 
-</div> <!-- đóng step 6 -->
+</div>
 <div class="step" id="criteria">
   <h3>Tiêu chí chấm điểm tư duy</h3>
 
@@ -587,7 +579,6 @@ lỗ hổng logic và từng bước cấu trúc hóa quan điểm — để tư
       font-size:16px;
   ">
 
-    <!-- CỘT TRÁI -->
     <div>
 
       <div style="margin-bottom:30px;">
@@ -610,7 +601,6 @@ lỗ hổng logic và từng bước cấu trúc hóa quan điểm — để tư
 
     </div>
 
-    <!-- CỘT PHẢI -->
     <div>
 
       <p><strong>4. Liên quan</strong><br>
@@ -636,9 +626,8 @@ lỗ hổng logic và từng bước cấu trúc hóa quan điểm — để tư
   </div>
 
 </div>
-</div> <!-- đóng section Giới thiệu -->
+</div>
 
-<!-- FOUNDERS -->
 <div class="section fade">
   <h2>Người sáng lập</h2>
   <p style="text-align:center; max-width:800px; margin:auto;">
@@ -650,8 +639,8 @@ lỗ hổng logic và từng bước cấu trúc hóa quan điểm — để tư
   </p>
 </div>
 
-
 <script>
+
 const observer = new IntersectionObserver(entries=>{
   entries.forEach(entry=>{
     if(entry.isIntersecting){
@@ -664,9 +653,8 @@ const observer = new IntersectionObserver(entries=>{
 document.querySelectorAll('.fade').forEach(el=>{
   observer.observe(el);
 });
+
 </script>
-
-
 
 <script>
 function toggleTheme() {
@@ -694,6 +682,7 @@ window.onload = function() {
 
 
 </script>
+
 <script>
 function scrollToNext() {
   window.scrollTo({
@@ -738,12 +727,15 @@ window.addEventListener("load", function() {
   });
 });
 </script>
+
 <script>
 function toggleMenu() {
   document.getElementById("mobileMenu").classList.toggle("open");
 }
 </script>
+
 <script src="mobile.js" defer></script>
+
 </body>
 </html>
 

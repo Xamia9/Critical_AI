@@ -23,7 +23,6 @@ body {
 }
 
 
-/* ===== TOPBAR ===== */
 .topbar {
   position: fixed;
   top: 0;
@@ -55,9 +54,9 @@ body {
   opacity: 1;
 }
 
-/* ===== PAGE LAYOUT ===== */
+
 .container {
-  max-width: 950px;   /* gọn lại */
+  max-width: 950px;
   margin: auto;
   padding-top: 120px;
   padding-bottom: 80px;
@@ -91,7 +90,7 @@ h1 {
   transition: 0.3s ease;
 }
 
-/* underline giống hệ thống */
+
 .section-title::after {
   content: "";
   position: absolute;
@@ -113,7 +112,7 @@ h1 {
   margin-bottom: 40px;
 }
 
-/* ===== SECTION CARD ===== */
+
 .section-card {
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(123,140,255,0.35);
@@ -125,13 +124,14 @@ h1 {
   padding: 50px 60px;  
   margin-bottom: 40px;
 }
+
 textarea, input[type="text"] {
   max-width: 100%;
 }
 
 #questionTitle {
-  font-size: 20px;   /* giảm từ 26 xuống 20 */
-  font-weight: 700;  /* bớt đậm */
+  font-size: 20px;
+  font-weight: 700;
   margin-bottom: 24px;
   line-height: 1.5;
 }
@@ -154,7 +154,8 @@ textarea, input[type="text"] {
     0 0 30px rgba(74,91,255,0.35),
     0 0 50px rgba(197,44,90,0.25);
 }
-/* ===== FORM ===== */
+
+
 label {
   font-weight: 600;
   font-size: 15px;
@@ -164,13 +165,13 @@ label {
 
 textarea, input[type="text"] {
   width: 100%;
-  padding: 14px 16px;        /* giảm padding */
-  margin-bottom: 22px;       /* bớt khoảng cách */
+  padding: 14px 16px;
+  margin-bottom: 22px; 
   border-radius: 14px;
   border: 1px solid rgba(255,255,255,0.15);
   background: rgba(255,255,255,0.06);
   color: white;
-  font-size: 16px;           /* giảm từ 18 xuống 16 */
+  font-size: 16px;
   resize: vertical;
 }
 
@@ -181,7 +182,7 @@ textarea:focus, input:focus {
   background: rgba(123,140,255,0.08);
 }
 
-/* ===== RADIO GRID ===== */
+
 .radio-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -208,7 +209,6 @@ textarea:focus, input:focus {
   border: 2px solid #4A5BFF;
 }
 
-/* ===== SCALE ===== */
 .scale {
   display: flex;
   justify-content: space-between;
@@ -236,7 +236,7 @@ textarea:focus, input:focus {
   border: 2px solid #4A5BFF;
 }
 
-/* ================= BUTTON SYSTEM ================= */
+
 .button-group {
   margin-top: 48px;
   display: flex;
@@ -273,7 +273,6 @@ button {
 }
 
 
-/* ===== PURPLE GLOW SYSTEM ===== */
 .section-card {
   box-shadow: 0 0 40px rgba(123,140,255,0.12);
   transition: 0.3s ease;
@@ -283,7 +282,7 @@ button {
   box-shadow: 0 0 55px rgba(123,140,255,0.25);
 }
 
-/* ===== LIGHT MODE ===== */
+
 body.light-mode {
   background: radial-gradient(circle at top, #EEF0FF, #F7F8FF 70%);
   color: #1E1E2F;
@@ -307,11 +306,10 @@ body.light-mode .section-card {
 }
 
 
-/* Tăng glow khi hover cho giống các file khác */
 body.light-mode .section-card:hover {
   box-shadow: 0 0 45px rgba(123,140,255,0.35);
 }
-/* Inputs light */
+
 body.light-mode textarea,
 body.light-mode input[type="text"] {
   background: rgba(0,0,0,0.04);
@@ -325,7 +323,7 @@ body.light-mode input:focus {
   background: rgba(123,140,255,0.08);
 }
 
-/* Radio & scale light */
+
 body.light-mode .radio-option,
 body.light-mode .scale div {
   background: rgba(0,0,0,0.04);
@@ -442,7 +440,6 @@ body.light-mode .theme-toggle-btn {
 
 </div>
 
-
 </div>
 
 <script>
@@ -510,8 +507,7 @@ const progressBar = document.getElementById("progressBar");
 const nextBtn = document.getElementById("nextBtn");
 
 let errorEl;
-let isProcessing = false; // 🔒 đặt ở đây (ngoài mọi function)
-
+let isProcessing = false;
 
 
 </script>
@@ -549,12 +545,10 @@ function renderStep() {
   let note = "";
 
 
-
 if(step.type === "checkbox"){
   note = `<div class="multi-note">Có thể chọn nhiều hơn 1</div>`;
 }
 
-  // FIX PROGRESS (step 1 đã có %)
   progressBar.style.width = ((currentStep + 1) / steps.length) * 100 + "%";
 
   contentEl.innerHTML = note;
@@ -573,7 +567,6 @@ errorEl.style.display = "none";
       div.innerText = opt;
 
 
-
       if(
   (Array.isArray(answers[step.key]) && answers[step.key].includes(opt)) ||
   answers[step.key] === opt
@@ -582,7 +575,6 @@ errorEl.style.display = "none";
 }
 
       
- 
 
 div.onclick = ()=>{
 
@@ -710,7 +702,6 @@ function nextStep(){
   const step = steps[currentStep];
   const value = answers[step.key];
 
-  // validate riêng cho radio+text
   if(step.type === "radio+text"){
     if(!value || !value.choice){
       errorEl.innerText = "Bạn chưa chọn phương án.";
@@ -719,7 +710,6 @@ function nextStep(){
     }
   }
 
-  // validate chung
   if(
     step.type !== "radio+text" &&
     (
@@ -745,7 +735,7 @@ function nextStep(){
 
 function prevStep(){
   if(currentStep === 0){
-    window.location.href = "Roles.html"; // 👈 về Roles nếu là bước đầu
+    window.location.href = "Roles.html";
     return;
   }
 
@@ -780,6 +770,7 @@ async function handleSubmit(){
     showError("Lỗi server");
   }
 }
+
 async function loadDecision() {
   const debateId = localStorage.getItem("currentDebateId");
   if (!debateId) return;
@@ -801,6 +792,7 @@ async function loadDecision() {
     console.error("Load decision error:", err);
   }
 }
+
 window.addEventListener("DOMContentLoaded", async () => {
   await loadDecision();
   if(Object.keys(answers).length === 0){

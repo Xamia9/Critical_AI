@@ -6,7 +6,6 @@
 <title>Critical AI | Authentication</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="mobile.css">
-<!-- SweetAlert2 for notifications -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="notification.js"></script>
 
@@ -22,7 +21,6 @@ body {
   color: #ffffff;
 }
 
-/* ===== TOPBAR ===== */
 .topbar {
   position: fixed;
   top: 0;
@@ -55,7 +53,6 @@ body {
   opacity: 1;
 }
 
-/* ===== AUTH LAYOUT ===== */
 .container {
   display: flex;
   justify-content: center;
@@ -77,8 +74,6 @@ body {
     0 0 60px rgba(197,44,90,0.25);
 }
 
-
-/* Title */
 .auth-card h1 {
   font-size: 32px;
   font-weight: 900;
@@ -89,8 +84,6 @@ body {
     0 0 25px rgba(197,44,90,0.4);
 }
 
-
-/* Tabs */
 .tabs {
   display: flex;
   margin-bottom: 28px;
@@ -114,8 +107,6 @@ body {
   color: white;
 }
 
-
-/* Form */
 form {
   display: flex;
   flex-direction: column;
@@ -137,8 +128,6 @@ input:focus {
   background: rgba(74,91,255,0.12);
 }
 
-
-/* Button */
 button {
   margin-top: 10px;
   padding: 14px;
@@ -157,7 +146,6 @@ button:hover {
   box-shadow: 0 6px 20px rgba(123,140,255,0.4);
 }
 
-/* Toggle text */
 .switch-text {
   margin-top: 20px;
   font-size: 13px;
@@ -169,7 +157,6 @@ button:hover {
 
 <body>
 
-<!-- TOPBAR -->
 <div class="topbar">
   <div class="logo">Critical AI</div>
   <nav>
@@ -222,14 +209,11 @@ button:hover {
   --primary-gradient: linear-gradient(135deg, #C9BBFF, #7B8CFF);
 }
 
-/* ===== LIGHT MODE ===== */
 body.light-mode {
   background: radial-gradient(circle at top, #EEF0FF, #F7F8FF 70%);
   color: #1E1E2F !important;
 }
 
-
-/* Auth Card giữ viền tím giống dark */
 body.light-mode .auth-card {
 
   background: #ffffff !important;
@@ -247,7 +231,6 @@ body.light-mode .auth-card h1 {
   text-shadow: none;
 }
 
-/* Tabs */
 body.light-mode .tabs {
   background: #EEF0FF !important;
 }
@@ -257,7 +240,6 @@ body.light-mode .tab.active {
   color: white;
 }
 
-/* Inputs */
 body.light-mode input {
   background: var(--input-light) !important;
   border: 1px solid var(--border-light) !important;
@@ -269,20 +251,16 @@ body.light-mode input:focus {
   background: #EEF2FF !important;
 }
 
-/* Button */
 body.light-mode .tab.active {
   background: linear-gradient(135deg, #C52C5A, #4A5BFF) !important;
   color: white !important;
 }
-
 
 body.light-mode button {
   background: linear-gradient(135deg, #C52C5A, #4A5BFF) !important;
   color: white !important;
 }
 
-
-/* ===== THEME BUTTON FIXED ===== */
 .theme-toggle-btn {
   position: fixed;
   bottom: 25px;
@@ -295,7 +273,7 @@ body.light-mode button {
   line-height: 1;
   font-weight: normal;
   background: linear-gradient(135deg, #C52C5A, #4A5BFF);
-  display: flex;              /* căn giữa icon */
+  display: flex; 
   align-items: center;
   justify-content: center;
   font-size: 20px;
@@ -303,14 +281,13 @@ body.light-mode button {
   box-shadow: 0 8px 20px rgba(0,0,0,0.25);
   transition: 0.3s ease;
   z-index: 9999;
-  color: white;               /* ép icon luôn trắng */
+  color: white;
 }
 
 .theme-toggle-btn:hover {
   transform: scale(1.1);
 }
 
-/* Light mode vẫn giữ icon trắng */
 body.light-mode .theme-toggle-btn {
   background: #7B8CFF;
   color: white !important;

@@ -49,8 +49,6 @@ body {
   opacity: 1;
 }
 
-
-/* ===== MAIN ===== */
 .container {
   padding-top: 140px;
   padding-left: 90px;
@@ -66,7 +64,6 @@ h1 {
     0 0 18px rgba(123,140,255,0.25);
 }
 
-
 .subtitle {
   margin-top: 0;
   margin-bottom: 40px;
@@ -76,7 +73,6 @@ h1 {
   letter-spacing: 0.3px;
 }
 
-/* ===== ROLE GRID ===== */
 .roles {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -84,7 +80,6 @@ h1 {
   margin-bottom: 50px;
 }
 
-/* ===== ROLE CARD ===== */
 .role-card {
   background: rgba(255,255,255,0.04);
   border-radius: 20px;
@@ -121,8 +116,6 @@ h1 {
   -webkit-text-fill-color: transparent;
 }
 
-
-/* underline glow */
 .role-card h2::after {
   content: "";
   position: absolute;
@@ -136,14 +129,12 @@ h1 {
   transition: 0.3s ease;
 }
 
-/* hover effect */
 .role-card:hover h2 {
   background-position: right center;
   text-shadow:
     0 0 14px rgba(243, 56, 178, 0.928),
     0 0 28px #c9097992;
 }
-
 
 .role-card:hover h2::after {
   width: 100%;
@@ -156,14 +147,12 @@ h1 {
   -webkit-text-fill-color: transparent;
 }
 
-
 .role-card p {
   font-size: 15.5px;
   line-height: 1.6;
   color: #cfd1e6;
 }
 
-/* ===== BUTTON AREA ===== */
 .button-group {
   margin-top: 20px;
 }
@@ -178,8 +167,6 @@ button {
   margin-right: 14px;
   transition: 0.2s;
 }
-
-/* ===== SHARED GRADIENT BUTTON ===== */
 
 .btn-back,
 .btn-continue {
@@ -197,12 +184,10 @@ button {
   background-size: 200% 100%;
 }
 
-/* Back = nửa trái */
 .btn-back {
   background-position: left center;
 }
 
-/* Continue = nửa phải */
 .btn-continue {
   background-position: right center;
   display: none;
@@ -215,8 +200,6 @@ button {
   box-shadow: 0 12px 30px rgba(74,91,255,0.45);
 }
 
-
-/* ===== DARK MODE GLOW ===== */
 .role-card {
   box-shadow:
     0 0 20px rgba(74,91,255,0.25),
@@ -228,12 +211,11 @@ button {
     0 0 25px rgba(74,91,255,0.45),
     0 0 70px rgba(197,44,90,0.35);
 }
-/* ===== LIGHT MODE ===== */
+
 body.light-mode {
   background: linear-gradient(180deg, #F8F9FF, #EEF1FF);
   color: #1E293B;
 }
-/* ===== LIGHT MODE TITLE GRADIENT ===== */
 
 body.light-mode h1 {
   background: linear-gradient(135deg, #FF2E88, #5B3CFF);
@@ -243,8 +225,6 @@ body.light-mode h1 {
   text-shadow: none;
 }
 
-
-/* Role card light */
 body.light-mode .role-card {
   background: #ffffff;
   border: 1px solid rgba(123,140,255,0.35);
@@ -257,10 +237,6 @@ body.light-mode .role-card p {
   color: #475569;
 }
 
-/* ===== LIGHT MODE COMPLETED CARD ===== */
-
-
-
 body.light-mode .role-card.completed {
   background: linear-gradient(135deg, #fff0ff, #f5e3ff);
   border: 2px solid #770ce2;
@@ -268,7 +244,6 @@ body.light-mode .role-card.completed {
     0 0 18px rgba(189, 46, 255, 0.35),
     0 0 40px rgba(192, 46, 255, 0.15);
 }
-
 
 body.light-mode .role-card h2 {
   text-shadow: 
@@ -282,7 +257,6 @@ body.light-mode .role-card.completed h2 {
   0 0 12px rgba(255,46,136,0.25);
 
 }
-
 
 .theme-toggle-btn {
   position: fixed;
@@ -312,11 +286,11 @@ body.light-mode .role-card.completed h2 {
   transition: 0.3s ease;
   z-index: 9999;
 }
+
 .theme-toggle-btn:hover {
   transform: scale(1.1);
 }
 
-/* Light mode button color */
 body.light-mode .theme-toggle-btn {
   background: linear-gradient(135deg, #C52C5A, #4A5BFF);
 }
@@ -326,7 +300,6 @@ body.light-mode .theme-toggle-btn {
 
 <body>
 
-<!-- ===== TOPBAR ===== -->
 <div class="topbar">
   <div class="logo">Critical AI</div>
   <nav>
@@ -361,7 +334,6 @@ body.light-mode .theme-toggle-btn {
 
 </div>
 
-
 <script>
 
 const continueBtn = document.getElementById("continueBtn");
@@ -369,11 +341,6 @@ const rolesContainer = document.getElementById("rolesContainer");
 
 let completedRoles = JSON.parse(localStorage.getItem("completedRoles")) || {};
 
-
-// Load roles từ backend
-
-// Xóa dòng này nếu không dùng, hoặc để lại để debug
-// let completedRoles = JSON.parse(localStorage.getItem("completedRoles")) || [];
 
 async function loadRoles() {
   try {
@@ -424,12 +391,10 @@ function renderRoles(data) {
     card.classList.add("role-card");
     card.dataset.role = key;
 
-    // Nếu role đã hoàn thành
     if (completedRoles[key]) {
       card.classList.add("completed");
     }
 
-    // Highlight role đang làm
     if (currentRole === key) {
       card.style.boxShadow = "0 0 30px rgba(255,255,255,0.4)";
     }
@@ -445,7 +410,6 @@ function renderRoles(data) {
     rolesContainer.appendChild(card);
   });
 
-  // Kiểm tra đã hoàn thành hết chưa
 checkAllCompleted();
 }
 
@@ -527,9 +491,6 @@ window.addEventListener("load", function () {
   }
 });
 
-
-
-//localStorage.removeItem("completedRoles");
 </script>
 <button class="theme-toggle-btn" onclick="toggleTheme()">🌙</button>
 <script src="authFetch.js"></script>

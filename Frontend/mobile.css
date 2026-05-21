@@ -1,11 +1,5 @@
-/* ================================================
-   MOBILE RESPONSIVE STYLES - SHARED ACROSS ALL PAGES
-   Breakpoint: max-width: 768px
-   ================================================ */
-
 @media (max-width: 768px) {
 
-  /* ========== GLOBAL RESET ========== */
   body {
     overflow-x: hidden !important;
   }
@@ -15,7 +9,6 @@
     height: auto;
   }
 
-  /* ========== TOPBAR ========== */
   .topbar {
     padding: 12px 16px !important;
       min-height: 64px;
@@ -26,9 +19,9 @@
     font-size: 18px !important;
   }
 
-.topbar nav {
-  display: none !important;
-}
+  .topbar nav {
+    display: none !important;
+  }
   .hamburger {
     display: block !important;
     font-size: 24px;
@@ -38,7 +31,6 @@
     user-select: none;
   }
 
-  /* ========== MOBILE MENU ========== */
   .mobile-menu {
     display: none;
     position: fixed;
@@ -72,7 +64,6 @@
     background: rgba(255, 255, 255, 0.1);
   }
 
-  /* ========== INTRO PAGE ========== */
   .intro-container {
     grid-template-columns: 1fr !important;
     padding-left: 16px !important;
@@ -110,7 +101,6 @@
     display: none;
   }
 
-  /* ========== SECTIONS ========== */
   .section {
     padding: 60px 16px !important;
     max-width: 100% !important;
@@ -150,14 +140,12 @@
     border-radius: 12px !important;
   }
 
-  /* ========== CRITERIA GRID ========== */
   #criteria > div[style*="grid-template-columns"],
   #criteria > div {
     grid-template-columns: 1fr !important;
     gap: 20px !important;
   }
 
-  /* ========== CONTAINERS ========== */
   .container {
     padding-top: 100px !important;
     padding-left: 16px !important;
@@ -174,7 +162,6 @@
     margin-bottom: 30px !important;
   }
 
-  /* ========== CARDS & PANELS ========== */
   .section-card {
     padding: 24px 16px !important;
     border-radius: 20px !important;
@@ -197,7 +184,6 @@
     line-height: 1.6 !important;
   }
 
-  /* ========== GRID LAYOUTS ========== */
   .container {
     grid-template-columns: 1fr !important;
   }
@@ -229,7 +215,6 @@
     gap: 12px !important;
   }
 
-  /* ========== HISTORY PAGE ========== */
   .history-list {
     margin-right: 0 !important;
     margin-bottom: 30px !important;
@@ -248,7 +233,6 @@
     font-size: 13px !important;
   }
 
-  /* ========== AUTH / LOGIN ========== */
   .auth-card {
     width: calc(100% - 32px) !important;
     max-width: 400px !important;
@@ -277,7 +261,6 @@
     margin-bottom: 12px !important;
   }
 
-  /* ========== DEBATE PAGE ========== */
   .debate-layout {
     flex-direction: column !important;
     gap: 20px !important;
@@ -311,7 +294,6 @@
     padding-left: 24px !important;
   }
 
-  /* ========== BUTTONS ========== */
   .button-group {
     flex-direction: column !important;
     gap: 12px !important;
@@ -332,7 +314,6 @@
     justify-content: center;
   }
 
-  /* ========== RADIO GRID & FORM ELEMENTS ========== */
   .radio-grid {
     grid-template-columns: 1fr !important;
     gap: 10px !important;
@@ -359,7 +340,6 @@
     font-size: 14px !important;
   }
 
-  /* ========== INPUTS & FORM ========== */
   label {
     font-size: 14px !important;
     margin-bottom: 10px !important;
@@ -381,7 +361,6 @@
     font-size: 15px !important;
   }
 
-  /* ========== MINDMAP ========== */
   .mindmap-container {
     height: 400px !important;
     border-radius: 14px !important;
@@ -405,7 +384,6 @@
     border-radius: 10px !important;
   }
 
-  /* ========== SCORE BOXES ========== */
   .score-box {
     padding: 16px !important;
     font-size: 13px !important;
@@ -429,7 +407,6 @@
     border-radius: 16px !important;
   }
 
-  /* ========== THEME TOGGLE ========== */
   .theme-toggle-btn {
     width: 40px !important;
     height: 40px !important;
@@ -438,14 +415,12 @@
     font-size: 16px !important;
   }
 
-  /* ========== PROGRESS BAR ========== */
   .progress {
     height: 8px !important;
     margin-bottom: 24px !important;
     border-radius: 16px !important;
   }
 
-  /* ========== MSG / CHAT ========== */
   .msg {
     padding: 12px 14px !important;
     font-size: 14px !important;
@@ -465,13 +440,11 @@
     border-radius: 12px !important;
   }
 
-  /* ========== FOUNDERS SECTION ========== */
   .section p {
     font-size: 14px !important;
     line-height: 1.7 !important;
   }
 
-  /* ========== SUMMARY BLOCKS ========== */
   .summary-block {
     margin-bottom: 16px !important;
   }
@@ -485,7 +458,6 @@
     line-height: 1.6 !important;
   }
 
-  /* ========== GLASS EFFECT ========== */
   .glass {
     padding: 16px !important;
     border-radius: 16px !important;
@@ -495,7 +467,6 @@
     width: 100% !important;
   }
 
-  /* ========== TOAST ========== */
   .toast {
     left: 16px !important;
     right: 16px !important;
@@ -504,20 +475,17 @@
     padding: 12px 16px !important;
   }
 
-  /* ========== MULTI NOTE ========== */
   .multi-note {
     font-size: 12px !important;
     margin-bottom: 8px !important;
   }
 
-  /* ========== ERROR TEXT ========== */
   .error-text {
     font-size: 12px !important;
     margin-top: -8px !important;
     margin-bottom: 16px !important;
   }
 
-  /* ========== SECTION TITLE ========== */
   .section-title {
     font-size: 18px !important;
     margin-bottom: 18px !important;
@@ -529,7 +497,6 @@
     bottom: -6px !important;
   }
 
-  /* ========== LOADING BOX ========== */
   #loadingBox {
     padding: 20px !important;
     margin-bottom: 24px !important;
@@ -540,14 +507,12 @@
     font-size: 16px !important;
   }
 
-  /* ========== CHECKBOX RADIO ========== */
   .checkbox-grid {
     grid-template-columns: 1fr !important;
   }
 
 }
 
-/* Hamburger is hidden on desktop */
 .hamburger {
   display: none;
 }
@@ -555,12 +520,12 @@
 .history-list {
   width: 100%;
   max-width: 100%;
-  overflow: hidden; /* 🔥 FIX CHÍNH */
+  overflow: hidden;
 }
 #historyList {
   width: 100%;
   max-width: 100%;
-  overflow-x: hidden; /* 🔥 chặn tràn ngang */
+  overflow-x: hidden;
 }
 .history-title {
   word-break: break-word;

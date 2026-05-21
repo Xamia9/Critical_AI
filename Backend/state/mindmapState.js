@@ -1,3 +1,4 @@
+// Lưu trạng thái + lịch sử
 export function createMindmapState(roleName) {
   return {
     role: roleName,
