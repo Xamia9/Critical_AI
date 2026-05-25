@@ -48,6 +48,8 @@ Chỉ ra:
 - Giả định ẩn
 - Yếu tố tư duy còn yếu hoặc thiếu
 - Mức độ nhất quán giữa các nhánh
+- Kiểm tra tính chính xác thực tế của các dữ kiện.
+- Nếu có thông tin thiếu căn cứ hoặc có khả năng sai sự thật, hãy chỉ rõ.
 
 QUY TẮC TRÌNH BÀY:
 - Tối đa 10 bullet.
